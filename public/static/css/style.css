@@ -4,6 +4,7 @@
   --main-color: #F5F5F5;
   --black-color: #353535;
   --border: 01rem solid rgba(255, 255, 255, 0.3);
+  --cards: rgba(238, 139, 90, 0.5);
 }
 
 /*! base html codes*/
@@ -30,8 +31,31 @@ html {
 
 }
 
+html::-webkit-scrollbar{
+  width: 1rem;
+  background-color: white;
+}
+
+html::-webkit-scrollbar-thumb{
+  width: 1rem;
+  background-color: black
+}
+
 section {
   padding: 3.5rem 7%;
+}
+
+.headLine{ /* Başlık */
+  color: black;
+  font-size: 3.5rem;
+  margin-bottom: 3.5rem;
+  border-bottom: 0.1rem solid #fff;
+  
+}
+
+.headLine span{
+  color: var(--cards);
+
 }
 
 
@@ -48,6 +72,10 @@ body {
   color: white;
   background-color: var(--black-color);
   font-weight: bold;
+}
+
+.btn:hover{
+  opacity: 0.4;
 }
 
 /* Header Sectiom Start*/
@@ -147,7 +175,7 @@ body {
 
 .book-cards .box-container .box{
   padding: 3rem;
-  background-color: rgb(245, 183, 153);
+  background-color: var(--cards);
   border-radius: 3rem;
   min-height: 60rem;
   display: flex;
@@ -160,6 +188,28 @@ body {
 .book-cards .box-container .box img {
   width: 100%;
   object-fit: cover;
+}
+
+.book-cards .box-container .box .book-publisher{
+  font-size: 1.8rem;
+}
+
+.book-cards .box-container .box h3{
+  font-size: 2.5rem;
+  padding: 1rem 0;
+}
+
+.book-cards .box-container .box .price{
+  font-size: 2.5rem;
+  padding: 0.5rem 0;
+}
+
+.book-cards .box-container .box .price span{
+  font-size: 2rem;
+  padding: 0.5rem 0;
+  text-decoration: line-through;
+  font-style: italic;
+  font-weight: 300;
 }
 
 /* Book Section End*/
