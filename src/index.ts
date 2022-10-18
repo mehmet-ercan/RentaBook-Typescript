@@ -19,3 +19,5 @@ const handleDecrementClick = () => {
 
 incrementButton.addEventListener("click", handleIncrementClick);
 decrementButton.addEventListener("click", handleDecrementClick);
+
+/*export NODE_OPTIONS=--openssl-legacy-provider*/
