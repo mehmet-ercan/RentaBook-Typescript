@@ -5,56 +5,141 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rent a Book App</title>
-    <link rel="icon" href="./images/icon.png" />
+    <link rel="icon" href="./images/icon1.svg" />
     <link rel="stylesheet" href="./static/css/style.css" />
     <script src="./static/bundle/script.js" defer></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
 
   <body>
-
-    <!-- Header Start-->
+    <!-- Header Start -->
+    <!-- src="https://img.icons8.com/clouds/100/000000/storytelling.png" -->
 
     <header class="header">
       <a href="#" class="logo">
-        <img src="https://img.icons8.com/clouds/100/000000/storytelling.png" alt="Logo">
+        <img
+          src="../public/images/icon1.png"
+          alt="Logo"
+        />
       </a>
 
       <nav class="navbar">
-        <a href="#">Anasayfa</a>
+        <a class="active" href="#">Anasayfa</a>
         <a href="#">Hakkında</a>
-        <a href="#">Kitap Ekle</a>
-        <a href="#">Müşteri Ekle</a>
-        <a href="#">Müşteri Sil</a>
-        <a href="#">Kitap Satışı</a>
-        <a href="#">Kitap Kirala</a>
-        <a href="#">Kitap Satış İptali</a>
+        <a href="#">Kitap İşlemleri</a>
+        <a href="#">Müşteri İşlemleri</a>
+        <a href="#">Satış İptali</a>
         <a href="#">İletişim</a>
       </nav>
 
-      <div class="buttons"> 
-        <button> 
-          <i class="fas fa-search"></i>
+      <div class="buttons">
+        <button>
+          <i class="fa-solid fa-magnifying-glass"></i>
         </button>
-        <button> 
-        <i class="fas fa-shopping-cart"></i>
-      </button>
-      <button> 
-      <i class="fas fa-bars"></i>
-    </button>
+        <button>
+          <i class="fas fa-shopping-cart"></i>
+        </button>
+        <button>
+          <i class="fas fa-bars"></i>
+        </button>
       </div>
     </header>
 
-<!-- Header End-->
+    <!-- Header End -->
 
-    <section class="end-section">
-      <div class="learn-ts-container">
-        <div class="counter-example flex flex-center">
-          <button id="increment">+</button> 
-          Count: <span id="count-value">0</span>
-          <button id="decrement">-</button>
+    <!-- Home Sectiom Start -->
+    <section class="home">
+      <div class="content">
+        <h3>Rent a Book KİTAP KİRALAMA </h3>
+        <p>
+          Kitapların raflarında tozlanmaya mahkum etmeyen bir uygulama. Okuyun
+          ve geri getirin, *belli bir oranda geri ödeme alın. Hem siz kazanın
+          hem de diğer okuyucular kazansın. Diğer kitaplara yelken açmaya var
+          mısınız?
+        </p>
+        <a class="btn" href="#">Hemen Kirala</a>
+
+        <section >
+          <div >
+            <div >
+              <button id="increment">+</button>
+              <span id="count-value">0</span>
+              <button id="decrement">-</button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      
+    </section>
+
+    <!-- Home Section End -->
+
+
+    <!-- Book Card Section Start -->
+    <section>  </section>
+    
+    <section class="book-cards">
+      <h1>Kitaplarımızdan <span>Seçmeler</span></h1>
+      <div class="box-container">
+
+        <div class="box">
+          <div class="box-head">
+            <img src="images/books/yalniziz.jpg" alt="book">
+            <span class="book-category">Edebiyat</span>
+            <h3>Yalnızız</h3>
+            <div class="price">49 TL <span>59 TL</span> </div>
+          </div>
+          <div class="box-bottom">
+            <a class="btn" href="#"> Ekle </a>
+          </div>
         </div>
+
+        <div class="box">
+          <div class="box-head">
+            <img src="images/books/yalniziz.jpg" alt="book">
+            <span class="book-category">Edebiyat</span>
+            <h3>Yalnızız</h3>
+            <div class="price">49 TL <span>59 TL</span> </div>
+          </div>
+          <div class="box-bottom">
+            <a class="btn" href="#"> Ekle </a>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-head">
+            <img src="images/books/yalniziz.jpg" alt="book">
+            <span class="book-category">Edebiyat</span>
+            <h3>Yalnızız</h3>
+            <div class="price">49 TL <span>59 TL</span> </div>
+          </div>
+          <div class="box-bottom">
+            <a class="btn" href="#"> Ekle </a>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-head">
+            <img src="images/books/yalniziz.jpg" alt="book">
+            <span class="book-category">Edebiyat</span>
+            <h3>Yalnızız</h3>
+            <div class="price">49 TL <span>59 TL</span> </div>
+          </div>
+          <div class="box-bottom">
+            <a class="btn" href="#"> Ekle </a>
+          </div>
+        </div>
+
       </div>
     </section>
+    <!-- Book Section End -->
   </body>
 </html>

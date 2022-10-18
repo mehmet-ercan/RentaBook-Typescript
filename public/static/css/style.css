@@ -1,20 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
 
-:root{
+:root {
   --main-color: #F5F5F5;
   --black-color: #353535;
-  --border: 01rem solid rgba(255,255,255,0.3);
+  --border: 01rem solid rgba(255, 255, 255, 0.3);
 }
 
 /*! base html codes*/
-/*Rem ile Px ilişkisi*/
-
-html{
-  font-size: 62.5%; /*Normalde 1rem=16px idi, (10/16=0.625). 1rem=10px olacak şeklinde daha kolay nalşılıyor*/
-  overflow-x: hidden; /* Yatayda bulunan scroll barı kapat*/
-  scroll-behavior: smooth;
-  scroll-padding-top: 9rem;
-}
 
 * {
   font-family: 'Poppins', sans-serif;
@@ -28,102 +20,139 @@ html{
   transition: 0.3s ease;
 }
 
-body{
-  background-color: var(--main-color);
-  height: 200vh;
+html {
+  font-size: 62.5%;
+  /*Normalde 1rem=16px idi, (10/16=0.625). 1rem=10px olacak şeklinde daha kolay nalşılıyor*/
+  overflow-x: hidden;
+  /* Yatayda bulunan scroll barı kapat*/
+  scroll-behavior: smooth;
+  scroll-padding-top: 9rem;
+
 }
 
-/* Header Start*/
+section {
+  padding: 3.5rem 7%;
+}
+
+
+body {
+  background-color: var(--main-color);
+}
+
+.btn {
+  margin-top: 1rem;
+  display: inline-block;
+  padding: 2rem 3.75rem;
+  border-radius: 30rem;
+  font-size: 2rem;
+  color: white;
+  background-color: var(--black-color);
+  font-weight: bold;
+}
+
+/* Header Sectiom Start*/
 .logo img {
   height: 10rem;
 }
 
-.header{
+.header {
   background-color: white;
-  display: flex; /* Öğeleri yan yana hizalar */
+  display: flex;
+  /* Öğeleri yan yana hizalar */
   align-items: center;
   justify-content: space-between;
-  
+
   padding: 0 3%;
   margin: 2rem 7%;
   border-radius: 30rem;
-  box-shadow: 0px 0px 17px -2px rgba(0,0,0,0.75);
-  position: sticky; /*aşağı doğru kaydırma yaptığımızda ekranın en üstüne yapışır*/
+  box-shadow: 0px 0px 17px -3px rgba(0, 0, 0, 0.75);
+  position: sticky;
+  /*aşağı doğru kaydırma yaptığımızda ekranın en üstüne yapışır*/
   top: 0.5em;
-  z-index: 1000; /* en önde olmasını sağlar */ 
+  z-index: 1000;
+  /* en önde olmasını sağlar */
 }
 
-.header .navbar a{
+.header .navbar a {
   font-size: 1.6rem;
-  margin: 0 0.7rem;
+  margin: 0 1.5rem;
+  /* ilk değer üst alt, sonraki de sağ ve soldan %7 kadar boşluk verir */
   color: var(--black-color);
   border-bottom: 0.1rem solid transparent;
 }
 
-.header .navbar a:hover{
+.header .navbar .active,
+.header .navbar a:hover {
   border-color: var(--black-color);
   padding-bottom: 0.5rem;
 }
 
-.buttons{
-  
+.header .buttons button {
+  cursor: pointer;
+  font-size: 2.5em;
+  margin-left: 2rem;
+  background-color: transparent;
 }
 
-/* Header End*/
+/* Header Sectiom End*/
 
-
-/*Buradam aşağısı counter için css kodlarımız*/
-
-.end-section {
-  position: relative;
-  width: 100%;
-  height: 50vh;
+/* Home Sectiom Start*/
+.home {
+  min-height: 100vh;
+  /* Bir tarayıcıda görülen maks alan, baştan sona kadar olan alan*/
   display: flex;
-  justify-content: center;
+  /*Yan yana hizala*/
+  background: url(../../images/home2.jpg) no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin-top: -14.5rem;
+  display: flex;
   align-items: center;
 }
 
-.counter-example {
-  width: 50%;
-  font-family: monospace;
-  font-size: 1.4rem;
+.home .content {
+  max-width: 60rem;
 }
 
-#increment,
-#decrement {
-  padding: 0.4rem;
-  font-size: 1.2rem;
-  background-color: #aca8a823;
-  border: none;
-  outline: none;
+.home .content h3 {
+  font-size: 7rem;
+  color: white;
+  text-transform: uppercase;
+  margin-top: 17rem;
 }
 
-#increment:hover,
-#decrement:hover {
-  background-color: #262626;
-  color: #f5f5f5;
-}
-
-.learn-ts-text {
-  color: #111111;
+.home .content p {
   font-size: 2rem;
+  font-weight: 300;
+  line-height: 1.8;
+  text-transform: capitalize;
+  padding: 1rem;
+  color: white;
+
 }
 
-.learn-ts-container a {
-  text-decoration: none;
+/* For Counter */
+#increment,
+#decrement,
+#count-value {
+  font-size: 1rem;
+  margin: 0.5em;
 }
 
+/* Home Section End*/
 
 
+/* Book Section Start*/
 
-
-.flex {
-  display: flex;
-  gap: 10px;
+.book-cards .box-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+  gap: 1em;
 }
 
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.book-cards .box-container .box img {
+  width: 100%;
+  object-fit: cover;
 }
+
+/* Book Section End*/
