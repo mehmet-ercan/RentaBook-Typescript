@@ -4,7 +4,7 @@
   --main-color: #F5F5F5;
   --black-color: #353535;
   --border: 01rem solid rgba(255, 255, 255, 0.3);
-  --cards: rgba(238, 139, 90, 0.5);
+  --cards: rgba(249, 167, 74,0.6)
 }
 
 /*! base html codes*/
@@ -22,10 +22,8 @@
 }
 
 html {
-  font-size: 62.5%;
-  /*Normalde 1rem=16px idi, (10/16=0.625). 1rem=10px olacak şeklinde daha kolay nalşılıyor*/
-  overflow-x: hidden;
-  /* Yatayda bulunan scroll barı kapat*/
+  font-size: 62.5%;  /*Normalde 1rem=16px idi, (10/16=0.625). 1rem=10px olacak şeklinde daha kolay nalşılıyor*/
+  overflow-x: hidden; /* Yatayda bulunan scroll barı kapat*/
   scroll-behavior: smooth;
   scroll-padding-top: 9rem;
 
@@ -45,7 +43,7 @@ section {
   padding: 3.5rem 7%;
 }
 
-.headLine{ /* Başlık */
+.book-cards .headLine{
   color: black;
   font-size: 3.5rem;
   margin-bottom: 3.5rem;
@@ -53,11 +51,10 @@ section {
   
 }
 
-.headLine span{
+.book-cards .headLine span{
   color: var(--cards);
 
 }
-
 
 body {
   background-color: var(--main-color);
@@ -117,6 +114,83 @@ body {
   background-color: transparent;
 }
 
+/*New Navbar Start*/
+#primary_nav_wrap
+{
+	margin-top:0.5rem
+}
+
+#primary_nav_wrap ul
+{
+	list-style:none;
+	position:relative;
+	float:left;
+	margin:0;
+	padding:0;
+  color:#000;
+
+}
+
+#primary_nav_wrap ul a
+{
+	display:block;
+	text-decoration:none;
+	font-size:1.8rem;
+	line-height:3.2rem;
+	padding:0 0.5rem;
+
+}
+
+#primary_nav_wrap ul li
+{
+	position:relative;
+	float:left;
+	margin:0;
+	padding:0;
+}
+
+
+#primary_nav_wrap ul li:hover
+{
+	background:#f6f6f6
+}
+
+#primary_nav_wrap ul ul
+{
+	display:none;
+	position:absolute;
+	top:100%;
+	left:0;
+	background:#fff;
+	padding:0
+}
+
+#primary_nav_wrap ul ul li
+{
+	float:none;
+	width:20rem;
+ 
+}
+
+#primary_nav_wrap ul ul a
+{
+	line-height:120%;
+	padding:1rem 1.5rem;
+
+}
+
+#primary_nav_wrap ul ul ul
+{
+	top:0;
+	left:100%
+}
+
+#primary_nav_wrap ul li:hover > ul
+{
+	display:block
+}
+  /*New Navbar End*/
+  
 /* Header Sectiom End*/
 
 /* Home Sectiom Start*/
@@ -167,6 +241,10 @@ body {
 
 /* Book Section Start*/
 
+.book-cards{
+  display: none;
+}
+
 .book-cards .box-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
@@ -212,4 +290,49 @@ body {
   font-weight: 300;
 }
 
+.book-cards .box-container .box .box-bottom{
+align-self: flex-end;
+}
+
 /* Book Section End*/
+
+/* Main Section To Show User Start */
+
+.mainSection{
+  font-size: 2rem;;
+}
+
+/* Add Book Section Start */
+.add-book{
+  display: none;
+  font-size: 2rem;
+}
+
+.myBook{
+  width: 30rem;
+  height: 2.5rem;
+}
+
+#title{
+  margin-left: 43px;
+  margin-bottom: 10px;
+ }
+ #author{
+   margin-left: 30px;
+   margin-bottom: 10px;
+ }
+ #isbn{
+    margin-left: 30px;
+   margin-bottom: 10px;
+ }
+ #submit{
+    margin-left: 80px;
+    font-size: 18px;
+    margin-bottom: 15px;
+ }
+
+ 
+
+/* Add Book Section End */
+
+/* Main Section To Show User End */

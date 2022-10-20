@@ -21,3 +21,10 @@ incrementButton.addEventListener("click", handleIncrementClick);
 decrementButton.addEventListener("click", handleDecrementClick);
 
 /*export NODE_OPTIONS=--openssl-legacy-provider*/
+
+function a(){
+  debugger;
+  const app = document.getElementById("name");
+  console.log(app);
+}
+
