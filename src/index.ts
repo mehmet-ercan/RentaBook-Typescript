@@ -9,10 +9,13 @@ const addBookMenuItem = document.getElementById("addBookMenuItem");
 const addBookSection = document.getElementById("addBookSection");
 
 if (addBookMenuItem != null && addBookSection != null) {
-  addBookMenuItem.addEventListener("click", () => {
-    if (addBookSection.style.display == "none") {
+  let a = "ali";
+
+  addBookMenuItem.addEventListener("click", function click() {
+    if (addBookSection.style.display === "none") {
       addBookSection.style.display = "block";
     } else {
+      a = "";
       addBookSection.style.display = "none";
     }
   });
