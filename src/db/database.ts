@@ -1,19 +1,20 @@
-class DataBase {
-    _books: Array<Book>;
-    _stocks: Array<Book>;
-    _customers: Array<Book>;
-    _sales: Array<Book>;
-    _rents: Array<Book>;
-    _bookSpecifications: Array<Book>;
+import { Book } from "../domain/book";
 
-    constructor() {
-        this._books = new Array<Book>();
-        this._stocks = new Array<Book>();
-        this._customers = new Array<Book>();
-        this._sales = new Array<Book>();
-        this._rents = new Array<Book>();
-        this._bookSpecifications = new Array<Book>();
-    }
+export class DataBase {
+    
+  books: Array<Book>;
+  stocks: Array<Book>;
+  customers: Array<Book>;
+  sales: Array<Book>;
+  rents: Array<Book>;
+  bookSpecifications: Array<Book>;
 
-
+  constructor() {
+    this.books = new Array<Book>();
+    this.stocks = new Array<Book>();
+    this.customers = new Array<Book>();
+    this.sales = new Array<Book>();
+    this.rents = new Array<Book>();
+    this.bookSpecifications = new Array<Book>();
+  }
 }

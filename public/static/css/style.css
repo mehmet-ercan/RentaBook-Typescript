@@ -229,9 +229,7 @@ body {
 }
 
 /* For Counter */
-#increment,
-#decrement,
-#count-value {
+#increment, #decrement, #count-value {
   font-size: 1rem;
   margin: 0.5em;
 }
@@ -302,10 +300,16 @@ align-self: flex-end;
   font-size: 2rem;;
 }
 
+
+
 /* Add Book Section Start */
 .add-book{
   display: none;
   font-size: 2rem;
+}
+
+.mainSection div input{
+
 }
 
 .myBook{
@@ -313,23 +317,25 @@ align-self: flex-end;
   height: 2.5rem;
 }
 
-#title{
-  margin-left: 43px;
-  margin-bottom: 10px;
- }
- #author{
-   margin-left: 30px;
-   margin-bottom: 10px;
- }
- #isbn{
-    margin-left: 30px;
-   margin-bottom: 10px;
- }
- #submit{
-    margin-left: 80px;
-    font-size: 18px;
-    margin-bottom: 15px;
- }
+
+ form {
+  margin: 2% auto;
+  padding: 1rem;
+  width: 32rem;
+  color: #aaa;
+  border: .1em solid #ddd;
+  border-radius: 0.5rem;
+  font-size: 2rem;
+}
+
+#add-book-form input{
+  width: 25rem;
+  height: 3em;
+  text-indent: .5em;
+  border: .1em solid #ddd;
+  border-radius: 0.4rem;
+  outline-color: #1abc9c;
+}
 
  
 

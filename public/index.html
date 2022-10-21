@@ -1,198 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rent a Book App</title>
-    <link rel="icon" href="./images/icon1.svg" />
-    <link rel="stylesheet" href="./static/css/style.css" />
-    <script src="./static/bundle/script.js" defer></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-  </head>
 
-  <body>
-    <!-- Header Start -->
-    <!-- src="https://img.icons8.com/clouds/100/000000/storytelling.png" -->
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rent a Book App</title>
+  <link rel="icon" href="./images/icon1.svg" />
+  <link rel="stylesheet" href="./static/css/style.css" />
+  <script src="./static/bundle/script.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
 
-    <header class="header">
-      <a href="#" class="logo">
-        <img src="../public/images/icon1.png" alt="Logo" />
-      </a>
+<body>
+  <!-- Header Start -->
+  <!-- src="https://img.icons8.com/clouds/100/000000/storytelling.png" -->
 
-      <nav class="navbar" id="primary_nav_wrap">
-        <ul>
-          <li class="current-menu-item">
-            <a href="#">Anasayfa</a>
-          </li>
+  <header class="header">
+    <a href="#" class="logo">
+      <img src="../public/images/icon1.png" alt="Logo" />
+    </a>
 
-          <li>
-            <a href="#">Kitap İşlemleri</a>
-            <ul>
-              <li><a href="#addBookSection" onclick="showAndHide('addBookSection')">Kitap Ekle</a></li>
-              <li><a href="#">Kitap Satışı</a></li>
-              <li><a href="#">Kitap Kiralama</a></li>
-              <li><a href="#bookCardsSection" onclick="showAndHide('bookCardsSection')">Kitapları Listemiz</a></li>
-            </ul>
-          </li>
+    <nav class="navbar" id="primary_nav_wrap">
+      <ul>
+        <li class="current-menu-item">
+          <a href="#">Anasayfa</a>
+        </li>
 
-          <li>
-            <a href="#">Müşteri İşlemleri</a>
-            <ul>
-              <li><a href="#">Müşteri Ekle</a></li>
-            </ul>
-          </li>
+        <li>
+          <a href="#">Kitap İşlemleri</a>
+          <ul>
+            <li>
+              <a href="#addBookSection" id="addBookMenuItem">Kitap Ekle</a>
+            </li>
+            <li><a href="#">Kitap Satışı</a></li>
+            <li><a href="#">Kitap Kiralama</a></li>
+            <li>
+              <a href="#bookCardsSection" id="bookCardsMenuItem">Kitapları Listemiz</a>
+            </li>
+          </ul>
+        </li>
 
-          <li><a href="#">İptal İşlemleri</a></li>
-          <li><a href="#">İletişim</a></li>
-          <li><a href="#">Hakkımızda</a></li>
-        </ul>
-      </nav>
+        <li>
+          <a href="#">Müşteri İşlemleri</a>
+          <ul>
+            <li><a href="#">Müşteri Ekle</a></li>
+          </ul>
+        </li>
 
-      <div class="buttons">
-        <button>
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
-        <button>
-          <i class="fas fa-shopping-cart"></i>
-        </button>
-        <button>
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
-    </header>
+        <li><a href="#">İptal İşlemleri</a></li>
+        <li><a href="#">İletişim</a></li>
+        <li><a href="#">Hakkımızda</a></li>
+      </ul>
+    </nav>
 
-    <!-- Header End -->
+    <div class="buttons">
+      <button>
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+      <button>
+        <i class="fas fa-shopping-cart"></i>
+      </button>
+      <button>
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
 
-    <!-- Home Sectiom Start -->
-    <section class="home">
-      <div class="content">
-        <h3>Rent a Book KİTAP KİRALAMA</h3>
-        <p>
-          Kitapların raflarında tozlanmaya mahkum etmeyen bir uygulama. Okuyun
-          ve geri getirin, *belli bir oranda geri ödeme alın. Hem siz kazanın
-          hem de diğer okuyucular kazansın. Diğer kitaplara yelken açmaya var
-          mısınız?
-        </p>
-        <a class="btn" href="#">Hemen Kirala</a>
+  <!-- Header End -->
 
-        <section>
+  <!-- Home Sectiom Start -->
+  <section class="home">
+    <div class="content">
+      <h3>Rent a Book KİTAP KİRALAMA</h3>
+      <p>
+        Kitapların raflarında tozlanmaya mahkum etmeyen bir uygulama. Okuyun
+        ve geri getirin, *belli bir oranda geri ödeme alın. Hem siz kazanın
+        hem de diğer okuyucular kazansın. Diğer kitaplara yelken açmaya var
+        mısınız?
+      </p>
+      <a class="btn" href="#">Hemen Kirala</a>
+
+      <section>
+        <div>
           <div>
-            <div>
-              <button id="increment">+</button>
-              <span id="count-value">0</span>
-              <button id="decrement">-</button>
-            </div>
-          </div>
-        </section>
-      </div>
-    </section>
-
-    <!-- Home Section End -->
-
-    <!-- Book Card Section Start -->
-    <section id="bookCardsSection" class="book-cards" >
-      <h1 class="headLine">KİTAPLARDAN <span>SEÇMELER</span></h1>
-      <div class="box-container">
-        <div class="box">
-          <div class="box-head">
-            <img src="images/books/yalniziz.jpg" alt="book" />
-            <span class="book-publisher">Ötüken Neşriyat</span>
-            <h3>Yalnızız</h3>
-            <div class="price">49 ₺ <span>59 ₺</span></div>
-          </div>
-          <div class="box-bottom">
-            <a class="btn" href="#"> Ekle </a>
+            <button id="increment">+</button>
+            <span id="count-value">0</span>
+            <button id="decrement">-</button>
           </div>
         </div>
-
-        <div class="box">
-          <div class="box-head">
-            <img src="images/books/yalniziz.jpg" alt="book" />
-            <span class="book-publisher">Ötüken Neşriyat</span>
-            <h3>Yalnızız</h3>
-            <div class="price">49 ₺ <span>59 ₺</span></div>
-          </div>
-          <div class="box-bottom">
-            <a class="btn" href="#"> Ekle </a>
-          </div>
-        </div>
-
-        <div class="box">
-          <div class="box-head">
-            <img src="images/books/yalniziz.jpg" alt="book" />
-            <span class="book-publisher">Ötüken Neşriyat</span>
-            <h3>Yalnızız</h3>
-            <div class="price">49 ₺ <span>59 ₺</span></div>
-          </div>
-          <div class="box-bottom">
-            <a class="btn" href="#"> Ekle </a>
-          </div>
-        </div>
-
-        <div class="box">
-          <div class="box-head">
-            <img src="images/books/yalniziz.jpg" alt="book" />
-            <span class="book-publisher">Ötüken Neşriyat</span>
-            <h3>Yalnızız</h3>
-            <div class="price">49 ₺ <span>59 ₺</span></div>
-          </div>
-          <div class="box-bottom">
-            <a class="btn" href="#"> Ekle </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Book Card Section End -->
-
-    <!-- Main Section To Show User Start -->
-
-    <section class="mainSection">
-
-      <section id="addBookSection" class="add-book">
-
-
-        <form id="add-book-form">
-          <div>
-            <label for="name">Title</label>
-            <input type="text" id="title" class="myBook">
-          </div>
-  
-          <div>
-            <label for="author">Author</label>
-            <input type="text" id="author" class="myBook">
-          </div>
-          <div>
-            <label for="isbn">ISBN</label>
-            <input type="text" id="isbn" class="myBook">
-          </div>
-          <div>
-            <label for="publishYear">Publish Year</label>
-            <input type="text" id="publishYear" class="myBook">
-          </div>
-          <div>
-            <label for="pages">Pages</label>
-            <input type="text" id="pages" class="myBook">
-          </div>
-          <!-- Submit button-->
-            <div>
-              <input type="submit" value="submit" class="myBook" id="submit">
-            </div>
-        </form>
-
       </section>
-     
+    </div>
+  </section>
+
+  <!-- Home Section End -->
+
+  <!-- Book Card Section Start -->
+  <section id="bookCardsSection" class="book-cards">
+    <h1 class="headLine">KİTAPLARDAN <span>SEÇMELER</span></h1>
+    <div class="box-container">
+      <div class="box">
+        <div class="box-head">
+          <img src="images/books/yalniziz.jpg" alt="book" />
+          <span class="book-publisher">Ötüken Neşriyat</span>
+          <h3>Yalnızız</h3>
+          <div class="price">49 ₺ <span>59 ₺</span></div>
+        </div>
+        <div class="box-bottom">
+          <a class="btn" href="#"> Ekle </a>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="box-head">
+          <img src="images/books/yalniziz.jpg" alt="book" />
+          <span class="book-publisher">Ötüken Neşriyat</span>
+          <h3>Yalnızız</h3>
+          <div class="price">49 ₺ <span>59 ₺</span></div>
+        </div>
+        <div class="box-bottom">
+          <a class="btn" href="#"> Ekle </a>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="box-head">
+          <img src="images/books/yalniziz.jpg" alt="book" />
+          <span class="book-publisher">Ötüken Neşriyat</span>
+          <h3>Yalnızız</h3>
+          <div class="price">49 ₺ <span>59 ₺</span></div>
+        </div>
+        <div class="box-bottom">
+          <a class="btn" href="#"> Ekle </a>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="box-head">
+          <img src="images/books/yalniziz.jpg" alt="book" />
+          <span class="book-publisher">Ötüken Neşriyat</span>
+          <h3>Yalnızız</h3>
+          <div class="price">49 ₺ <span>59 ₺</span></div>
+        </div>
+        <div class="box-bottom">
+          <a class="btn" href="#"> Ekle </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Book Card Section End -->
+
+  <!-- Main Section To Show User Start -->
+
+  <section class="mainSection">
+    <section id="addBookSection" class="add-book">
+      <form id="add-book-form">
+        <div>
+          <label for="name">Kitabın İsmi</label>
+          <input type="text" name="bookTitle" id="title" class="myBook" />
+        </div>
+
+        <div>
+          <label for="author">Kitabın Yazarı</label>
+          <input type="text" name="bookAuthor" id="author" class="myBook" />
+        </div>
+        <div>
+          <label for="isbn">ISBN Numarası</label>
+          <input type="text" name="bookIsbn" id="isbn" class="myBook" />
+        </div>
+        <div>
+          <label for="publishYear">Yayın Yılı</label>
+          <input type="text" name="bookPublishYear" id="publishYear" class="myBook" />
+        </div>
+        <div>
+          <label for="pages">Sayfa Sayısı</label>
+          <input type="text" name="bookPages" id="pages" class="myBook" />
+        </div>
+        <!-- Submit button-->
+        <div>
+          <input type="submit" value="Ekle" class="myBook" id="addBookSubmitButton" />
+          <label id="addBookSituation"></label>
+        </div>
+      </form>
     </section>
+  </section>
 
-    <!-- Main Section To Show User End -->
+  <!-- Main Section To Show User End -->
 
-    <!-- TODO DİĞER SAYFA TASARIMLARI-->
-  </body>
+  <!-- TODO DİĞER SAYFA TASARIMLARI-->
+</body>
+
 </html>
