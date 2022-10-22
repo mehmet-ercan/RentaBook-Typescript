@@ -1,5 +1,6 @@
 import { DataBase } from "./db/database";
 import { Book } from "./domain/book";
+import { Customer } from "./domain/customer";
 
 /*export NODE_OPTIONS=--openssl-legacy-provider*/
 
@@ -9,13 +10,10 @@ const addBookMenuItem = document.getElementById("addBookMenuItem");
 const addBookSection = document.getElementById("addBookSection");
 
 if (addBookMenuItem != null && addBookSection != null) {
-  let a = "ali";
-
   addBookMenuItem.addEventListener("click", function click() {
     if (addBookSection.style.display === "none") {
       addBookSection.style.display = "block";
     } else {
-      a = "";
       addBookSection.style.display = "none";
     }
   });
@@ -34,11 +32,11 @@ if (bookCardsMenuItem != null && bookCardsSection != null) {
   });
 }
 
-const form = document.getElementById("add-book-form");
+const form = <HTMLFormElement>document.getElementById("add-book-form");
 
 if (form != null) {
   form.onsubmit = () => {
-    const formData = new FormData(<HTMLFormElement>form);
+    const formData = new FormData(form);
 
     const title = formData.get("bookTitle") as string;
     const author = formData.get("bookAuthor") as string;
@@ -48,6 +46,9 @@ if (form != null) {
 
     const book = new Book(title, author, isbn, publishYear, pages);
     db.books.push(book);
+
+    alert("Kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
+    form.reset();
 
     console.log(book);
 
@@ -61,9 +62,45 @@ if (form != null) {
 
     return false; // prevent reload
   };
-
- 
 }
+
+const addCustomerMenuItem = document.getElementById("addCustomerMenuItem");
+const addCustomerSection = document.getElementById("addCustomerSection");
+
+if (addCustomerMenuItem != null && addCustomerSection != null) {
+  addCustomerMenuItem.addEventListener("click", () => {
+    if (addCustomerSection.style.display == "none") {
+      addCustomerSection.style.display = "block";
+    } else {
+      addCustomerSection.style.display = "none";
+    }
+
+  });
+}
+
+const addCustomerForm = <HTMLFormElement>(document.getElementById("add-customer-form"));
+if (addCustomerForm) {
+
+  addCustomerForm.onsubmit = () => {
+    const formData = new FormData(addCustomerForm);
+
+    const name = formData.get("customerName") as string;
+    const surname = formData.get("customerSurname") as string;
+    const phoneNumber = formData.get("customerPhoneNumber") as string;
+
+    const customer = new Customer(1, name, surname, phoneNumber);
+    db.customers.push(customer);
+
+    alert("Müşteri Ekleme İşlemi Başarı İle Tamamlanmıştır. ");
+    addCustomerForm.reset();
+    console.log(customer);
+
+    return false; // prevent reload
+  };
+
+
+}
+
 /*
 const incrementButton = <HTMLButtonElement>document.querySelector("#increment");
 const decrementButton = <HTMLButtonElement>document.querySelector("#decrement");

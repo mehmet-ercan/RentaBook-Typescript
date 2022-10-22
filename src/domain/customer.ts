@@ -1,13 +1,13 @@
-class Customer {
-  _id: number;
-  _name: string;
-  _surName: string;
-  _phoneNumber: string;
+export class Customer {
+  id: number;
+  name: string;
+  surName: string;
+  phoneNumber: string;
 
   constructor(id: number, name: string, surName: string, phoneNumber: string) {
-    this._id = id;
-    this._name = name;
-    this._surName = surName;
-    this._phoneNumber = phoneNumber;
+    this.id = id;
+    this.name = name;
+    this.surName = surName;
+    this.phoneNumber = phoneNumber;
   }
 }
