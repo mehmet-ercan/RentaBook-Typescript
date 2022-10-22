@@ -61,8 +61,9 @@ if (form != null) {
 
     return false; // prevent reload
   };
-}
 
+ 
+}
 /*
 const incrementButton = <HTMLButtonElement>document.querySelector("#increment");
 const decrementButton = <HTMLButtonElement>document.querySelector("#decrement");

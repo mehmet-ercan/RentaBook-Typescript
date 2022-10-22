@@ -294,22 +294,11 @@ align-self: flex-end;
 
 /* Book Section End*/
 
-/* Main Section To Show User Start */
-
-.mainSection{
-  font-size: 2rem;;
-}
-
-
 
 /* Add Book Section Start */
 .add-book{
   display: none;
   font-size: 2rem;
-}
-
-.mainSection div input{
-
 }
 
 .myBook{
@@ -337,8 +326,4 @@ align-self: flex-end;
   outline-color: #1abc9c;
 }
 
- 
-
 /* Add Book Section End */
-
-/* Main Section To Show User End */
