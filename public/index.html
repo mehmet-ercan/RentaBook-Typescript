@@ -38,6 +38,9 @@
             <li>
               <a href="#listBooksSection" id="bookCardsMenuItem">Kitap Listesi</a>
             </li>
+            <li>
+              <a href="#addStockSection" id="addStockMenuItem">Stok Ekleme</a>
+            </li>
           </ul>
         </li>
 
@@ -175,6 +178,11 @@
         <input type="text" name="bookPages" id="pages" class="myBook" />
       </div>
 
+      <div>
+        <label for="price">Ücreti</label>
+        <input type="text" name="bookPrice" id="price" class="myBook" />
+      </div>
+
       <!-- Submit button-->
       <div>
         <input type="submit" value="Ekle" class="myBook" id="addBookSubmitButton" />
@@ -210,6 +218,32 @@
 
     </form>
   </section>
+
+  <section id="addStockSection" class="add-stock" >
+    <form id="add-stock-form">
+      <div>
+        <label for="isbn">Stok Eklenecek Kitabın ISBN Numarası</label>
+        <input type="text" name="bookIsbnForAddStock" id="book-isbn-for-stock" />
+      </div>
+
+      <div>
+        <label for="stock">Stok Adedi</label>
+        <input type="text" name="stockQuantity" id="book-stock-quantity" />
+      </div>
+
+      <div>
+        <label for="shelfNumber">Raf Numarası</label>
+        <input type="text" name="shelfNumber" id="book-stock-shelfNumber" />
+      </div>
+
+      <!-- Submit button-->
+      <div>
+        <input type="submit" value="Ekle" id="addStockSubmitButton" />
+      </div>
+
+    </form>
+
+  </section> 
 
 
   <!-- TODO DİĞER SAYFA TASARIMLARI-->

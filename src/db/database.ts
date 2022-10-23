@@ -1,10 +1,11 @@
 import { Book } from "../domain/book";
 import { Customer } from "../domain/customer";
+import { Stock } from "../domain/stock";
 
 export class DataBase {
     
   books: Array<Book>;
-  stocks: Array<Book>;
+  stocks: Array<Stock>;
   customers: Array<Customer>;
   sales: Array<Book>;
   rents: Array<Book>;
@@ -12,7 +13,7 @@ export class DataBase {
 
   constructor() {
     this.books = new Array<Book>();
-    this.stocks = new Array<Book>();
+    this.stocks = new Array<Stock>();
     this.customers = new Array<Customer>();
     this.sales = new Array<Book>();
     this.rents = new Array<Book>();

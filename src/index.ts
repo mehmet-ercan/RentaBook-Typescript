@@ -1,6 +1,9 @@
+import { cli } from "webpack";
 import { DataBase } from "./db/database";
 import { Book } from "./domain/book";
+import { BookSpecification } from "./domain/book-specification";
 import { Customer } from "./domain/customer";
+import { Stock } from "./domain/stock";
 
 /*export NODE_OPTIONS=--openssl-legacy-provider*/
 
@@ -43,8 +46,13 @@ if (form != null) {
     const isbn = formData.get("bookIsbn") as string;
     const publishYear = formData.get("bookPublishYear") as string;
     const pages = formData.get("bookPages") as unknown as number;
+    const price = formData.get("bookPrice") as unknown as number;
+    const startDate = new Date();
+    const endDate = new Date('Dec 31, 9999 23:59:59');
 
-    const book = new Book(title, author, isbn, publishYear, pages);
+    const bookSpec = new BookSpecification(isbn, price, startDate, endDate);
+
+    const book = new Book(isbn, title, author, publishYear, pages, bookSpec);
     db.books.push(book);
 
     alert("Kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
@@ -58,6 +66,7 @@ if (form != null) {
       console.log(b.author);
       console.log(b.publishYear);
       console.log(b.pages);
+      console.log(b.bookSpec.price);
     }
 
     return false; // prevent reload
@@ -100,6 +109,47 @@ if (addCustomerForm) {
 
 
 }
+
+const addStockForm = <HTMLFormElement>(document.getElementById("add-stock-form"));
+const addStockSection = <HTMLFormElement>(document.getElementById("addStockSection"));
+const addStockMenuItem = <HTMLFormElement>(document.getElementById("addStockMenuItem"));
+
+if (addStockSection && addStockMenuItem) {
+  addStockMenuItem.addEventListener("click", () => {
+    if (addStockSection.style.display === "none") {
+      addStockSection.style.display = "block";
+    } else {
+      addStockSection.style.display = "none";
+    }
+  });
+}
+
+if (addStockForm) {
+  addStockForm.onsubmit = () => {
+
+    const formData = new FormData(addStockForm);
+
+    const isbn = formData.get("bookIsbnForAddStock") as string;
+    const quanttiy = formData.get("stockQuantity") as unknown as number;
+    const shelfNumber = formData.get("shelfNumber") as string;
+
+    const stock = new Stock(isbn, quanttiy, shelfNumber);
+
+    const isContainsBook = db.books.some(b => b.isbn == isbn);
+
+    if (!isContainsBook) {
+      alert("Stok eklenmeye çalışılan kitap, kayıtlı değildir. Litfen önce kitap ekleyiniz");
+    }
+    else {
+      db.stocks.push(stock);
+      alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
+    }
+
+    return false; // prevent reload
+  };
+}
+
+
 
 /*
 const incrementButton = <HTMLButtonElement>document.querySelector("#increment");
