@@ -43,6 +43,10 @@ section {
   padding: 3.5rem 7%;
 }
 
+.bookCardsSection .addBookSection .listBooksSection .addCustomerSection .addStockSection{
+  display: block;
+}
+
 .book-cards .headLine{
   color: black;
   font-size: 3.5rem;
@@ -295,11 +299,8 @@ align-self: flex-end;
 /* Book Section End*/
 
 
-/* Add Book Section Start */
+/* All Form Using - Start */
 
-.addBookSection{
-  display: none;
-}
 
 form{
   margin: 2% auto;
@@ -312,7 +313,7 @@ form{
   
 }
 
-#add-book-form input {
+form input {
   width: 25rem;
   height: 4rem;
   text-indent: 1.5em;
@@ -322,20 +323,12 @@ form{
   font-size: 1.75rem;
 }
 
-#add-book-form div {
+form div {
 margin-top: 1.5rem;
 }
 
-#add-book-form label{
+form label{
   color: black;
-}
-/* Add Book Section End */
 
-
-/* Add Customer Section Start */
-.addCustomerSection{
-  display: none;;
-}
-
-/* Add Customer Section End */
+/* All Form Using - End */
 
