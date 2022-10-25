@@ -3,27 +3,64 @@ import { Book } from "../domain/book";
 import { Sale } from "../domain/sale";
 
 export class SaleService {
-    db: DataBase;
+    private _dataBase: DataBase;
 
-    constructor(db: DataBase) {
-        this.db = db;
+    constructor(dataBase: DataBase) {
+        this._dataBase = dataBase;
     }
 
+    /**
+     * Getter dataBase
+     * @return {DataBase}
+     */
+    public get dataBase(): DataBase {
+        return this._dataBase;
+    }
+
+    /**
+     * Setter dataBase
+     * @param {DataBase} value
+     */
+    public set dataBase(value: DataBase) {
+        this._dataBase = value;
+    }
+
+    public addSale(sale: Sale): void {
+        this.dataBase.getSalesList.push(sale);
+    }
+
+
     calculateTotal(sale: Sale): number {
-        let subtotal = 0.0;
+        let subTotal = 0.0;
 
         for (let entry of sale.bookAndQuantityMap.entries()) {
-            subtotal += entry[0].bookSpec.price * entry[1];
+            subTotal += entry[0].bookSpec.price * entry[1];
         }
 
-        return subtotal;
+        return subTotal;
     }
 
     generateSaleNumber(customerId: number): string {
         let today = new Date();
-        let receiptNumber: string = today.getDay() + today.getMonth() + today.getFullYear() + today.getHours() + today.getMinutes() + today.getSeconds() + customerId.toString();
+        let receiptNumber: string = "S" + today.getDay().toString + today.getMonth().toString + today.getFullYear().toString + today.getHours().toString + today.getMinutes().toString + today.getSeconds().toString + customerId.toString;
 
         return receiptNumber;
+    }
+
+    public getSale(saleNumber: string): Sale | undefined {
+        let sale = this.dataBase.getSalesList.find(s => s.operationNumber === saleNumber);
+        if (sale) {
+            return sale;
+        }
+        else {
+            return undefined;
+        }
+
+        //return this.dataBase.getSalesList.stream().filter(s -> s.getOperationNumber().equals(saleNumber)).findFirst().orElse(null);
+    }
+
+    public removeSale(sale: Sale) {
+        this.dataBase.getSalesList.pop(sale);
     }
 
 }

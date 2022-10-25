@@ -42,14 +42,22 @@ export class CustomerService {
         return lastCustomerId;
     }
 
-    public getCustomerInfo(id: number): Customer {
-        return this.dataBase.getCustomersList.find(customer => customer.id === id)!;
+    public getCustomerInfo(id: number): Customer | undefined {
+
+        let customer = this.dataBase.getCustomersList.find(customer => customer.id === id);
+
+        if (customer) {
+            return customer;
+        } else {
+            return undefined;
+        }
     }
 
     public isValidCustomer(customerId: number): boolean {
-        //return dataBase.getCustomersList().stream().anyMatch(c -> c.getId() == customerId);
-        let isvalid = this.dataBase.getCustomersList.find(customer => customer.id === customerId);
-        if (isvalid) {
+
+        let isValid = this.dataBase.getCustomersList.find(customer => customer.id === customerId);
+
+        if (isValid) {
             return true;
         } else {
             return false;
