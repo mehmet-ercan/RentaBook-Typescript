@@ -43,8 +43,8 @@ section {
   padding: 3.5rem 7%;
 }
 
-.bookCardsSection .addBookSection .listBooksSection .addCustomerSection .addStockSection{
-  display: block;
+#bookCardsSection, #addBookSection, #listBooksSection, #addCustomerSection, #addStockSection, #saleBookSection{
+  display: none;
 }
 
 .book-cards .headLine{
@@ -329,6 +329,6 @@ margin-top: 1.5rem;
 
 form label{
   color: black;
-
+}
 /* All Form Using - End */
 

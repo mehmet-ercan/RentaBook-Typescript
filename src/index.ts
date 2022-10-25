@@ -1,11 +1,13 @@
-import { cli } from "webpack";
 import { DataBase } from "./db/database";
 import { Book } from "./domain/book";
 import { BookSpecification } from "./domain/book-specification";
 import { Customer } from "./domain/customer";
 import { Stock } from "./domain/stock";
+import { SaleService } from "./service/sale-service";
+
 
 /*export NODE_OPTIONS=--openssl-legacy-provider*/
+
 
 const db = new DataBase();
 
@@ -23,14 +25,14 @@ if (addBookMenuItem != null && addBookSection != null) {
 }
 
 const bookCardsMenuItem = document.getElementById("bookCardsMenuItem");
-const bookCardsSection = document.getElementById("bookCardsSection");
+const listBooksSection = document.getElementById("listBooksSection");
 
-if (bookCardsMenuItem != null && bookCardsSection != null) {
+if (bookCardsMenuItem != null && listBooksSection != null) {
   bookCardsMenuItem.addEventListener("click", () => {
-    if (bookCardsSection.style.display == "none") {
-      bookCardsSection.style.display = "block";
+    if (listBooksSection.style.display == "none") {
+      listBooksSection.style.display = "block";
     } else {
-      bookCardsSection.style.display = "none";
+      listBooksSection.style.display = "none";
     }
   });
 }
@@ -111,8 +113,8 @@ if (addCustomerForm) {
 }
 
 const addStockForm = <HTMLFormElement>(document.getElementById("add-stock-form"));
-const addStockSection = <HTMLFormElement>(document.getElementById("addStockSection"));
-const addStockMenuItem = <HTMLFormElement>(document.getElementById("addStockMenuItem"));
+const addStockSection = (document.getElementById("addStockSection"));
+const addStockMenuItem = (document.getElementById("addStockMenuItem"));
 
 if (addStockSection && addStockMenuItem) {
   addStockMenuItem.addEventListener("click", () => {
@@ -147,27 +149,52 @@ if (addStockForm) {
 
     return false; // prevent reload
   };
+
+  const saleBookForm = <HTMLFormElement>(document.getElementById("sale-book-form"));
+  const saleBookSection = (document.getElementById("saleBookSection"));
+  const saleBookMenuItem = (document.getElementById("saleBookMenuItem"));
+  const btnAddBookToCart = (document.getElementById("btnAddBookToCart"));
+  const saleService = new SaleService(db);
+  let sale;
+
+  if (saleBookMenuItem && saleBookSection) {
+    saleBookMenuItem.addEventListener("click", () => {
+
+      if (saleBookSection.style.display == "none") {
+        saleBookSection.style.display = "block";
+      } else {
+        saleBookSection.style.display = "none"
+      }
+    });
+  }
+
+  if (btnAddBookToCart) {
+    btnAddBookToCart.addEventListener("click", () => {
+
+      const formData = new FormData(saleBookForm);
+
+      const isbn = formData.get("isbnForSale") as string;
+      const customerId = formData.get("customerIdForSale") as unknown as number;
+      const quantity = formData.get("quantityForSale") as string;
+
+
+
+
+
+
+    });
+  }
+
+  if (saleBookForm) {
+    saleBookForm.onsubmit = () => {
+
+
+
+
+
+    }
+  }
+
 }
 
 
-
-/*
-const incrementButton = <HTMLButtonElement>document.querySelector("#increment");
-const decrementButton = <HTMLButtonElement>document.querySelector("#decrement");
-const countValue = <HTMLSpanElement>document.querySelector("#count-value");
-
-const handleIncrementClick = () => {
-  const currentValue = parseFloat(countValue.innerText);
-  const incrementedValue = increment(currentValue);
-  countValue.innerText = incrementedValue.toString();
-};
-
-const handleDecrementClick = () => {
-  const currentValue = parseFloat(countValue.innerText);
-  const decrementedValue = decrement(currentValue);
-  countValue.innerText = decrementedValue.toString();
-};
-
-incrementButton.addEventListener("click", handleIncrementClick);
-decrementButton.addEventListener("click", handleDecrementClick);
-*/

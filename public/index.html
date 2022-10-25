@@ -33,11 +33,14 @@
             <li>
               <a href="#addBookSection" id="addBookMenuItem">Kitap Ekle</a>
             </li>
-            <li><a href="#">Kitap Satışı</a></li>
+
+            <li><a href="#saleBookSection" id="saleBookMenuItem">Kitap Satışı</a></li>
             <li><a href="#">Kitap Kiralama</a></li>
+
             <li>
               <a href="#listBooksSection" id="bookCardsMenuItem">Kitap Listesi</a>
             </li>
+
             <li>
               <a href="#addStockSection" id="addStockMenuItem">Stok Ekleme</a>
             </li>
@@ -101,6 +104,7 @@
   <section id="bookCardsSection" class="book-cards">
     <h1 class="headLine">KİTAPLARDAN <span>SEÇMELER</span></h1>
     <div class="box-container">
+
       <div class="box">
         <div class="box-head">
           <img src="images/books/yalniziz.jpg" alt="book" />
@@ -244,6 +248,36 @@
     </form>
 
   </section> 
+
+  <section id="saleBookSection" class="sale-book">
+    <form id="sale-book-form">
+      <div>
+        <label for="customerId">Müşteri Numarası</label>
+        <input type="text" name="customerIdForSale" id="customer-id-for-sale" />
+      </div>
+
+      <div>
+        <label for="isbn">ISBN Numarası</label>
+        <input type="text" name="isbnForSale" id="isbn-for-sale" />
+      </div>
+
+      <div>
+        <label for="quantityForSale">Kaç Adet Alınacak</label>
+        <input type="text" name="quantityForSale" id="quantity-for-sale" />
+      </div>
+
+      <!-- Submit button-->
+    
+      <div>
+        <input type="button" value="Ekle" id="btnAddBookToCart" />
+      </div>
+
+      <div>
+        <input type="submit" value="Satış" id="saleSubmitButton" />
+      </div>
+
+    </form>
+  </section>
 
 
   <!-- TODO DİĞER SAYFA TASARIMLARI-->
