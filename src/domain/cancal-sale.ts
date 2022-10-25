@@ -11,6 +11,8 @@ export class CancelSale {
         this._canceledDateTime = canceledDateTime;
     };
 
+    
+
 
     /**
      * Getter sale

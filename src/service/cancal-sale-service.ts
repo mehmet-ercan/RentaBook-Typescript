@@ -1,0 +1,55 @@
+import { DataBase } from "../db/database";
+import { CancelSale } from "../domain/cancal-sale";
+
+export class CancelSaleService {
+    private _dataBase: DataBase;
+
+    constructor(dataBase: DataBase) {
+        this._dataBase = dataBase;
+    }
+
+    /**
+     * Getter dataBase
+     * @return {DataBase}
+     */
+    public get dataBase(): DataBase {
+        return this._dataBase;
+    }
+
+    /**
+     * Setter dataBase
+     * @param {DataBase} value
+     */
+    public set dataBase(value: DataBase) {
+        this._dataBase = value;
+    }
+
+
+    public cancelSale(cancelSale: CancelSale): void {
+        this.dataBase.getCancaledSales.push(cancelSale);
+        let refund: number = this.calculateRefund(cancelSale);
+        cancelSale.refund = refund;
+    }
+
+    public calculateRefund(cancelSale: CancelSale): number {
+
+
+        let diff = this.calculateDiffHours(cancelSale.canceledDateTime, cancelSale.sale.operationDateTime)
+        let refund: number;
+
+        if (diff > 24) {
+            refund = cancelSale.sale.total * 0.75;
+        } else {
+            refund = cancelSale.sale.total;
+        }
+        return refund;
+    }
+
+    public calculateDiffHours(d1: Date, d2: Date): number {
+
+        let diffMilis: number = (d1.getTime() - d2.getTime());// mili seconds
+        let diffHour = Math.floor(diffMilis / 1000 / 60 / 60 ); // /1000 > second / 60 > min / 60 > hour
+        return diffHour;
+    }
+
+}
