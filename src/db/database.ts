@@ -1,6 +1,6 @@
 import { Book } from "../domain/book";
 import { BookSpecification } from "../domain/book-specification";
-import { CancelSale } from "../domain/cancaled-sale";
+import { CancelSale } from "../domain/cancal-sale";
 import { Customer } from "../domain/customer";
 import { Rent } from "../domain/rent";
 import { Sale } from "../domain/sale";
