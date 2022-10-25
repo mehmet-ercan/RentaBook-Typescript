@@ -3,8 +3,12 @@ import { Book } from "./domain/book";
 import { BookSpecification } from "./domain/book-specification";
 import { Customer } from "./domain/customer";
 import { Stock } from "./domain/stock";
+import { BookService } from "./service/book-service";
 import { SaleService } from "./service/sale-service";
+import { StockService } from "./service/stock-service";
 
+export let stockService: StockService;
+export let bookService:BookService;
 
 /*export NODE_OPTIONS=--openssl-legacy-provider*/
 
@@ -55,14 +59,14 @@ if (form != null) {
     const bookSpec = new BookSpecification(isbn, price, startDate, endDate);
 
     const book = new Book(isbn, title, author, publishYear, pages, bookSpec);
-    db.books.push(book);
+    db.getBooksList.push(book);
 
     alert("Kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
     form.reset();
 
     console.log(book);
 
-    for (var b of db.books) {
+    for (var b of db.getBooksList) {
       console.log(b.isbn);
       console.log(b.name);
       console.log(b.author);
@@ -100,7 +104,7 @@ if (addCustomerForm) {
     const phoneNumber = formData.get("customerPhoneNumber") as string;
 
     const customer = new Customer(1, name, surname, phoneNumber);
-    db.customers.push(customer);
+    db.getCustomersList.push(customer);
 
     alert("Müşteri Ekleme İşlemi Başarı İle Tamamlanmıştır. ");
     addCustomerForm.reset();
@@ -137,13 +141,13 @@ if (addStockForm) {
 
     const stock = new Stock(isbn, quanttiy, shelfNumber);
 
-    const isContainsBook = db.books.some(b => b.isbn == isbn);
+    const isContainsBook = db.getBooksList.some(b => b.isbn == isbn);
 
     if (!isContainsBook) {
       alert("Stok eklenmeye çalışılan kitap, kayıtlı değildir. Litfen önce kitap ekleyiniz");
     }
     else {
-      db.stocks.push(stock);
+      db.getStocksList.push(stock);
       alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
     }
 

@@ -29,7 +29,6 @@ export class SaleService {
         this.dataBase.getSalesList.push(sale);
     }
 
-
     calculateTotal(sale: Sale): number {
         let subTotal = 0.0;
 
@@ -47,16 +46,16 @@ export class SaleService {
         return receiptNumber;
     }
 
-    public getSale(saleNumber: string): Sale | undefined {
+    public getSale(saleNumber: string): Sale {
+
         let sale = this.dataBase.getSalesList.find(s => s.operationNumber === saleNumber);
+        
         if (sale) {
             return sale;
         }
-        else {
-            return undefined;
-        }
 
-        //return this.dataBase.getSalesList.stream().filter(s -> s.getOperationNumber().equals(saleNumber)).findFirst().orElse(null);
+
+        throw new Error();
     }
 
     public removeSale(sale: Sale) {
