@@ -34,7 +34,6 @@ export class BookService {
 
         try {
             this.dataBase.getBooksList.push(newBook);
-
             this.dataBase.getBookSpecifications.push(newBook.bookSpec);
             return true;
         } catch (Exception) {

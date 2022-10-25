@@ -57,13 +57,19 @@ export class StockService {
         } else {
             return false;
         }
-
     }
 
+    /**
+     * stock nesnesini geri döndürür
+     * @param isbn stock nesnesi getirilecek olan nesnenin isbn nosu,
+     * @returns db olan stock nesnensi geri döner, db de yok ise throw ile hata fırlatırlır
+     */
     public getStock(isbn: string): Stock {
-        Stock stock = null;
-        stock = dataBase.getStocksList().stream().filter(s -> s.getIsbn().equals(isbn)).findFirst().orElse(null);
-        return stock;
+        let stock = this.dataBase.getStocksList.find(s => s.isbn === isbn);
+        if (stock) {
+            return stock;
+        }
+        throw new Error('');
     }
 
 }

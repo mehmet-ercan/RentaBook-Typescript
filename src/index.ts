@@ -1,48 +1,72 @@
+//export NODE_OPTIONS=--openssl-legacy-provider
+
+import { doc } from "prettier";
+import { cli } from "webpack";
 import { DataBase } from "./db/database";
+
 import { Book } from "./domain/book";
 import { BookSpecification } from "./domain/book-specification";
 import { Customer } from "./domain/customer";
 import { Stock } from "./domain/stock";
 import { BookService } from "./service/book-service";
+import { CancelSaleService } from "./service/cancal-sale-service";
+import { CustomerService } from "./service/customer-service";
+import { RentService } from "./service/rent-service";
 import { SaleService } from "./service/sale-service";
 import { StockService } from "./service/stock-service";
 
-export let stockService: StockService;
-export let bookService:BookService;
+let bookService: BookService;
+let customerService: CustomerService;
+let cancelSaleService: CancelSaleService;
+let rentService: RentService;
+let saleService: SaleService;
+let stockService: StockService;
 
-/*export NODE_OPTIONS=--openssl-legacy-provider*/
+let db!: DataBase;
+initiliazeServices(db);
+addListenerForMenuItems();
 
+function initiliazeServices(db: DataBase) {
+  console.log("intiliaze services");
 
-const db = new DataBase();
+  db = new DataBase();
 
-const addBookMenuItem = document.getElementById("addBookMenuItem");
-const addBookSection = document.getElementById("addBookSection");
-
-if (addBookMenuItem != null && addBookSection != null) {
-  addBookMenuItem.addEventListener("click", function click() {
-    if (addBookSection.style.display === "none") {
-      addBookSection.style.display = "block";
-    } else {
-      addBookSection.style.display = "none";
-    }
-  });
+  bookService = new BookService(db);
+  customerService = new CustomerService(db);
+  cancelSaleService = new CancelSaleService(db);
+  rentService = new RentService(db);
+  saleService = new SaleService(db);
+  stockService = new StockService(db);
 }
 
-const bookCardsMenuItem = document.getElementById("bookCardsMenuItem");
-const listBooksSection = document.getElementById("listBooksSection");
-
-if (bookCardsMenuItem != null && listBooksSection != null) {
-  bookCardsMenuItem.addEventListener("click", () => {
-    if (listBooksSection.style.display == "none") {
-      listBooksSection.style.display = "block";
-    } else {
-      listBooksSection.style.display = "none";
-    }
-  });
+function addListenerForMenuItems(){
+  showAndHide("addBookMenuItem","addBookSection");
+  showAndHide("bookCardsMenuItem","listBooksSection");
+  showAndHide("addCustomerMenuItem","addCustomerSection");
+  showAndHide("addStockMenuItem","addStockSection");
+  showAndHide("saleBookMenuItem","saleBookSection");
 }
+
+
+function showAndHide(btnId: string, elementId: string) {
+
+  const element = document.getElementById(elementId);
+  const btn = document.getElementById(btnId);
+
+  if (element && btn) {
+    btn.addEventListener("click", () => {
+      if (element.style.display === "none") {
+        element.style.display = "block";
+      } else {
+        element.style.display = "none";
+      }
+    });
+  }
+}
+
+
 
 const form = <HTMLFormElement>document.getElementById("add-book-form");
-
 if (form != null) {
   form.onsubmit = () => {
     const formData = new FormData(form);
@@ -79,19 +103,6 @@ if (form != null) {
   };
 }
 
-const addCustomerMenuItem = document.getElementById("addCustomerMenuItem");
-const addCustomerSection = document.getElementById("addCustomerSection");
-
-if (addCustomerMenuItem != null && addCustomerSection != null) {
-  addCustomerMenuItem.addEventListener("click", () => {
-    if (addCustomerSection.style.display == "none") {
-      addCustomerSection.style.display = "block";
-    } else {
-      addCustomerSection.style.display = "none";
-    }
-
-  });
-}
 
 const addCustomerForm = <HTMLFormElement>(document.getElementById("add-customer-form"));
 if (addCustomerForm) {
@@ -117,19 +128,6 @@ if (addCustomerForm) {
 }
 
 const addStockForm = <HTMLFormElement>(document.getElementById("add-stock-form"));
-const addStockSection = (document.getElementById("addStockSection"));
-const addStockMenuItem = (document.getElementById("addStockMenuItem"));
-
-if (addStockSection && addStockMenuItem) {
-  addStockMenuItem.addEventListener("click", () => {
-    if (addStockSection.style.display === "none") {
-      addStockSection.style.display = "block";
-    } else {
-      addStockSection.style.display = "none";
-    }
-  });
-}
-
 if (addStockForm) {
   addStockForm.onsubmit = () => {
 
@@ -153,52 +151,29 @@ if (addStockForm) {
 
     return false; // prevent reload
   };
+}
 
-  const saleBookForm = <HTMLFormElement>(document.getElementById("sale-book-form"));
-  const saleBookSection = (document.getElementById("saleBookSection"));
-  const saleBookMenuItem = (document.getElementById("saleBookMenuItem"));
-  const btnAddBookToCart = (document.getElementById("btnAddBookToCart"));
-  const saleService = new SaleService(db);
-  let sale;
 
-  if (saleBookMenuItem && saleBookSection) {
-    saleBookMenuItem.addEventListener("click", () => {
+const saleBookForm = <HTMLFormElement>(document.getElementById("sale-book-form"));
+const btnAddBookToCart = (document.getElementById("btnAddBookToCart"));
 
-      if (saleBookSection.style.display == "none") {
-        saleBookSection.style.display = "block";
-      } else {
-        saleBookSection.style.display = "none"
-      }
-    });
+if (btnAddBookToCart) {
+  btnAddBookToCart.addEventListener("click", () => {
+
+    const formData = new FormData(saleBookForm);
+
+    const isbn = formData.get("isbnForSale") as string;
+    const customerId = formData.get("customerIdForSale") as unknown as number;
+    const quantity = formData.get("quantityForSale") as string;
+
+  });
+}
+
+if (saleBookForm) {
+  saleBookForm.onsubmit = () => {
+
+
   }
-
-  if (btnAddBookToCart) {
-    btnAddBookToCart.addEventListener("click", () => {
-
-      const formData = new FormData(saleBookForm);
-
-      const isbn = formData.get("isbnForSale") as string;
-      const customerId = formData.get("customerIdForSale") as unknown as number;
-      const quantity = formData.get("quantityForSale") as string;
-
-
-
-
-
-
-    });
-  }
-
-  if (saleBookForm) {
-    saleBookForm.onsubmit = () => {
-
-
-
-
-
-    }
-  }
-
 }
 
 

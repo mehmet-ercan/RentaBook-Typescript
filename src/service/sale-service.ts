@@ -49,7 +49,7 @@ export class SaleService {
     public getSale(saleNumber: string): Sale {
 
         let sale = this.dataBase.getSalesList.find(s => s.operationNumber === saleNumber);
-        
+
         if (sale) {
             return sale;
         }
@@ -59,7 +59,8 @@ export class SaleService {
     }
 
     public removeSale(sale: Sale) {
-        this.dataBase.getSalesList.pop(sale);
+        let index = this.dataBase.getSalesList.indexOf(sale);
+        this.dataBase.getSalesList.splice(index,1);
     }
 
 }
