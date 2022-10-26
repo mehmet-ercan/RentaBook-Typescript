@@ -82,17 +82,14 @@ export class SaleService {
     }
 
     public updateSaleCart() {
-        debugger;
-        console.log("size::::" + this.dataBase.getSaleCart.bookAndQuantityMap.size);
-
         const saleCart = document.getElementById("saleCart");
+        const subTotalSpan = document.getElementById("totalAmountTl");
 
         if (saleCart) {
 
-            let row, column;
-            debugger;
-            while (saleCart.firstChild && saleCart.children.length > 1) {
-                saleCart.removeChild(saleCart.firstChild);
+            let row, column,subTotal: number = 0;
+            while (saleCart.lastChild && saleCart.children.length > 1) {
+                saleCart.removeChild(saleCart.lastChild);
             }
 
             for (let index = 0; index < this.dataBase.getSaleCart.bookAndQuantityMap.size; index++) {
@@ -124,8 +121,14 @@ export class SaleService {
                 }
             }
 
-            if (row) {
+            if (row && subTotalSpan) {
+
+                for (let t of this.dataBase.getSaleCart.bookAndQuantityMap) {
+                    subTotal +=t[0].bookSpec.price * t[1];
+                }
+
                 saleCart.appendChild(row);
+                subTotalSpan.textContent = subTotal.toString() + " TL";
             }
         }
 

@@ -345,3 +345,16 @@ form label {
   background-color: black;
   color: white;
 }
+
+#totalAmount{
+  font-size: 2rem;
+  display: flex;
+  justify-content:flex-end;
+}
+
+#totalAmount>span{
+  padding-left: .5rem;
+  font-weight: bold;
+  font-size: 2rem;
+  color: green;
+}

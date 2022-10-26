@@ -32,7 +32,19 @@ function initiliazeServices(db: DataBase) {
   rentService = new RentService(db);
   saleService = new SaleService(db);
   stockService = new StockService(db);
-  console.log("Services intiliazed");
+  console.log("Services intiliazed.");
+
+  bookService.addBook(new Book("123-45", "Neredeyiz", "Mehmet Ercan", "2021", 109, new BookSpecification("123-45", 25.99, new Date, new Date)));
+  bookService.addBook(new Book("123-46", "Neredeyiz 2", "Mehmet Ercan", "2022", 179, new BookSpecification("123-46", 29.99, new Date, new Date)));
+
+  customerService.addCustomer(new Customer(1, "", "", ""));
+  customerService.addCustomer(new Customer(2, "", "", ""));
+
+  stockService.addStock("123-45", "A45-52", 10);
+  stockService.addStock("123-46", "A45-52", 10);
+
+  console.log("Data loaded.");
+
 }
 
 function addListenerForMenuItems() {
@@ -61,10 +73,10 @@ function showAndHide(btnId: string, elementId: string) {
   }
 }
 
-const form = <HTMLFormElement>document.getElementById("add-book-form");
-if (form != null) {
-  form.onsubmit = () => {
-    const formData = new FormData(form);
+const addBookForm = <HTMLFormElement>document.getElementById("add-book-form");
+if (addBookForm != null) {
+  addBookForm.onsubmit = () => {
+    const formData = new FormData(addBookForm);
 
     const title = formData.get("bookTitle") as string;
     const author = formData.get("bookAuthor") as string;
@@ -80,8 +92,8 @@ if (form != null) {
     const book = new Book(isbn, title, author, publishYear, pages, bookSpec);
     bookService.addBook(book);
 
-    console.log("Kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
-    form.reset();
+    alert("Kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
+    addBookForm.reset();
 
     for (let b of db.getBooksList) {
       console.log(b.isbn);
@@ -109,7 +121,7 @@ if (addCustomerForm) {
 
     customerService.addCustomer(customer);
     console.log(customer);
-    console.log("Müşteri Ekleme İşlemi Başarı İle Tamamlanmıştır. ");
+    alert("Müşteri Ekleme İşlemi Başarı İle Tamamlanmıştır. ");
 
     addCustomerForm.reset();
 
@@ -134,11 +146,11 @@ if (addStockForm) {
     const isContainsBook = db.getBooksList.some(b => b.isbn == isbn);
 
     if (!isContainsBook) {
-      console.log("Stok eklenmeye çalışılan kitap, kayıtlı değildir. Litfen önce kitap ekleyiniz");
+      alert("Stok eklenmeye çalışılan kitap, kayıtlı değildir. Litfen önce kitap ekleyiniz");
     }
     else {
       db.getStocksList.push(stock);
-      console.log(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
+     alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
     }
 
     return false; // prevent reload
@@ -149,33 +161,35 @@ const saleBookForm = <HTMLFormElement>(document.getElementById("sale-book-form")
 if (saleBookForm) {
   saleBookForm.onsubmit = () => {
 
-    customerService.addCustomer(new Customer(1, "", "", ""));
-    customerService.addCustomer(new Customer(2, "", "", ""));
-
-    bookService.addBook(new Book("123-45", "Neredeyiz", "Mehmet Ercan", "2021", 109, new BookSpecification("123-45", 25.99, new Date, new Date)));
-
-    bookService.addBook(new Book("123-46", "Neredeyiz 2", "Mehmet Ercan", "2022", 179, new BookSpecification("123-46", 29.99, new Date, new Date)));
-
     const formData = new FormData(saleBookForm);
 
     const isbn = formData.get("isbnForSale") as string;
     const book = bookService.getBook(isbn);
     const customerId = parseInt(formData.get("customerIdForSale") as string);
     const customer: boolean = customerService.isValidCustomer(customerId);
-    const quantity = formData.get("quantityForSale") as unknown as number;
+    const quantity = parseInt(formData.get("quantityForSale") as string);
+
+    const stock = stockService.getStock(isbn);
 
     try {
       if (book) {
-        if (customer) {
-          
-          saleService.addBookToCart(book, quantity, customerId);
-        } else {
-          console.log(customerId + " numaralı müşteri kayıtlı değildir.");
+        if (stock.quantity >= quantity) {
+          if (customer) {
+            saleService.addBookToCart(book, quantity, customerId);
+          } else {
+            alert(customerId + " numaralı müşteri kayıtlı değildir.");
+          }
+        }
+        else {
+          alert(quantity + " kadar kitap dükkanda mevcut değildir.");
         }
       } else {
-        console.log(isbn + " numaralı kitap yoktur.");
+        alert(isbn + " numaralı kitap yoktur.");
       }
+
+      saleBookForm.reset();
       return false;
+
     } catch (error) {
       console.log(error);
     }
@@ -185,8 +199,8 @@ if (saleBookForm) {
 const btnBuy = <HTMLButtonElement>(document.getElementById("btnBuy"));
 btnBuy.addEventListener("click", () => {
   if (saleService.dataBase.getSaleCart.bookAndQuantityMap.size === 0) {
-    console.log("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
-  }else{
+   alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
+  } else {
     saleService.cartToSale();
   }
 
