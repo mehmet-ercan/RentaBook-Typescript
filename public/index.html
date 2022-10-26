@@ -15,7 +15,7 @@
 </head>
 
 <body>
-  <!-- Header Start -->
+
   <header class="header">
     <a href="#" class="logo">
       <img src="../public/images/icon1.png" alt="Logo" />
@@ -72,9 +72,7 @@
       </button>
     </div>
   </header>
-  <!-- Header End -->
 
-  <!-- Home Sectiom Start -->
   <section class="home">
     <div class="content">
       <h3>Rent a Book KİTAP KİRALAMA</h3>
@@ -87,19 +85,6 @@
       <a class="btn" href="#">Hemen Kirala</a>
     </div>
   </section>
-  <!-- Home Section End -->
-
-  <!--
-      <section>
-        <div>
-          <div>
-            <button id="increment">+</button>
-            <span id="count-value">0</span>
-            <button id="decrement">-</button>
-          </div>
-        </div>
-      </section>
-    -->
 
   <section id="bookCardsSection" class="book-cards">
     <h1 class="headLine">KİTAPLARDAN <span>SEÇMELER</span></h1>
@@ -169,7 +154,7 @@
 
       <div>
         <label for="isbn">ISBN Numarası</label>
-        <input type="text" name="bookIsbn" id="isbn" class="myBook" />
+        <input type="text" name="bookIsbn" id="isbn" class="myBook"/>
       </div>
 
       <div>
@@ -179,12 +164,12 @@
 
       <div>
         <label for="pages">Sayfa Sayısı</label>
-        <input type="text" name="bookPages" id="pages" class="myBook" />
+        <input type="text" name="bookPages" id="pages" class="myBook"/>
       </div>
 
       <div>
         <label for="price">Ücreti</label>
-        <input type="text" name="bookPrice" id="price" class="myBook" />
+        <input type="text" name="bookPrice" id="price" class="myBook"/>
       </div>
 
       <!-- Submit button-->
@@ -212,7 +197,7 @@
 
       <div>
         <label for="isbn">Müşterinin Telefon Numarası</label>
-        <input type="text" name="customerPhoneNumber" id="customerPhoneNumber"  />
+        <input type="text" name="customerPhoneNumber" id="customerPhoneNumber" />
       </div>
 
       <!-- Submit button-->
@@ -223,7 +208,7 @@
     </form>
   </section>
 
-  <section id="addStockSection" class="add-stock" >
+  <section id="addStockSection" class="add-stock">
     <form id="add-stock-form">
       <div>
         <label for="isbn">Stok Eklenecek Kitabın ISBN Numarası</label>
@@ -247,38 +232,58 @@
 
     </form>
 
-  </section> 
+  </section>
 
   <section id="saleBookSection" class="sale-book">
+
     <form id="sale-book-form">
       <div>
         <label for="customerId">Müşteri Numarası</label>
-        <input type="text" name="customerIdForSale" id="customer-id-for-sale" />
+        <input type="text" name="customerIdForSale" id="customer-id-for-sale" value="1" />
       </div>
 
       <div>
         <label for="isbn">ISBN Numarası</label>
-        <input type="text" name="isbnForSale" id="isbn-for-sale" />
+        <input type="text" name="isbnForSale" id="isbn-for-sale" value="123-45"/>
       </div>
 
       <div>
         <label for="quantityForSale">Kaç Adet Alınacak</label>
-        <input type="text" name="quantityForSale" id="quantity-for-sale" />
+        <input type="text" name="quantityForSale" id="quantity-for-sale" value="1"/>
       </div>
 
       <!-- Submit button-->
-    
       <div>
-        <input type="button" value="Ekle" id="btnAddBookToCart" />
-      </div>
-
-      <div>
-        <input type="submit" value="Satış" id="saleSubmitButton" />
+        <input type="submit" value="Ekle" />
       </div>
 
     </form>
-  </section>
 
+    <h1 class="headLine">ALIŞ VERİŞ SEPETİ</h1>
+
+    <div id="saleCart" class="sale-cart">
+
+      <div class="row">
+        <div class="column">
+          No
+        </div>
+        <div class="column">
+          Müşteri Numarası
+        </div>
+        <div class="column">
+          Kitap İsmi
+        </div>
+        <div class="column">
+          Adet
+        </div>
+        <div class="column">
+          Ücreti
+        </div>
+      </div>
+      
+    </div>
+
+  </section>
 
   <!-- TODO DİĞER SAYFA TASARIMLARI-->
 </body>

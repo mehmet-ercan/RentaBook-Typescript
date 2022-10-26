@@ -1,7 +1,4 @@
-//export NODE_OPTIONS=--openssl-legacy-provider
-
-import { doc } from "prettier";
-import { cli } from "webpack";
+// export NODE_OPTIONS=--openssl-legacy-provider
 import { DataBase } from "./db/database";
 
 import { Book } from "./domain/book";
@@ -22,33 +19,32 @@ let rentService: RentService;
 let saleService: SaleService;
 let stockService: StockService;
 
-let db!: DataBase;
+let db: DataBase = new DataBase();
 initiliazeServices(db);
 addListenerForMenuItems();
 
+
 function initiliazeServices(db: DataBase) {
-  console.log("intiliaze services");
-
-  db = new DataBase();
-
   bookService = new BookService(db);
   customerService = new CustomerService(db);
   cancelSaleService = new CancelSaleService(db);
   rentService = new RentService(db);
   saleService = new SaleService(db);
   stockService = new StockService(db);
+  console.log("Services intiliazed");
 }
 
-function addListenerForMenuItems(){
-  showAndHide("addBookMenuItem","addBookSection");
-  showAndHide("bookCardsMenuItem","listBooksSection");
-  showAndHide("addCustomerMenuItem","addCustomerSection");
-  showAndHide("addStockMenuItem","addStockSection");
-  showAndHide("saleBookMenuItem","saleBookSection");
+function addListenerForMenuItems() {
+  //saleService.updateSaleCart();
+  showAndHide("addBookMenuItem", "addBookSection");
+  showAndHide("bookCardsMenuItem", "listBooksSection");
+  showAndHide("addCustomerMenuItem", "addCustomerSection");
+  showAndHide("addStockMenuItem", "addStockSection");
+  showAndHide("saleBookMenuItem", "saleBookSection");
 }
-
 
 function showAndHide(btnId: string, elementId: string) {
+  //saleService.updateSaleCart();
 
   const element = document.getElementById(elementId);
   const btn = document.getElementById(btnId);
@@ -63,8 +59,6 @@ function showAndHide(btnId: string, elementId: string) {
     });
   }
 }
-
-
 
 const form = <HTMLFormElement>document.getElementById("add-book-form");
 if (form != null) {
@@ -83,26 +77,22 @@ if (form != null) {
     const bookSpec = new BookSpecification(isbn, price, startDate, endDate);
 
     const book = new Book(isbn, title, author, publishYear, pages, bookSpec);
-    db.getBooksList.push(book);
+    bookService.addBook(book);
 
-    alert("Kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
+    console.log("Kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
     form.reset();
 
-    console.log(book);
-
-    for (var b of db.getBooksList) {
+    for (let b of db.getBooksList) {
       console.log(b.isbn);
       console.log(b.name);
-      console.log(b.author);
-      console.log(b.publishYear);
       console.log(b.pages);
+      console.log(b.publishYear);
       console.log(b.bookSpec.price);
     }
 
     return false; // prevent reload
   };
 }
-
 
 const addCustomerForm = <HTMLFormElement>(document.getElementById("add-customer-form"));
 if (addCustomerForm) {
@@ -114,12 +104,13 @@ if (addCustomerForm) {
     const surname = formData.get("customerSurname") as string;
     const phoneNumber = formData.get("customerPhoneNumber") as string;
 
-    const customer = new Customer(1, name, surname, phoneNumber);
-    db.getCustomersList.push(customer);
+    const customer = new Customer(customerService.getNewCustomerId(), name, surname, phoneNumber);
 
-    alert("Müşteri Ekleme İşlemi Başarı İle Tamamlanmıştır. ");
-    addCustomerForm.reset();
+    customerService.addCustomer(customer);
     console.log(customer);
+    console.log("Müşteri Ekleme İşlemi Başarı İle Tamamlanmıştır. ");
+
+    addCustomerForm.reset();
 
     return false; // prevent reload
   };
@@ -142,38 +133,54 @@ if (addStockForm) {
     const isContainsBook = db.getBooksList.some(b => b.isbn == isbn);
 
     if (!isContainsBook) {
-      alert("Stok eklenmeye çalışılan kitap, kayıtlı değildir. Litfen önce kitap ekleyiniz");
+      console.log("Stok eklenmeye çalışılan kitap, kayıtlı değildir. Litfen önce kitap ekleyiniz");
     }
     else {
       db.getStocksList.push(stock);
-      alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
+      console.log(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
     }
 
     return false; // prevent reload
   };
 }
 
-
 const saleBookForm = <HTMLFormElement>(document.getElementById("sale-book-form"));
-const btnAddBookToCart = (document.getElementById("btnAddBookToCart"));
+if (saleBookForm) {
+  saleBookForm.onsubmit = () => {
 
-if (btnAddBookToCart) {
-  btnAddBookToCart.addEventListener("click", () => {
+    customerService.addCustomer(new Customer(1, "", "", ""));
+    customerService.addCustomer(new Customer(2, "", "", ""));
+
+    bookService.addBook(new Book("123-45","Neredeyiz" , "Mehmet Ercan", "2021", 109, new BookSpecification("123-45", 25.99, new Date, new Date)));
+
+    bookService.addBook(new Book("123-46","Neredeyiz 2" , "Mehmet Ercan", "2022", 179, new BookSpecification("123-46", 29.99, new Date, new Date)));
 
     const formData = new FormData(saleBookForm);
 
     const isbn = formData.get("isbnForSale") as string;
-    const customerId = formData.get("customerIdForSale") as unknown as number;
-    const quantity = formData.get("quantityForSale") as string;
+    const book = bookService.getBook(isbn);
+    const customerId = parseInt(formData.get("customerIdForSale") as string);
+    const customer: boolean = customerService.isValidCustomer(customerId);
+    const quantity = formData.get("quantityForSale") as unknown as number;
 
-  });
-}
+    try {
+      if (book) {
+        if (customer) {
+          saleService.addBookToCart(book, quantity, customerId);
+        } else {
+          console.log(customerId + " numaralı müşteri kayıtlı değildir.");
+        }
+      } else {
+        console.log(isbn + " numaralı kitap yoktur.");
+      }
+      return false;
+    } catch (error) {
+      console.log(error);
+    }
 
-if (saleBookForm) {
-  saleBookForm.onsubmit = () => {
 
 
   }
 }
 
-
+const btnAddBookToSale = <HTMLButtonElement>(document.getElementById(""));

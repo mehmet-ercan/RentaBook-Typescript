@@ -3,8 +3,8 @@ import { Book } from "./book";
 export class Sale {
 
     private _bookAndQuantityMap = new Map<Book, number>();
-    private _operationDateTime: Date;
     private _customerId: number;
+    private _operationDateTime: Date;
     private _operationNumber: string;
     private _total: number;
 

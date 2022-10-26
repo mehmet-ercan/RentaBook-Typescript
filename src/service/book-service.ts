@@ -30,15 +30,12 @@ export class BookService {
         return this.dataBase.getBooksList.find(b => b.isbn === isbn)!;
     }
 
-    public addBook(newBook: Book): boolean {
-
+    public addBook(newBook: Book) {
         try {
             this.dataBase.getBooksList.push(newBook);
             this.dataBase.getBookSpecifications.push(newBook.bookSpec);
-            return true;
         } catch (Exception) {
-            // System.out.println("Hata kodu:" + Exception.getMessage() + "\n");
-            return false;
+            console.log("Kitap eklenirken bir hata meydana geldi.");
         }
     }
 

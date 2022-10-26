@@ -24,9 +24,8 @@ export class CustomerService {
         this._dataBase = value;
     }
 
-    public addCustomer(newCustomer: Customer): boolean {
+    public addCustomer(newCustomer: Customer) {
         this.dataBase.getCustomersList.push(newCustomer);
-        return true;
     }
 
     public getNewCustomerId(): number {
@@ -55,8 +54,8 @@ export class CustomerService {
 
     public isValidCustomer(customerId: number): boolean {
 
-        let isValid = this.dataBase.getCustomersList.find(customer => customer.id === customerId);
-
+        let isValid = this.dataBase.getCustomersList.some(customer => customer.id === customerId);
+        
         if (isValid) {
             return true;
         } else {
