@@ -1,5 +1,7 @@
+import { debug } from "webpack";
 import { DataBase } from "../db/database";
 import { Book } from "../domain/book";
+import { Customer } from "../domain/customer";
 import { Sale } from "../domain/sale";
 import { SaleCart } from "../domain/sale-cart";
 
@@ -28,7 +30,6 @@ export class SaleService {
 
     public addSale(sale: Sale): void {
         this.dataBase.getSalesList.push(sale);
-        this.dataBase.setSaleCart = new SaleCart;
     }
 
     calculateTotal(sale: Sale): number {
@@ -43,7 +44,7 @@ export class SaleService {
 
     generateSaleNumber(customerId: number): string {
         let today = new Date();
-        let receiptNumber: string = "S" + today.getDay().toString + today.getMonth().toString + today.getFullYear().toString + today.getHours().toString + today.getMinutes().toString + today.getSeconds().toString + customerId.toString;
+        let receiptNumber: string = "S" + today.getDay().toString() + today.getMonth().toString() + today.getFullYear().toString() + today.getHours().toString() + today.getMinutes().toString() + today.getSeconds().toString() + customerId.toString();
 
         return receiptNumber;
     }
@@ -68,11 +69,8 @@ export class SaleService {
     public addBookToCart(book: Book, quantity: number, customerId: number) {
 
         if (this.dataBase.getSaleCart.bookAndQuantityMap.size === 0) {
-
             this.dataBase.getSaleCart.customerId = customerId;
-
         } else if (this.dataBase.getSaleCart.bookAndQuantityMap.size > 0) {
-
             if (this.dataBase.getSaleCart.customerId !== customerId) {
                 console.log("Farklı müşteriye kitap satılmaya çalışılıyor. Lütfen tek müşteri için işlem yapınız");
                 return false;
@@ -84,17 +82,18 @@ export class SaleService {
     }
 
     public updateSaleCart() {
+        debugger;
+        console.log("size::::" + this.dataBase.getSaleCart.bookAndQuantityMap.size);
+
         const saleCart = document.getElementById("saleCart");
 
         if (saleCart) {
 
-            saleCart.removeChild(saleCart.lastChild!);
-
-            console.log("bookAndQuantityMap.size: " + this.dataBase.getSaleCart.bookAndQuantityMap.size);
-
-            let row;
-            let column;
-            let i: number = 0;
+            let row, column;
+            debugger;
+            while (saleCart.firstChild && saleCart.children.length > 1) {
+                saleCart.removeChild(saleCart.firstChild);
+            }
 
             for (let index = 0; index < this.dataBase.getSaleCart.bookAndQuantityMap.size; index++) {
 
@@ -102,12 +101,6 @@ export class SaleService {
                 row.className = "row";
 
                 for (let entry of this.dataBase.getSaleCart.bookAndQuantityMap.entries()) {
-                    i++;
-
-                    column = document.createElement("div");
-                    column.className = "column";
-                    column.textContent = i.toString();
-                    row.appendChild(column);
 
                     column = document.createElement("div");
                     column.className = "column";
@@ -132,17 +125,27 @@ export class SaleService {
             }
 
             if (row) {
-                saleCart?.appendChild(row);
+                saleCart.appendChild(row);
             }
-
-
         }
 
 
 
     }
 
+    public cartToSale() {
+        let saleCart: SaleCart = this.dataBase.getSaleCart;
+        let sale = new Sale();
+        sale.bookAndQuantityMap = saleCart.bookAndQuantityMap;
+        sale.customerId = saleCart.customerId;
+        sale.operationNumber = this.generateSaleNumber(saleCart.customerId);
+        sale.operationDateTime = new Date();
+        sale.total = this.calculateTotal(sale);
+        this.addSale(sale);
+        this.dataBase.setSaleCart = new SaleCart; // sepeti boşalt
 
-
+        this.updateSaleCart();
+        console.log(sale);
+    }
 
 }

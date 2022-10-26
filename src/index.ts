@@ -24,6 +24,7 @@ initiliazeServices(db);
 addListenerForMenuItems();
 
 
+
 function initiliazeServices(db: DataBase) {
   bookService = new BookService(db);
   customerService = new CustomerService(db);
@@ -151,9 +152,9 @@ if (saleBookForm) {
     customerService.addCustomer(new Customer(1, "", "", ""));
     customerService.addCustomer(new Customer(2, "", "", ""));
 
-    bookService.addBook(new Book("123-45","Neredeyiz" , "Mehmet Ercan", "2021", 109, new BookSpecification("123-45", 25.99, new Date, new Date)));
+    bookService.addBook(new Book("123-45", "Neredeyiz", "Mehmet Ercan", "2021", 109, new BookSpecification("123-45", 25.99, new Date, new Date)));
 
-    bookService.addBook(new Book("123-46","Neredeyiz 2" , "Mehmet Ercan", "2022", 179, new BookSpecification("123-46", 29.99, new Date, new Date)));
+    bookService.addBook(new Book("123-46", "Neredeyiz 2", "Mehmet Ercan", "2022", 179, new BookSpecification("123-46", 29.99, new Date, new Date)));
 
     const formData = new FormData(saleBookForm);
 
@@ -166,6 +167,7 @@ if (saleBookForm) {
     try {
       if (book) {
         if (customer) {
+          
           saleService.addBookToCart(book, quantity, customerId);
         } else {
           console.log(customerId + " numaralı müşteri kayıtlı değildir.");
@@ -177,10 +179,15 @@ if (saleBookForm) {
     } catch (error) {
       console.log(error);
     }
-
-
-
   }
 }
 
-const btnAddBookToSale = <HTMLButtonElement>(document.getElementById(""));
+const btnBuy = <HTMLButtonElement>(document.getElementById("btnBuy"));
+btnBuy.addEventListener("click", () => {
+  if (saleService.dataBase.getSaleCart.bookAndQuantityMap.size === 0) {
+    console.log("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
+  }else{
+    saleService.cartToSale();
+  }
+
+});

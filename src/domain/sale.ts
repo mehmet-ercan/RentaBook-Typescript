@@ -2,14 +2,14 @@ import { Book } from "./book";
 
 export class Sale {
 
-    private _bookAndQuantityMap = new Map<Book, number>();
-    private _customerId: number;
-    private _operationDateTime: Date;
-    private _operationNumber: string;
-    private _total: number;
+    private _bookAndQuantityMap? = new Map<Book, number>();
+    private _customerId?: number;
+    private _operationDateTime?: Date;
+    private _operationNumber?: string;
+    private _total?: number;
 
 
-    constructor(bookAndQuantityMap: Map<Book, number>, operationDateTime: Date, customerId: number, operationNumber: string, total: number) {
+    constructor(bookAndQuantityMap?: Map<Book, number>, operationDateTime?: Date, customerId?: number, operationNumber?: string, total?: number) {
         this._bookAndQuantityMap = bookAndQuantityMap;
         this._operationDateTime = operationDateTime;
         this._customerId = customerId;
@@ -23,7 +23,7 @@ export class Sale {
      * @return {Map<Book, number>()}
      */
     public get bookAndQuantityMap(): Map<Book, number> {
-        return this._bookAndQuantityMap;
+        return this._bookAndQuantityMap!;
     }
 
 
@@ -32,7 +32,7 @@ export class Sale {
      * @return {Date}
      */
     public get operationDateTime(): Date {
-        return this._operationDateTime;
+        return this._operationDateTime!;
     }
 
     /**
@@ -40,7 +40,7 @@ export class Sale {
      * @return {number}
      */
     public get customerId(): number {
-        return this._customerId;
+        return this._customerId!;
     }
 
     /**
@@ -48,7 +48,7 @@ export class Sale {
      * @return {string}
      */
     public get operationNumber(): string {
-        return this._operationNumber;
+        return this._operationNumber!;
     }
 
     /**
@@ -56,7 +56,7 @@ export class Sale {
      * @return {number}
      */
     public get total(): number {
-        return this._total;
+        return this._total!;
     }
 
 
