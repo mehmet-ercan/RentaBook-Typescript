@@ -1,9 +1,11 @@
 import { debug } from "webpack";
+import { stockService } from "..";
 import { DataBase } from "../db/database";
 import { Book } from "../domain/book";
 import { Customer } from "../domain/customer";
 import { Sale } from "../domain/sale";
 import { SaleCart } from "../domain/sale-cart";
+import { StockService } from "../service/stock-service"
 
 export class SaleService {
     private _dataBase: DataBase;
@@ -72,7 +74,7 @@ export class SaleService {
             this.dataBase.getSaleCart.customerId = customerId;
         } else if (this.dataBase.getSaleCart.bookAndQuantityMap.size > 0) {
             if (this.dataBase.getSaleCart.customerId !== customerId) {
-                console.log("Farklı müşteriye kitap satılmaya çalışılıyor. Lütfen tek müşteri için işlem yapınız");
+                alert("Farklı müşteriye kitap satılmaya çalışılıyor. Lütfen tek müşteri için işlem yapınız");
                 return false;
             }
         }
@@ -87,7 +89,7 @@ export class SaleService {
 
         if (saleCart) {
 
-            let row, column,subTotal: number = 0;
+            let row, column, subTotal: number = 0;
             while (saleCart.lastChild && saleCart.children.length > 1) {
                 saleCart.removeChild(saleCart.lastChild);
             }
@@ -124,7 +126,7 @@ export class SaleService {
             if (row && subTotalSpan) {
 
                 for (let t of this.dataBase.getSaleCart.bookAndQuantityMap) {
-                    subTotal +=t[0].bookSpec.price * t[1];
+                    subTotal += t[0].bookSpec.price * t[1];
                 }
 
                 saleCart.appendChild(row);
@@ -144,11 +146,17 @@ export class SaleService {
         sale.operationNumber = this.generateSaleNumber(saleCart.customerId);
         sale.operationDateTime = new Date();
         sale.total = this.calculateTotal(sale);
+
+        for (let q of sale.bookAndQuantityMap) {
+            stockService.increaseStock(q[0].isbn, -q[1])
+        }
+
         this.addSale(sale);
         this.dataBase.setSaleCart = new SaleCart; // sepeti boşalt
-
         this.updateSaleCart();
-        console.log(sale);
+
+        console.log(sale.operationNumber);
+        alert("Satış gerçekleşmiştir. Fiş Numaranız: " + sale.operationNumber + "\nFişinizi kaybetmeyiniz. ");
     }
 
 }

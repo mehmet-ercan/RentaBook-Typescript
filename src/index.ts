@@ -12,12 +12,12 @@ import { RentService } from "./service/rent-service";
 import { SaleService } from "./service/sale-service";
 import { StockService } from "./service/stock-service";
 
-let bookService: BookService;
-let customerService: CustomerService;
-let cancelSaleService: CancelSaleService;
-let rentService: RentService;
-let saleService: SaleService;
-let stockService: StockService;
+export let bookService: BookService;
+export let customerService: CustomerService;
+export let cancelSaleService: CancelSaleService;
+export let rentService: RentService;
+export let saleService: SaleService;
+export let stockService: StockService;
 
 let db: DataBase = new DataBase();
 initiliazeServices(db);
@@ -95,14 +95,6 @@ if (addBookForm != null) {
     alert("Kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
     addBookForm.reset();
 
-    for (let b of db.getBooksList) {
-      console.log(b.isbn);
-      console.log(b.name);
-      console.log(b.pages);
-      console.log(b.publishYear);
-      console.log(b.bookSpec.price);
-    }
-
     return false; // prevent reload
   };
 }
@@ -120,7 +112,6 @@ if (addCustomerForm) {
     const customer = new Customer(customerService.getNewCustomerId(), name, surname, phoneNumber);
 
     customerService.addCustomer(customer);
-    console.log(customer);
     alert("Müşteri Ekleme İşlemi Başarı İle Tamamlanmıştır. ");
 
     addCustomerForm.reset();
@@ -146,13 +137,14 @@ if (addStockForm) {
     const isContainsBook = db.getBooksList.some(b => b.isbn == isbn);
 
     if (!isContainsBook) {
-      alert("Stok eklenmeye çalışılan kitap, kayıtlı değildir. Litfen önce kitap ekleyiniz");
+      alert("Stok eklenmeye çalışılan kitap, kayıtlı değildir. Lütfen önce kitap ekleyiniz");
     }
     else {
-      db.getStocksList.push(stock);
-     alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
+      stockService.increaseStock(isbn, quanttiy);
+      alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
     }
 
+    addStockForm.reset();
     return false; // prevent reload
   };
 }
@@ -176,6 +168,7 @@ if (saleBookForm) {
         if (stock.quantity >= quantity) {
           if (customer) {
             saleService.addBookToCart(book, quantity, customerId);
+
           } else {
             alert(customerId + " numaralı müşteri kayıtlı değildir.");
           }
@@ -191,7 +184,7 @@ if (saleBookForm) {
       return false;
 
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   }
 }
@@ -199,7 +192,7 @@ if (saleBookForm) {
 const btnBuy = <HTMLButtonElement>(document.getElementById("btnBuy"));
 btnBuy.addEventListener("click", () => {
   if (saleService.dataBase.getSaleCart.bookAndQuantityMap.size === 0) {
-   alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
+    alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
   } else {
     saleService.cartToSale();
   }
