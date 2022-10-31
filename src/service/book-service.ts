@@ -44,6 +44,62 @@ export class BookService {
         return this.dataBase.getBooksList.includes(b)
     }
 
+    public initializeBooksMock() {
+        getInitializeBooksMock();
+    }
 
+    public addBookMock(b: Book) {
+        console.log(b.isbn);
+        postAddBookMock(b);
+    }
+}
 
+async function getInitializeBooksMock() {
+    try {
+        const response = await fetch('http://localhost:3002/api/books', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+        }
+
+        const result = (await response.json()) as Book[];
+        console.log(result);
+
+    } catch (Exception) {
+        console.log('Hata Oluştu.');
+    }
+}
+
+async function postAddBookMock(b: Book) {
+    try {
+        const response = await fetch('http://localhost:3002/api/books/' + b.isbn, {
+            method: 'POST',
+            body: JSON.stringify({
+                isbn: b.isbn,
+                name: b.name,
+                author: b.author,
+                pages: b.pages,
+                publishYear: b.publishYear
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+        }
+
+        const result = (await response.json());
+        console.log(result);
+
+    } catch (Exception) {
+        console.log('Hata Oluştu.');
+    }
 }

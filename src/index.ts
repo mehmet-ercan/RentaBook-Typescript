@@ -1,5 +1,6 @@
 // export NODE_OPTIONS=--openssl-legacy-provider
 import { DataBase } from "./db/database";
+import fetch from 'node-fetch'
 
 import { Book } from "./domain/book";
 import { BookSpecification } from "./domain/book-specification";
@@ -25,6 +26,9 @@ addListenerForMenuItems();
 
 
 
+
+
+
 function initiliazeServices(db: DataBase) {
   bookService = new BookService(db);
   customerService = new CustomerService(db);
@@ -43,14 +47,12 @@ function initiliazeServices(db: DataBase) {
   stockService.addStock("123-45", "A45-52", 10);
   stockService.addStock("123-46", "A45-52", 10);
 
-  console.log("Data loaded.");
-
 }
 
 function addListenerForMenuItems() {
   //saleService.updateSaleCart();
   showAndHide("addBookMenuItem", "addBookSection");
-  showAndHide("bookCardsMenuItem", "listBooksSection");
+  showAndHide("showBooksMenuItem", "listBooksSection");
   showAndHide("addCustomerMenuItem", "addCustomerSection");
   showAndHide("addStockMenuItem", "addStockSection");
   showAndHide("saleBookMenuItem", "saleBookSection");
@@ -90,11 +92,41 @@ if (addBookForm != null) {
     const bookSpec = new BookSpecification(isbn, price, startDate, endDate);
 
     const book = new Book(isbn, title, author, publishYear, pages, bookSpec);
-    bookService.addBook(book);
+    //bookService.addBook(book);
 
-    alert("Kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
+    bookService.addBookMock(book);
+    alert(book.isbn + " numaralı kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
     addBookForm.reset();
 
+    return false; // prevent reload
+  };
+}
+
+const addStockForm = <HTMLFormElement>(document.getElementById("add-stock-form"));
+if (addStockForm) {
+  addStockForm.onsubmit = () => {
+
+    const formData = new FormData(addStockForm);
+
+    const isbn = formData.get("bookIsbnForAddStock") as string;
+    const quanttiy = formData.get("stockQuantity") as unknown as number;
+    const shelfNumber = formData.get("shelfNumber") as string;
+
+    const stock = new Stock(isbn, quanttiy, shelfNumber);
+
+    const isContainsBook = db.getBooksList.some(b => b.isbn == isbn);
+
+    // if (!isContainsBook) {
+    //   alert("Stok eklenmeye çalışılan kitap, kayıtlı değildir. Lütfen önce kitap ekleyiniz");
+    // }
+    // else {
+    //   stockService.increaseStock(isbn, quanttiy);
+    //   alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
+    // }
+
+    alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
+    stockService.addStockMock(stock);
+    addStockForm.reset();
     return false; // prevent reload
   };
 }
@@ -120,33 +152,6 @@ if (addCustomerForm) {
   };
 
 
-}
-
-const addStockForm = <HTMLFormElement>(document.getElementById("add-stock-form"));
-if (addStockForm) {
-  addStockForm.onsubmit = () => {
-
-    const formData = new FormData(addStockForm);
-
-    const isbn = formData.get("bookIsbnForAddStock") as string;
-    const quanttiy = formData.get("stockQuantity") as unknown as number;
-    const shelfNumber = formData.get("shelfNumber") as string;
-
-    const stock = new Stock(isbn, quanttiy, shelfNumber);
-
-    const isContainsBook = db.getBooksList.some(b => b.isbn == isbn);
-
-    if (!isContainsBook) {
-      alert("Stok eklenmeye çalışılan kitap, kayıtlı değildir. Lütfen önce kitap ekleyiniz");
-    }
-    else {
-      stockService.increaseStock(isbn, quanttiy);
-      alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
-    }
-
-    addStockForm.reset();
-    return false; // prevent reload
-  };
 }
 
 const saleBookForm = <HTMLFormElement>(document.getElementById("sale-book-form"));
@@ -198,3 +203,9 @@ btnBuy.addEventListener("click", () => {
   }
 
 });
+
+const btnShowBooksMenuItem = <HTMLElement>(document.getElementById("showBooksMenuItem"));
+btnShowBooksMenuItem.addEventListener("click", () => {
+  bookService.initializeBooksMock();
+})
+

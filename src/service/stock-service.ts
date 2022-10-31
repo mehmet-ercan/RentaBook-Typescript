@@ -72,4 +72,33 @@ export class StockService {
         throw new Error('');
     }
 
+    public addStockMock(s: Stock) {
+        postAddStockMock(s);
+    }
+}
+
+async function postAddStockMock(s: Stock) {
+    try {
+        const response = await fetch('http://localhost:3002/api/stocks/' + s.isbn, {
+            method: 'POST',
+            body: JSON.stringify({
+                isbn: s.isbn,
+                quantity: s.quantity
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+        }
+
+        const result = (await response.json());
+        console.log(result);
+
+    } catch (Exception) {
+        console.log('Hata Oluştu.');
+    }
 }
