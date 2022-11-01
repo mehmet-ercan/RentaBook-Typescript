@@ -9,13 +9,13 @@ import { Stock } from "../domain/stock";
 
 export class DataBase {
 
-     private _books: Array<Book>;
+     private _books: Array<Book>;//
      private _stocks: Array<Stock>;
-     private _customers: Array<Customer>;
-     private _sales: Array<Sale>;
+     private _customers: Array<Customer>;//
+     private _sales: Array<Sale>;//
      private _rents: Array<Rent>;
      private _bookSpecifications: Array<BookSpecification>;
-     private _cancelSales: Array<CancelSale>;
+     private _cancelSales: Array<CancelSale>;//
      private _saleCart: SaleCart;
 
      constructor() {

@@ -2,27 +2,29 @@ import { DataBase } from "../db/database";
 import { Stock } from "../domain/stock";
 
 export class StockService {
-    private _dataBase: DataBase;
+    private _stockList: Array<Stock>;
 
-    constructor(dataBase: DataBase) {
-        this._dataBase = dataBase;
-    }
 
-    /**
-     * Getter dataBase
-     * @return {DataBase}
-     */
-    public get dataBase(): DataBase {
-        return this._dataBase;
-    }
+	constructor(stockList: Array<Stock>) {
+		this._stockList = stockList;
+	}
 
     /**
-     * Setter dataBase
-     * @param {DataBase} value
+     * Getter stockList
+     * @return {Array<Stock>}
      */
-    public set dataBase(value: DataBase) {
-        this._dataBase = value;
-    }
+	public get stockList(): Array<Stock> {
+		return this._stockList;
+	}
+
+    /**
+     * Setter stockList
+     * @param {Array<Stock>} value
+     */
+	public set stockList(value: Array<Stock>) {
+		this._stockList = value;
+	}
+    
 
     /**
      * Kitap henüz eklendikten sonra hemen giriyor,
@@ -34,7 +36,7 @@ export class StockService {
         try {
 
             let newStock = new Stock(isbn, quantity, shelfNumber);
-            this.dataBase.getStocksList.push(newStock);
+            this.stockList.push(newStock);
             return true;
         } catch (error) {
             console.error(error);
@@ -64,12 +66,11 @@ export class StockService {
      * @param isbn stock nesnesi getirilecek olan nesnenin isbn nosu,
      * @returns db olan stock nesnensi geri döner, db de yok ise throw ile hata fırlatırlır
      */
-    public getStock(isbn: string): Stock {
-        let stock = this.dataBase.getStocksList.find(s => s.isbn === isbn);
+    public getStock(isbn: string) {
+        let stock = this.stockList.find(s => s.isbn === isbn);
         if (stock) {
             return stock;
         }
-        throw new Error('');
     }
 
     public addStockMock(s: Stock) {

@@ -2,31 +2,34 @@ import { DataBase } from "../db/database";
 import { CancelSale } from "../domain/cancal-sale";
 
 export class CancelSaleService {
-    private _dataBase: DataBase;
+    private _cancelledSalesList: Array<CancelSale>;
 
-    constructor(dataBase: DataBase) {
-        this._dataBase = dataBase;
-    }
 
-    /**
-     * Getter dataBase
-     * @return {DataBase}
-     */
-    public get dataBase(): DataBase {
-        return this._dataBase;
-    }
+	constructor(cancelledSalesList: Array<CancelSale>) {
+		this._cancelledSalesList = cancelledSalesList;
+	}
+    
 
     /**
-     * Setter dataBase
-     * @param {DataBase} value
+     * Getter cancelledSalesList
+     * @return {Array<CancelSale>}
      */
-    public set dataBase(value: DataBase) {
-        this._dataBase = value;
-    }
+	public get cancelledSalesList(): Array<CancelSale> {
+		return this._cancelledSalesList;
+	}
+
+    /**
+     * Setter cancelledSalesList
+     * @param {Array<CancelSale>} value
+     */
+	public set cancelledSalesList(value: Array<CancelSale>) {
+		this._cancelledSalesList = value;
+	}
+
 
 
     public cancelSale(cancelSale: CancelSale): void {
-        this.dataBase.getCancaledSales.push(cancelSale);
+        this.cancelledSalesList.push(cancelSale);
         let refund: number = this.calculateRefund(cancelSale);
         cancelSale.refund = refund;
     }

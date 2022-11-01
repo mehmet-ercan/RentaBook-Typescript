@@ -8,30 +8,51 @@ import { SaleCart } from "../domain/sale-cart";
 import { StockService } from "../service/stock-service"
 
 export class SaleService {
-    private _dataBase: DataBase;
+    private _saleList: Array<Sale>;
+    private _saleCart: SaleCart;
 
-    constructor(dataBase: DataBase) {
-        this._dataBase = dataBase;
+
+    constructor(saleList: Array<Sale>, saleCart: SaleCart) {
+        this._saleList = saleList;
+        this._saleCart = saleCart;
     }
 
     /**
-     * Getter dataBase
-     * @return {DataBase}
+     * Getter saleList
+     * @return {Array<Sale>}
      */
-    public get dataBase(): DataBase {
-        return this._dataBase;
+    public get saleList(): Array<Sale> {
+        return this._saleList;
     }
 
     /**
-     * Setter dataBase
-     * @param {DataBase} value
+     * Setter saleList
+     * @param {Array<Sale>} value
      */
-    public set dataBase(value: DataBase) {
-        this._dataBase = value;
+    public set saleList(value: Array<Sale>) {
+        this._saleList = value;
     }
+
+
+    /**
+     * Getter saleCart
+     * @return {Array<SaleCart>}
+     */
+	public get saleCart(): SaleCart {
+		return this._saleCart;
+	}
+
+    /**
+     * Setter saleCart
+     * @param {Array<SaleCart>} value
+     */
+	public set saleCart(value: SaleCart) {
+		this._saleCart = value;
+	}
+
 
     public addSale(sale: Sale): void {
-        this.dataBase.getSalesList.push(sale);
+        this.saleList.push(sale);
     }
 
     calculateTotal(sale: Sale): number {
@@ -53,33 +74,32 @@ export class SaleService {
 
     public getSale(saleNumber: string): Sale {
 
-        let sale = this.dataBase.getSalesList.find(s => s.operationNumber === saleNumber);
+        let sale = this.saleList.find(s => s.operationNumber === saleNumber);
 
         if (sale) {
             return sale;
         }
 
-
         throw new Error();
     }
 
     public removeSale(sale: Sale) {
-        let index = this.dataBase.getSalesList.indexOf(sale);
-        this.dataBase.getSalesList.splice(index, 1);
+        let index = this.saleList.indexOf(sale);
+        this.saleList.splice(index, 1);
     }
 
     public addBookToCart(book: Book, quantity: number, customerId: number) {
 
-        if (this.dataBase.getSaleCart.bookAndQuantityMap.size === 0) {
-            this.dataBase.getSaleCart.customerId = customerId;
-        } else if (this.dataBase.getSaleCart.bookAndQuantityMap.size > 0) {
-            if (this.dataBase.getSaleCart.customerId !== customerId) {
+        if (this.saleCart.bookAndQuantityMap.size === 0) {
+            this.saleCart.customerId = customerId;
+        } else if (this.saleCart.bookAndQuantityMap.size > 0) {
+            if (this.saleCart.customerId !== customerId) {
                 alert("Farklı müşteriye kitap satılmaya çalışılıyor. Lütfen tek müşteri için işlem yapınız");
                 return false;
             }
         }
 
-        this.dataBase.getSaleCart.bookAndQuantityMap.set(book, quantity);
+        this.saleCart.bookAndQuantityMap.set(book, quantity);
         this.updateSaleCart();
     }
 
@@ -94,30 +114,30 @@ export class SaleService {
                 saleCart.removeChild(saleCart.lastChild);
             }
 
-            for (let index = 0; index < this.dataBase.getSaleCart.bookAndQuantityMap.size; index++) {
+            for (let index = 0; index < this.saleCart.bookAndQuantityMap.size; index++) {
 
                 row = document.createElement("div");
-                row.className = "row";
+                row.className = "row-cart";
 
-                for (let entry of this.dataBase.getSaleCart.bookAndQuantityMap.entries()) {
+                for (let entry of this.saleCart.bookAndQuantityMap.entries()) {
 
                     column = document.createElement("div");
-                    column.className = "column";
-                    column.textContent = this.dataBase.getSaleCart.customerId.toString();
+                    column.className = "column-cart";
+                    column.textContent = this.saleCart.customerId.toString();
                     row.appendChild(column);
 
                     column = document.createElement("div");
-                    column.className = "column";
+                    column.className = "column-cart";
                     column.textContent = entry[0].name;
                     row.appendChild(column);
 
                     column = document.createElement("div");
-                    column.className = "column";
+                    column.className = "column-cart";
                     column.textContent = entry[1].toString();
                     row.appendChild(column);
 
                     column = document.createElement("div");
-                    column.className = "column";
+                    column.className = "column-cart";
                     column.textContent = (entry[0].bookSpec.price * entry[1]).toString();
                     row.appendChild(column);
                 }
@@ -125,7 +145,7 @@ export class SaleService {
 
             if (row && subTotalSpan) {
 
-                for (let t of this.dataBase.getSaleCart.bookAndQuantityMap) {
+                for (let t of this.saleCart.bookAndQuantityMap) {
                     subTotal += t[0].bookSpec.price * t[1];
                 }
 
@@ -139,7 +159,7 @@ export class SaleService {
     }
 
     public cartToSale() {
-        let saleCart: SaleCart = this.dataBase.getSaleCart;
+        let saleCart: SaleCart = this.saleCart;
         let sale = new Sale();
         sale.bookAndQuantityMap = saleCart.bookAndQuantityMap;
         sale.customerId = saleCart.customerId;
@@ -152,7 +172,7 @@ export class SaleService {
         }
 
         this.addSale(sale);
-        this.dataBase.setSaleCart = new SaleCart; // sepeti boşalt
+        this.saleCart = new SaleCart; // sepeti boşalt
         this.updateSaleCart();
 
         console.log(sale.operationNumber);

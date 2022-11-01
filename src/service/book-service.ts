@@ -1,39 +1,60 @@
-import { DataBase } from "../db/database";
+
 import { Book } from "../domain/book";
+import { BookSpecification } from "../domain/book-specification";
 
 export class BookService {
-    private _dataBase: DataBase;
+    private _bookList: Array<Book>;
+    private _bookSpecList: Array<BookSpecification>;
 
-    constructor(dataBase: DataBase) {
-        this._dataBase = dataBase;
+    constructor(bookList: Array<Book>, bookSpecList: Array<BookSpecification>) {
+        this._bookList = bookList;
+        this._bookSpecList = bookSpecList;
     }
 
     /**
      * Getter dataBase
      * @return {DataBase}
      */
-    public get dataBase(): DataBase {
-        return this._dataBase;
+    public get bookList(): Array<Book> {
+        return this._bookList;
     }
 
     /**
      * Setter dataBase
      * @param {DataBase} value
      */
-    public set dataBase(value: DataBase) {
-        this._dataBase = value;
+    public set bookList(value: Array<Book>) {
+        this._bookList = value;
     }
+
+
+    /**
+     * Getter bookSpecList
+     * @return {Array<BookSpecification>}
+     */
+    public get bookSpecList(): Array<BookSpecification> {
+        return this._bookSpecList;
+    }
+
+    /**
+     * Setter bookSpecList
+     * @param {Array<BookSpecification>} value
+     */
+    public set bookSpecList(value: Array<BookSpecification>) {
+        this._bookSpecList = value;
+    }
+
 
     public getBook(isbn: string): Book {
         //Buradan null bir değer de dönebileceği için hata veriyor
         //ama biz sondaki ! operatörü ile null değer dönmeyecek diye garanti veriyoruz
-        return this.dataBase.getBooksList.find(b => b.isbn === isbn)!;
+        return this.bookList.find(b => b.isbn === isbn)!;
     }
 
     public addBook(newBook: Book) {
         try {
-            this.dataBase.getBooksList.push(newBook);
-            this.dataBase.getBookSpecifications.push(newBook.bookSpec);
+            this.bookList.push(newBook);
+            this._bookSpecList.push(newBook.bookSpec);
         } catch (Exception) {
             console.log("Kitap eklenirken bir hata meydana geldi.");
         }
@@ -41,7 +62,11 @@ export class BookService {
 
     public isValidBook(isbn: string): boolean {
         const b = this.getBook(isbn);
-        return this.dataBase.getBooksList.includes(b)
+        return this.bookList.includes(b)
+    }
+
+    public listBooks() {
+
     }
 
     public initializeBooksMock() {
@@ -49,7 +74,6 @@ export class BookService {
     }
 
     public addBookMock(b: Book) {
-        console.log(b.isbn);
         postAddBookMock(b);
     }
 }
@@ -67,8 +91,13 @@ async function getInitializeBooksMock() {
             throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
         }
 
-        const result = (await response.json()) as Book[];
-        console.log(result);
+        const result = (await response.json());
+
+
+        const getResult = <Book[]>JSON.parse(JSON.stringify(result, null, 4)).books;
+        console.log(getResult);
+
+
 
     } catch (Exception) {
         console.log('Hata Oluştu.');

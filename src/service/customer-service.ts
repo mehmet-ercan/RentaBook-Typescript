@@ -2,38 +2,40 @@ import { DataBase } from "../db/database";
 import { Customer } from "../domain/customer";
 
 export class CustomerService {
-    private _dataBase: DataBase;
+    private _customerList: Array<Customer>;
 
-    constructor(dataBase: DataBase) {
-        this._dataBase = dataBase;
+    constructor(customerList: Array<Customer>) {
+        this._customerList = customerList;
     }
 
-    /**
-     * Getter dataBase
-     * @return {DataBase}
-     */
-    public get dataBase(): DataBase {
-        return this._dataBase;
-    }
 
     /**
-     * Setter dataBase
-     * @param {DataBase} value
+     * Getter customerList
+     * @return {Array<Customer>}
      */
-    public set dataBase(value: DataBase) {
-        this._dataBase = value;
-    }
+	public get customerList(): Array<Customer> {
+		return this._customerList;
+	}
+
+    /**
+     * Setter customerList
+     * @param {Array<Customer>} value
+     */
+	public set customerList(value: Array<Customer>) {
+		this._customerList = value;
+	}
+   
 
     public addCustomer(newCustomer: Customer) {
-        this.dataBase.getCustomersList.push(newCustomer);
+        this.customerList.push(newCustomer);
     }
 
     public getNewCustomerId(): number {
         let lastCustomerId: number = 0;
 
-        if (this.dataBase.getCustomersList.length > 0) {
+        if (this.customerList.length > 0) {
 
-            lastCustomerId = this.dataBase.getCustomersList.at(this.dataBase.getCustomersList.length - 1)!.id;
+            lastCustomerId = this.customerList.at(this.customerList.length - 1)!.id;
         }
 
         lastCustomerId = lastCustomerId + 1;
@@ -43,7 +45,7 @@ export class CustomerService {
 
     public getCustomerInfo(id: number): Customer | undefined {
 
-        let customer = this.dataBase.getCustomersList.find(customer => customer.id === id);
+        let customer = this.customerList.find(customer => customer.id === id);
 
         if (customer) {
             return customer;
@@ -54,8 +56,8 @@ export class CustomerService {
 
     public isValidCustomer(customerId: number): boolean {
 
-        let isValid = this.dataBase.getCustomersList.some(customer => customer.id === customerId);
-        
+        let isValid = this.customerList.some(customer => customer.id === customerId);
+
         if (isValid) {
             return true;
         } else {

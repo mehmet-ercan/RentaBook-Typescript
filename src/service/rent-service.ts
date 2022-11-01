@@ -3,32 +3,36 @@ import { Book } from "../domain/book";
 import { Rent } from "../domain/rent";
 
 export class RentService {
-    private _dataBase: DataBase;
+    private _rentList: Array<Rent>;
     refundPercent: number;
 
-    constructor(dataBase: DataBase) {
-        this._dataBase = dataBase;
+
+    constructor(rentList: Array<Rent>) {
+        this._rentList = rentList;
         this.refundPercent = 0.75;
     }
 
-    /**
-     * Getter dataBase
-     * @return {DataBase}
-     */
-    public get dataBase(): DataBase {
-        return this._dataBase;
-    }
 
     /**
-     * Setter dataBase
-     * @param {DataBase} value
+     * Getter rentList
+     * @return {Array<Rent>}
      */
-    public set dataBase(value: DataBase) {
-        this._dataBase = value;
-    }
+	public get rentList(): Array<Rent> {
+		return this._rentList;
+	}
+
+    /**
+     * Setter rentList
+     * @param {Array<Rent>} value
+     */
+	public set rentList(value: Array<Rent>) {
+		this._rentList = value;
+	}
+
+
 
     public addRent(rent: Rent): void {
-        this.dataBase.getRents.push(rent);
+        this.rentList.push(rent);
     }
 
     public calculateTotal(rent: Rent): number {

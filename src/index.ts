@@ -25,17 +25,13 @@ initiliazeServices(db);
 addListenerForMenuItems();
 
 
-
-
-
-
 function initiliazeServices(db: DataBase) {
-  bookService = new BookService(db);
-  customerService = new CustomerService(db);
-  cancelSaleService = new CancelSaleService(db);
-  rentService = new RentService(db);
-  saleService = new SaleService(db);
-  stockService = new StockService(db);
+  bookService = new BookService(db.getBooksList, db.getBookSpecifications);
+  customerService = new CustomerService(db.getCustomersList);
+  cancelSaleService = new CancelSaleService(db.getCancaledSales);
+  rentService = new RentService(db.getRents);
+  saleService = new SaleService(db.getSalesList, db.getSaleCart);
+  stockService = new StockService(db.getStocksList);
   console.log("Services intiliazed.");
 
   bookService.addBook(new Book("123-45", "Neredeyiz", "Mehmet Ercan", "2021", 109, new BookSpecification("123-45", 25.99, new Date, new Date)));
@@ -46,7 +42,6 @@ function initiliazeServices(db: DataBase) {
 
   stockService.addStock("123-45", "A45-52", 10);
   stockService.addStock("123-46", "A45-52", 10);
-
 }
 
 function addListenerForMenuItems() {
@@ -166,20 +161,23 @@ if (saleBookForm) {
     const customer: boolean = customerService.isValidCustomer(customerId);
     const quantity = parseInt(formData.get("quantityForSale") as string);
 
-    const stock = stockService.getStock(isbn);
+    const stock = stockService.getStock(isbn)!;
 
     try {
       if (book) {
-        if (stock.quantity >= quantity) {
-          if (customer) {
-            saleService.addBookToCart(book, quantity, customerId);
-
-          } else {
-            alert(customerId + " numaralı müşteri kayıtlı değildir.");
+        if (stock) {
+          if (stock.quantity >= quantity) {
+            if (customer) {
+              saleService.addBookToCart(book, quantity, customerId);
+            } else {
+              alert(customerId + " numaralı müşteri kayıtlı değildir.");
+            }
           }
-        }
-        else {
-          alert(quantity + " kadar kitap dükkanda mevcut değildir.");
+          else {
+            alert(quantity + " kadar kitap dükkanda mevcut değildir.");
+          }
+        } else {
+          alert(`Dükkanda ${isbn} numaralı kitabın stoğu mevcut değildir.`);
         }
       } else {
         alert(isbn + " numaralı kitap yoktur.");
@@ -196,7 +194,7 @@ if (saleBookForm) {
 
 const btnBuy = <HTMLButtonElement>(document.getElementById("btnBuy"));
 btnBuy.addEventListener("click", () => {
-  if (saleService.dataBase.getSaleCart.bookAndQuantityMap.size === 0) {
+  if (saleService.saleCart.bookAndQuantityMap.size === 0) {
     alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
   } else {
     saleService.cartToSale();
