@@ -1,16 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap");
 
 :root {
-  --main-color: #F5F5F5;
+  --main-color: #f5f5f5;
   --black-color: #353535;
   --border: 01rem solid rgba(255, 255, 255, 0.3);
-  --cards: rgba(249, 167, 74,0.6)
+  --cards: rgba(249, 167, 74, 0.6);
 }
 
 /*! base html codes*/
 
 * {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -22,42 +22,44 @@
 }
 
 html {
-  font-size: 62.5%;  /*Normalde 1rem=16px idi, (10/16=0.625). 1rem=10px olacak şeklinde daha kolay nalşılıyor*/
+  font-size: 62.5%; /*Normalde 1rem=16px idi, (10/16=0.625). 1rem=10px olacak şeklinde daha kolay nalşılıyor*/
   overflow-x: hidden; /* Yatayda bulunan scroll barı kapat*/
   scroll-behavior: smooth;
   scroll-padding-top: 9rem;
-
 }
 
-html::-webkit-scrollbar{
+html::-webkit-scrollbar {
   width: 1rem;
   background-color: white;
 }
 
-html::-webkit-scrollbar-thumb{
+html::-webkit-scrollbar-thumb {
   width: 1rem;
-  background-color: black
+  background-color: black;
 }
 
 section {
   padding: 3.5rem 7%;
 }
 
-.bookCardsSection .addBookSection .listBooksSection .addCustomerSection .addStockSection{
-  display: block;
+#bookCardsSection,
+#listBooksSection,
+#addBookSection,
+#addCustomerSection,
+#saleBookSection,
+#addStockSection {
+  display: none;
 }
 
-.book-cards .headLine{
+.book-cards .headLine {
   color: black;
   font-size: 3.5rem;
   margin-bottom: 3.5rem;
   border-bottom: 0.1rem solid #fff;
-  
 }
 
-.book-cards .headLine span{
+.book-cards .headLine span {
   color: var(--cards);
-
 }
 
 body {
@@ -75,7 +77,22 @@ body {
   font-weight: bold;
 }
 
-.btn:hover{
+.btn:hover {
+  opacity: 0.4;
+}
+
+.btnBuy {
+  margin-left: auto;
+  margin-right: 0;
+  padding: 2rem 3.75rem;
+  border-radius: 5rem;
+  font-size: 2rem;
+  color: white;
+  background-color: var(--black-color);
+  font-weight: bold;
+}
+
+.btnBuy:hover {
   opacity: 0.4;
 }
 
@@ -100,7 +117,7 @@ body {
 
 .header .navbar a {
   font-size: 1.6rem;
-  margin: 0 1.5rem;  /* ilk değer üst alt, sonraki de sağ ve soldan %7 kadar boşluk verir */
+  margin: 0 1.5rem; /* ilk değer üst alt, sonraki de sağ ve soldan %7 kadar boşluk verir */
   color: var(--black-color);
   border-bottom: 0.1rem solid transparent;
 }
@@ -119,82 +136,67 @@ body {
 }
 
 /*New Navbar Start*/
-#primary_nav_wrap
-{
-	margin-top:0.5rem
+#primary_nav_wrap {
+  margin-top: 0.5rem;
 }
 
-#primary_nav_wrap ul
-{
-	list-style:none;
-	position:relative;
-	float:left;
-	margin:0;
-	padding:0;
-  color:#000;
-
+#primary_nav_wrap ul {
+  list-style: none;
+  position: relative;
+  float: left;
+  margin: 0;
+  padding: 0;
+  color: #000;
 }
 
-#primary_nav_wrap ul a
-{
-	display:block;
-	text-decoration:none;
-	font-size:1.8rem;
-	line-height:3.2rem;
-	padding:0 0.5rem;
-
+#primary_nav_wrap ul a {
+  display: block;
+  text-decoration: none;
+  font-size: 1.8rem;
+  line-height: 3.2rem;
+  padding: 0 0.5rem;
 }
 
-#primary_nav_wrap ul li
-{
-	position:relative;
-	float:left;
-	margin:0;
-	padding:0;
+#primary_nav_wrap ul li {
+  position: relative;
+  float: left;
+  margin: 0;
+  padding: 0;
 }
 
-
-#primary_nav_wrap ul li:hover
-{
-	background:#f6f6f6
+#primary_nav_wrap ul li:hover {
+  background: #f6f6f6;
 }
 
-#primary_nav_wrap ul ul
-{
-	display:none;
-	position:absolute;
-	top:100%;
-	left:0;
-	background:#fff;
-	padding:0
+#primary_nav_wrap ul ul {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  padding: 0;
 }
 
-#primary_nav_wrap ul ul li
-{
-	float:none;
-	width:20rem;
- 
+#primary_nav_wrap ul ul li {
+  float: none;
+  width: 20rem;
 }
 
-#primary_nav_wrap ul ul a
-{
-	line-height:120%;
-	padding:1rem 1.5rem;
-
+#primary_nav_wrap ul ul a {
+  line-height: 120%;
+  padding: 1rem 1.5rem;
 }
 
-#primary_nav_wrap ul ul ul
-{
-	top:0;
-	left:100%
+#primary_nav_wrap ul ul ul {
+  top: 0;
+  left: 100%;
 }
 
-#primary_nav_wrap ul li:hover > ul
-{
-	display:block
+#primary_nav_wrap ul li:hover > ul {
+  display: block;
 }
-  /*New Navbar End*/
-  
+/*New Navbar End*/
+
 /* Header Sectiom End*/
 
 /* Home Sectiom Start*/
@@ -229,21 +231,11 @@ body {
   text-transform: capitalize;
   padding: 1rem;
   color: white;
-
 }
-
-/* For Counter */
-#increment, #decrement, #count-value {
-  font-size: 1rem;
-  margin: 0.5em;
-}
-
-/* Home Section End*/
-
 
 /* Book Section Start*/
 
-.book-cards{
+.book-cards {
   display: none;
 }
 
@@ -253,7 +245,7 @@ body {
   gap: 1rem;
 }
 
-.book-cards .box-container .box{
+.book-cards .box-container .box {
   padding: 3rem;
   background-color: var(--cards);
   border-radius: 3rem;
@@ -262,7 +254,6 @@ body {
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-
 }
 
 .book-cards .box-container .box img {
@@ -270,21 +261,21 @@ body {
   object-fit: cover;
 }
 
-.book-cards .box-container .box .book-publisher{
+.book-cards .box-container .box .book-publisher {
   font-size: 1.8rem;
 }
 
-.book-cards .box-container .box h3{
+.book-cards .box-container .box h3 {
   font-size: 2.5rem;
   padding: 1rem 0;
 }
 
-.book-cards .box-container .box .price{
+.book-cards .box-container .box .price {
   font-size: 2.5rem;
   padding: 0.5rem 0;
 }
 
-.book-cards .box-container .box .price span{
+.book-cards .box-container .box .price span {
   font-size: 2rem;
   padding: 0.5rem 0;
   text-decoration: line-through;
@@ -292,43 +283,104 @@ body {
   font-weight: 300;
 }
 
-.book-cards .box-container .box .box-bottom{
-align-self: flex-end;
+.book-cards .box-container .box .box-bottom {
+  align-self: flex-end;
 }
 
 /* Book Section End*/
 
-
 /* All Form Using - Start */
 
-
-form{
+form {
   margin: 2% auto;
   padding: 3rem 3.75rem;
   width: 32rem;
   color: #aaa;
-  border: .1em solid #ddd;
+  border: 0.1em solid #ddd;
   border-radius: 0.5rem;
   font-size: 1.75rem;
-  
 }
 
 form input {
   width: 25rem;
   height: 4rem;
   text-indent: 1.5em;
-  border: .1em solid #ddd;
+  border: 0.1em solid #ddd;
   border-radius: 2rem;
   outline-color: #1abc9c;
   font-size: 1.75rem;
 }
 
 form div {
-margin-top: 1.5rem;
+  margin-top: 1.5rem;
 }
 
-form label{
+form label {
   color: black;
-
+}
 /* All Form Using - End */
 
+/* Create four equal columns that floats next to each other */
+.column-cart {
+  text-align: center;
+  float: left;
+  width: 24%;
+  padding: 0.5 0.5rem;
+  margin: 0.1rem;
+  background-color: var(--cards);
+  font-size: 1.7rem;
+  height: 3rem; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row-cart:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.sale-cart .row-cart:nth-child(1) > div {
+  font-weight: bold;
+  font-size: 2.3rem;
+  background-color: black;
+  color: white;
+}
+
+#totalAmount{
+  font-size: 2rem;
+  display: flex;
+  justify-content:flex-end;
+}
+
+#totalAmount>span{
+  padding-left: .5rem;
+  font-weight: bold;
+  font-size: 2rem;
+  color: green;
+}
+
+/* Create four equal columns that floats next to each other */
+.column-list-book {
+  text-align: center;
+  float: left;
+  width: 19%;
+  padding: 0.5 0.5rem;
+  margin: 0.1rem;
+  background-color: var(--cards);
+  font-size: 1.7rem;
+  height: 3rem; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row-list-book:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.list-books .row-list-book:nth-child(1) > div {
+  font-weight: bold;
+  font-size: 2.3rem;
+  background-color: black;
+  color: white;
+}

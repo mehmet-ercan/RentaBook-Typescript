@@ -1,45 +1,82 @@
-import { cli } from "webpack";
+// export NODE_OPTIONS=--openssl-legacy-provider
 import { DataBase } from "./db/database";
+import fetch from 'node-fetch'
+
 import { Book } from "./domain/book";
 import { BookSpecification } from "./domain/book-specification";
 import { Customer } from "./domain/customer";
 import { Stock } from "./domain/stock";
+import { BookService } from "./service/book-service";
+import { CancelSaleService } from "./service/cancal-sale-service";
+import { CustomerService } from "./service/customer-service";
+import { RentService } from "./service/rent-service";
+import { SaleService } from "./service/sale-service";
+import { StockService } from "./service/stock-service";
 
-/*export NODE_OPTIONS=--openssl-legacy-provider*/
+export let bookService: BookService;
+export let customerService: CustomerService;
+export let cancelSaleService: CancelSaleService;
+export let rentService: RentService;
+export let saleService: SaleService;
+export let stockService: StockService;
 
-const db = new DataBase();
+let db: DataBase = new DataBase();
+initiliazeServices(db);
+initiliazeData();
+addListenerForMenuItems();
 
-const addBookMenuItem = document.getElementById("addBookMenuItem");
-const addBookSection = document.getElementById("addBookSection");
-
-if (addBookMenuItem != null && addBookSection != null) {
-  addBookMenuItem.addEventListener("click", function click() {
-    if (addBookSection.style.display === "none") {
-      addBookSection.style.display = "block";
-    } else {
-      addBookSection.style.display = "none";
-    }
-  });
+ function initiliazeData(){
+ bookService.initializeBooksDataMock();
 }
 
-const bookCardsMenuItem = document.getElementById("bookCardsMenuItem");
-const bookCardsSection = document.getElementById("bookCardsSection");
 
-if (bookCardsMenuItem != null && bookCardsSection != null) {
-  bookCardsMenuItem.addEventListener("click", () => {
-    if (bookCardsSection.style.display == "none") {
-      bookCardsSection.style.display = "block";
-    } else {
-      bookCardsSection.style.display = "none";
-    }
-  });
+
+function initiliazeServices(db: DataBase) {
+  bookService = new BookService(db.getBooksList, db.getBookSpecifications);
+  customerService = new CustomerService(db.getCustomersList);
+  cancelSaleService = new CancelSaleService(db.getCancaledSales);
+  rentService = new RentService(db.getRents);
+  saleService = new SaleService(db.getSalesList, db.getSaleCart);
+  stockService = new StockService(db.getStocksList);
+  console.log("Services intiliazed.");
+
+  customerService.addCustomer(new Customer(1, "", "", ""));
+  customerService.addCustomer(new Customer(2, "", "", ""));
+
+  stockService.addStock("123-45", "A45-52", 10);
+  stockService.addStock("123-46", "A45-52", 10);
 }
 
-const form = <HTMLFormElement>document.getElementById("add-book-form");
+function addListenerForMenuItems() {
+  //saleService.updateSaleCart();
+  showAndHide("addBookMenuItem", "addBookSection");
+  showAndHide("showBooksMenuItem", "listBooksSection");
+  showAndHide("addCustomerMenuItem", "addCustomerSection");
+  showAndHide("addStockMenuItem", "addStockSection");
+  showAndHide("saleBookMenuItem", "saleBookSection");
+}
 
-if (form != null) {
-  form.onsubmit = () => {
-    const formData = new FormData(form);
+function showAndHide(btnId: string, elementId: string) {
+  //saleService.updateSaleCart();
+
+  const element = document.getElementById(elementId);
+  const btn = document.getElementById(btnId);
+
+  if (element && btn) {
+    btn.addEventListener("click", () => {
+      if (element.style.display === "none") {
+        element.style.display = "block";
+      } else {
+        element.style.display = "none";
+      }
+    });
+  }
+}
+
+const addBookForm = <HTMLFormElement>document.getElementById("add-book-form");
+if (addBookForm != null) {
+  addBookForm.onsubmit = () => {
+    const formData = new FormData(addBookForm);
 
     const title = formData.get("bookTitle") as string;
     const author = formData.get("bookAuthor") as string;
@@ -53,38 +90,43 @@ if (form != null) {
     const bookSpec = new BookSpecification(isbn, price, startDate, endDate);
 
     const book = new Book(isbn, title, author, publishYear, pages, bookSpec);
-    db.books.push(book);
+    //bookService.addBook(book);
 
-    alert("Kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
-    form.reset();
-
-    console.log(book);
-
-    for (var b of db.books) {
-      console.log(b.isbn);
-      console.log(b.name);
-      console.log(b.author);
-      console.log(b.publishYear);
-      console.log(b.pages);
-      console.log(b.bookSpec.price);
-    }
+    bookService.addBookMock(book);
+    alert(book.isbn + " numaralı kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
+    addBookForm.reset();
 
     return false; // prevent reload
   };
 }
 
-const addCustomerMenuItem = document.getElementById("addCustomerMenuItem");
-const addCustomerSection = document.getElementById("addCustomerSection");
+const addStockForm = <HTMLFormElement>(document.getElementById("add-stock-form"));
+if (addStockForm) {
+  addStockForm.onsubmit = () => {
 
-if (addCustomerMenuItem != null && addCustomerSection != null) {
-  addCustomerMenuItem.addEventListener("click", () => {
-    if (addCustomerSection.style.display == "none") {
-      addCustomerSection.style.display = "block";
-    } else {
-      addCustomerSection.style.display = "none";
-    }
+    const formData = new FormData(addStockForm);
 
-  });
+    const isbn = formData.get("bookIsbnForAddStock") as string;
+    const quanttiy = formData.get("stockQuantity") as unknown as number;
+    const shelfNumber = formData.get("shelfNumber") as string;
+
+    const stock = new Stock(isbn, quanttiy, shelfNumber);
+
+    const isContainsBook = db.getBooksList.some(b => b.isbn == isbn);
+
+    // if (!isContainsBook) {
+    //   alert("Stok eklenmeye çalışılan kitap, kayıtlı değildir. Lütfen önce kitap ekleyiniz");
+    // }
+    // else {
+    //   stockService.increaseStock(isbn, quanttiy);
+    //   alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
+    // }
+
+    alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
+    stockService.addStockMock(stock);
+    addStockForm.reset();
+    return false; // prevent reload
+  };
 }
 
 const addCustomerForm = <HTMLFormElement>(document.getElementById("add-customer-form"));
@@ -97,12 +139,12 @@ if (addCustomerForm) {
     const surname = formData.get("customerSurname") as string;
     const phoneNumber = formData.get("customerPhoneNumber") as string;
 
-    const customer = new Customer(1, name, surname, phoneNumber);
-    db.customers.push(customer);
+    const customer = new Customer(customerService.getNewCustomerId(), name, surname, phoneNumber);
 
+    customerService.addCustomer(customer);
     alert("Müşteri Ekleme İşlemi Başarı İle Tamamlanmıştır. ");
+
     addCustomerForm.reset();
-    console.log(customer);
 
     return false; // prevent reload
   };
@@ -110,64 +152,61 @@ if (addCustomerForm) {
 
 }
 
-const addStockForm = <HTMLFormElement>(document.getElementById("add-stock-form"));
-const addStockSection = <HTMLFormElement>(document.getElementById("addStockSection"));
-const addStockMenuItem = <HTMLFormElement>(document.getElementById("addStockMenuItem"));
+const saleBookForm = <HTMLFormElement>(document.getElementById("sale-book-form"));
+if (saleBookForm) {
+  saleBookForm.onsubmit = () => {
 
-if (addStockSection && addStockMenuItem) {
-  addStockMenuItem.addEventListener("click", () => {
-    if (addStockSection.style.display === "none") {
-      addStockSection.style.display = "block";
-    } else {
-      addStockSection.style.display = "none";
+    const formData = new FormData(saleBookForm);
+
+    const isbn = formData.get("isbnForSale") as string;
+    const book = bookService.getBook(isbn);
+    const customerId = parseInt(formData.get("customerIdForSale") as string);
+    const customer: boolean = customerService.isValidCustomer(customerId);
+    const quantity = parseInt(formData.get("quantityForSale") as string);
+
+    const stock = stockService.getStock(isbn)!;
+
+    try {
+      if (book) {
+        if (stock) {
+          if (stock.quantity >= quantity) {
+            if (customer) {
+              saleService.addBookToCart(book, quantity, customerId);
+            } else {
+              alert(customerId + " numaralı müşteri kayıtlı değildir.");
+            }
+          }
+          else {
+            alert(quantity + " kadar kitap dükkanda mevcut değildir.");
+          }
+        } else {
+          alert(`Dükkanda ${isbn} numaralı kitabın stoğu mevcut değildir.`);
+        }
+      } else {
+        alert(isbn + " numaralı kitap yoktur.");
+      }
+
+      saleBookForm.reset();
+      return false;
+
+    } catch (error) {
+      alert(error);
     }
-  });
+  }
 }
 
-if (addStockForm) {
-  addStockForm.onsubmit = () => {
+const btnBuy = <HTMLButtonElement>(document.getElementById("btnBuy"));
+btnBuy.addEventListener("click", () => {
+  if (saleService.saleCart.bookAndQuantityMap.size === 0) {
+    alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
+  } else {
+    saleService.cartToSale();
+  }
 
-    const formData = new FormData(addStockForm);
+});
 
-    const isbn = formData.get("bookIsbnForAddStock") as string;
-    const quanttiy = formData.get("stockQuantity") as unknown as number;
-    const shelfNumber = formData.get("shelfNumber") as string;
+const btnShowBooksMenuItem = <HTMLElement>(document.getElementById("showBooksMenuItem"));
+btnShowBooksMenuItem.addEventListener("click", () => {
+  bookService.initializeBooksDataMock();
+})
 
-    const stock = new Stock(isbn, quanttiy, shelfNumber);
-
-    const isContainsBook = db.books.some(b => b.isbn == isbn);
-
-    if (!isContainsBook) {
-      alert("Stok eklenmeye çalışılan kitap, kayıtlı değildir. Litfen önce kitap ekleyiniz");
-    }
-    else {
-      db.stocks.push(stock);
-      alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
-    }
-
-    return false; // prevent reload
-  };
-}
-
-
-
-/*
-const incrementButton = <HTMLButtonElement>document.querySelector("#increment");
-const decrementButton = <HTMLButtonElement>document.querySelector("#decrement");
-const countValue = <HTMLSpanElement>document.querySelector("#count-value");
-
-const handleIncrementClick = () => {
-  const currentValue = parseFloat(countValue.innerText);
-  const incrementedValue = increment(currentValue);
-  countValue.innerText = incrementedValue.toString();
-};
-
-const handleDecrementClick = () => {
-  const currentValue = parseFloat(countValue.innerText);
-  const decrementedValue = decrement(currentValue);
-  countValue.innerText = decrementedValue.toString();
-};
-
-incrementButton.addEventListener("click", handleIncrementClick);
-decrementButton.addEventListener("click", handleDecrementClick);
-*/
