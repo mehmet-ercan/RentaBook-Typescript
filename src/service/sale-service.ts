@@ -110,8 +110,9 @@ export class SaleService {
         if (saleCart) {
 
             let row, column, subTotal: number = 0;
-            while (saleCart.lastChild && saleCart.children.length > 1) {
-                saleCart.removeChild(saleCart.lastChild);
+            
+            while (saleCart.lastChild && saleCart.children.length > 1) { 
+            	saleCart.removeChild(saleCart.lastChild); 
             }
 
             for (let index = 0; index < this.saleCart.bookAndQuantityMap.size; index++) {

@@ -4,27 +4,25 @@ import { Stock } from "../domain/stock";
 export class StockService {
     private _stockList: Array<Stock>;
 
-
-	constructor(stockList: Array<Stock>) {
-		this._stockList = stockList;
-	}
+    constructor(stockList: Array<Stock>) {
+        this._stockList = stockList;
+    }
 
     /**
      * Getter stockList
      * @return {Array<Stock>}
      */
-	public get stockList(): Array<Stock> {
-		return this._stockList;
-	}
+    public get stockList(): Array<Stock> {
+        return this._stockList;
+    }
 
     /**
      * Setter stockList
      * @param {Array<Stock>} value
      */
-	public set stockList(value: Array<Stock>) {
-		this._stockList = value;
-	}
-    
+    public set stockList(value: Array<Stock>) {
+        this._stockList = value;
+    }
 
     /**
      * Kitap henüz eklendikten sonra hemen giriyor,
@@ -50,7 +48,6 @@ export class StockService {
      * @param quantity stok eklenecek olan kitabın adedi
      * @returns işlem gerçekleşmesi durumunda true, diğer durumda false döner
      */
-    //
     public increaseStock(isbn: string, quantity: number): boolean {
         let stock = this.getStock(isbn);
         if (stock) {
@@ -70,6 +67,16 @@ export class StockService {
         let stock = this.stockList.find(s => s.isbn === isbn);
         if (stock) {
             return stock;
+        }
+    }
+
+    public getStockQuantity(isbn: string): number {
+        let s: Stock = this.getStock(isbn)!;
+
+        if (s) {
+            return s.quantity;
+        } else {
+            return 0;
         }
     }
 

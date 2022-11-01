@@ -22,7 +22,13 @@ export let stockService: StockService;
 
 let db: DataBase = new DataBase();
 initiliazeServices(db);
+initiliazeData();
 addListenerForMenuItems();
+
+ function initiliazeData(){
+ bookService.initializeBooksDataMock();
+}
+
 
 
 function initiliazeServices(db: DataBase) {
@@ -33,9 +39,6 @@ function initiliazeServices(db: DataBase) {
   saleService = new SaleService(db.getSalesList, db.getSaleCart);
   stockService = new StockService(db.getStocksList);
   console.log("Services intiliazed.");
-
-  bookService.addBook(new Book("123-45", "Neredeyiz", "Mehmet Ercan", "2021", 109, new BookSpecification("123-45", 25.99, new Date, new Date)));
-  bookService.addBook(new Book("123-46", "Neredeyiz 2", "Mehmet Ercan", "2022", 179, new BookSpecification("123-46", 29.99, new Date, new Date)));
 
   customerService.addCustomer(new Customer(1, "", "", ""));
   customerService.addCustomer(new Customer(2, "", "", ""));
@@ -204,6 +207,6 @@ btnBuy.addEventListener("click", () => {
 
 const btnShowBooksMenuItem = <HTMLElement>(document.getElementById("showBooksMenuItem"));
 btnShowBooksMenuItem.addEventListener("click", () => {
-  bookService.initializeBooksMock();
+  bookService.initializeBooksDataMock();
 })
 

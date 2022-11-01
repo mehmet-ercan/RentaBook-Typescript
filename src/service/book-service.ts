@@ -1,4 +1,5 @@
 
+import { stockService } from "..";
 import { Book } from "../domain/book";
 import { BookSpecification } from "../domain/book-specification";
 
@@ -65,70 +66,101 @@ export class BookService {
         return this.bookList.includes(b)
     }
 
+    async initializeBooksDataMock() {
+        try {
+            const response = await fetch('http://localhost:3002/api/books', {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+            }
+            const result = (await response.json());
+            const getResult = <Book[]>JSON.parse(JSON.stringify(result, null, 4));
+            this.bookList = getResult as Array<Book>;
+            this.listBooks();
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     public listBooks() {
+        const listBooksDiv = document.getElementById("listBooks");
 
-    }
+        if (listBooksDiv) {
+            let row, column;
 
-    public initializeBooksMock() {
-        getInitializeBooksMock();
-    }
+            while (listBooksDiv.lastChild && listBooksDiv.children.length > 1) {
+                listBooksDiv.removeChild(listBooksDiv.lastChild);
+            }
 
-    public addBookMock(b: Book) {
-        postAddBookMock(b);
-    }
-}
+            this.bookList.forEach(element => {
+                row = document.createElement("div");
+                row.className = "row-list-book";
 
-async function getInitializeBooksMock() {
-    try {
-        const response = await fetch('http://localhost:3002/api/books', {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-            },
-        });
+                column = document.createElement("div");
+                column.className = "column-list-book";
+                column.textContent = element.isbn.toString();
+                row.appendChild(column);
 
-        if (!response.ok) {
-            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+                column = document.createElement("div");
+                column.className = "column-list-book";
+                column.textContent = element.name.toString();
+                row.appendChild(column);
+
+                column = document.createElement("div");
+                column.className = "column-list-book";
+                column.textContent = element.author.toString();
+                row.appendChild(column);
+
+                column = document.createElement("div");
+                column.className = "column-list-book";
+                column.textContent = stockService.getStockQuantity(element.isbn).toString();
+                row.appendChild(column);
+
+                column = document.createElement("div");
+                column.className = "column-list-book";
+                column.textContent = element.bookSpec.price.toString() + " ₺";
+                row.appendChild(column);
+
+                listBooksDiv.appendChild(row);
+            });
+
+
         }
 
-        const result = (await response.json());
-
-
-        const getResult = <Book[]>JSON.parse(JSON.stringify(result, null, 4)).books;
-        console.log(getResult);
-
-
-
-    } catch (Exception) {
-        console.log('Hata Oluştu.');
     }
-}
 
-async function postAddBookMock(b: Book) {
-    try {
-        const response = await fetch('http://localhost:3002/api/books/' + b.isbn, {
-            method: 'POST',
-            body: JSON.stringify({
-                isbn: b.isbn,
-                name: b.name,
-                author: b.author,
-                pages: b.pages,
-                publishYear: b.publishYear
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-        });
+    async addBookMock(b: Book) {
+        try {
+            const response = await fetch('http://localhost:3002/api/books/', {
+                method: 'POST',
+                body: JSON.stringify({
+                    isbn: b.isbn,
+                    name: b.name,
+                    author: b.author,
+                    pages: b.pages,
+                    publishYear: b.publishYear
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            });
 
-        if (!response.ok) {
-            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+            if (!response.ok) {
+                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+            }
+
+            const result = (await response.json());
+            console.log(result);
+
+        } catch (Exception) {
+            console.log('Hata Oluştu.');
         }
-
-        const result = (await response.json());
-        console.log(result);
-
-    } catch (Exception) {
-        console.log('Hata Oluştu.');
     }
 }
