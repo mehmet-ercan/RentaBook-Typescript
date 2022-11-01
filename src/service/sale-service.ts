@@ -1,16 +1,12 @@
-import { debug } from "webpack";
 import { stockService } from "..";
-import { DataBase } from "../db/database";
 import { Book } from "../domain/book";
-import { Customer } from "../domain/customer";
 import { Sale } from "../domain/sale";
 import { SaleCart } from "../domain/sale-cart";
-import { StockService } from "../service/stock-service"
 
 export class SaleService {
     private _saleList: Array<Sale>;
     private _saleCart: SaleCart;
-
+    public addSaleApi = 'http://localhost:3002/api/sales/';
 
     constructor(saleList: Array<Sale>, saleCart: SaleCart) {
         this._saleList = saleList;
@@ -38,21 +34,21 @@ export class SaleService {
      * Getter saleCart
      * @return {Array<SaleCart>}
      */
-	public get saleCart(): SaleCart {
-		return this._saleCart;
-	}
+    public get saleCart(): SaleCart {
+        return this._saleCart;
+    }
 
     /**
      * Setter saleCart
      * @param {Array<SaleCart>} value
      */
-	public set saleCart(value: SaleCart) {
-		this._saleCart = value;
-	}
-
+    public set saleCart(value: SaleCart) {
+        this._saleCart = value;
+    }
 
     public addSale(sale: Sale): void {
         this.saleList.push(sale);
+
     }
 
     calculateTotal(sale: Sale): number {
@@ -110,10 +106,11 @@ export class SaleService {
         if (saleCart) {
 
             let row, column, subTotal: number = 0;
-            
-            while (saleCart.lastChild && saleCart.children.length > 1) { 
-            	saleCart.removeChild(saleCart.lastChild); 
+
+            while (saleCart.lastChild && saleCart.children.length > 1) {
+                saleCart.removeChild(saleCart.lastChild);
             }
+            subTotalSpan!.textContent = "";
 
             for (let index = 0; index < this.saleCart.bookAndQuantityMap.size; index++) {
 
@@ -162,6 +159,7 @@ export class SaleService {
     public cartToSale() {
         let saleCart: SaleCart = this.saleCart;
         let sale = new Sale();
+
         sale.bookAndQuantityMap = saleCart.bookAndQuantityMap;
         sale.customerId = saleCart.customerId;
         sale.operationNumber = this.generateSaleNumber(saleCart.customerId);
@@ -172,12 +170,42 @@ export class SaleService {
             stockService.increaseStock(q[0].isbn, -q[1])
         }
 
-        this.addSale(sale);
+        this.addSaleMock(sale);
         this.saleCart = new SaleCart; // sepeti boşalt
         this.updateSaleCart();
-
-        console.log(sale.operationNumber);
-        alert("Satış gerçekleşmiştir. Fiş Numaranız: " + sale.operationNumber + "\nFişinizi kaybetmeyiniz. ");
     }
+
+    async addSaleMock(s: Sale) {
+        try {
+            const response = await fetch(this.addSaleApi, {
+                method: 'POST',
+                body: JSON.stringify({
+                    bookAndQuantity: s.bookAndQuantityMap,
+                    customerId: s.customerId,
+                    operationDateTime: s.operationDateTime,
+                    operationNumber: s.operationNumber,
+                    total: s.total
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+            }
+
+            const result = (await response.json());
+            console.log(result);
+            
+            alert(result.message + " "+ result.saleNumber);
+
+        } catch (Exception) {
+            console.log('Hata Oluştu.');
+        }
+    }
+
+
 
 }

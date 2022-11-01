@@ -81,6 +81,7 @@ export class BookService {
             const result = (await response.json());
             const getResult = <Book[]>JSON.parse(JSON.stringify(result, null, 4));
             this.bookList = getResult as Array<Book>;
+            
             this.listBooks();
 
         } catch (error) {
