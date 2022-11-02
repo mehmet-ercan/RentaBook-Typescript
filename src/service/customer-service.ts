@@ -3,7 +3,7 @@ import { Customer } from "../domain/customer";
 
 export class CustomerService {
     private _customerList: Array<Customer>;
-    private customerApi: string = "http://localhost:3002/api/customers/";
+    private customerApi: string = "http://localhost:3002/api/customers";
 
     constructor(customerList: Array<Customer>) {
         this._customerList = customerList;

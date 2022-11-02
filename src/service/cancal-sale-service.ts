@@ -3,7 +3,7 @@ import { CancelSale } from "../domain/cancal-sale";
 
 export class CancelSaleService {
     private _cancelledSalesList: Array<CancelSale>;
-    cancelSaleApi: string = 'http://localhost:3002/api/cancelSale/';
+    cancelSaleApi: string = 'http://localhost:3002/api/cancelSale';
 
     constructor(cancelledSalesList: Array<CancelSale>) {
         this._cancelledSalesList = cancelledSalesList;

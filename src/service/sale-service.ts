@@ -6,7 +6,7 @@ import { SaleCart } from "../domain/sale-cart";
 export class SaleService {
     private _saleList: Array<Sale>;
     private _saleCart: SaleCart;
-    public saleApi = 'http://localhost:3002/api/sales/';
+    public saleApi = 'http://localhost:3002/api/sales';
 
     constructor(saleList: Array<Sale>, saleCart: SaleCart) {
         this._saleList = saleList;

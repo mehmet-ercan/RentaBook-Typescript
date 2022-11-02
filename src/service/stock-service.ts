@@ -3,7 +3,7 @@ import { Stock } from "../domain/stock";
 
 export class StockService {
     private _stockList: Array<Stock>;
-    private stockApi: string = "http://localhost:3002/api/stocks/";
+    private stockApi: string = "http://localhost:3002/api/stocks";
 
     constructor(stockList: Array<Stock>) {
         this._stockList = stockList;
@@ -122,7 +122,7 @@ export class StockService {
     async increaseStockMock(s: Stock) {
         try {
 
-            const response = await fetch(this.stockApi + s.isbn, {
+            const response = await fetch(this.stockApi + "/" + s.isbn, {
                 method: 'PUT',
                 body: JSON.stringify({
                     isbn: s.isbn,
