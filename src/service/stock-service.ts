@@ -29,6 +29,8 @@ export class StockService {
      * Elimizde hiç stock kaydı/nesnesi yok, yeni kayıt/nesne oluşturuyoruz
      * Yeni eklenen kitaba stok ekleme işlemi
      * @param isbn  stok eklenecek olan kitabın isbn numarası
+     * @param shelfNumber stok eklenecek olan kitabın raf numarası
+     * @param quantity kitapdan kaç adet stoğa eklenecek
      */
     public addStock(isbn: string, shelfNumber: string, quantity: number): boolean {
         try {

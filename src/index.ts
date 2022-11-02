@@ -1,7 +1,5 @@
 // export NODE_OPTIONS=--openssl-legacy-provider
 import { DataBase } from "./db/database";
-import fetch from 'node-fetch'
-
 import { Book } from "./domain/book";
 import { BookSpecification } from "./domain/book-specification";
 import { Customer } from "./domain/customer";
@@ -28,8 +26,6 @@ addListenerForMenuItems();
  function initiliazeData(){
  bookService.initializeBooksDataMock();
 }
-
-
 
 function initiliazeServices(db: DataBase) {
   bookService = new BookService(db.getBooksList, db.getBookSpecifications);
@@ -131,8 +127,7 @@ if (addStockForm) {
 
 const addCustomerForm = <HTMLFormElement>(document.getElementById("add-customer-form"));
 if (addCustomerForm) {
-
-  addCustomerForm.onsubmit = () => {
+  addCustomerForm.onsubmit = async () => {
     const formData = new FormData(addCustomerForm);
 
     const name = formData.get("customerName") as string;
@@ -140,16 +135,12 @@ if (addCustomerForm) {
     const phoneNumber = formData.get("customerPhoneNumber") as string;
 
     const customer = new Customer(customerService.getNewCustomerId(), name, surname, phoneNumber);
+    await customerService.addCustomerMock(customer);
 
-    customerService.addCustomer(customer);
     alert("Müşteri Ekleme İşlemi Başarı İle Tamamlanmıştır. ");
-
     addCustomerForm.reset();
-
     return false; // prevent reload
   };
-
-
 }
 
 const saleBookForm = <HTMLFormElement>(document.getElementById("sale-book-form"));
@@ -195,6 +186,12 @@ if (saleBookForm) {
   }
 }
 
+/**
+ * Kitap satışı için işlem yapılırken kitaplar sepete ekleniyor.
+ * Ekleme işlemi bittikten sonra satın alm iiçin bu butona tıklandığında servise gidip sepetteki kitapların satışı gerçekleşiyor
+ * Burada diğer butonlarda olduğu gibi direk mock servisine bağlanmak yerine servise gitmek durumundayız. 
+ * Çünkü serviste Sale nesnesini oluşturup mock servisine parametre olark geçiyoruz.
+ */
 const btnBuy = <HTMLButtonElement>(document.getElementById("btnBuy"));
 btnBuy.addEventListener("click", () => {
   if (saleService.saleCart.bookAndQuantityMap.size === 0) {
@@ -209,4 +206,3 @@ const btnShowBooksMenuItem = <HTMLElement>(document.getElementById("showBooksMen
 btnShowBooksMenuItem.addEventListener("click", () => {
   bookService.initializeBooksDataMock();
 })
-

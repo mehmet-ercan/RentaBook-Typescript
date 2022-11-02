@@ -29,7 +29,6 @@ export class SaleService {
         this._saleList = value;
     }
 
-
     /**
      * Getter saleCart
      * @return {Array<SaleCart>}
