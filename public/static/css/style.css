@@ -47,7 +47,8 @@ section {
 #addBookSection,
 #addCustomerSection,
 #saleBookSection,
-#addStockSection {
+#addStockSection,
+#cancelSaleSection {
   display: none;
 }
 

@@ -57,8 +57,8 @@
         <li>
           <a href="#">İptal İşlemleri</a>
           <ul>
-            <li><a href="#" id="addCustomerMenuItem">Satış İptali</a></li>
-            <li><a href="#" id="addCustomerMenuItem">Kiralama İptali</a></li>
+            <li><a href="#cancelSaleSection" id="cancelSaleMenuItem">Satış İptali</a></li>
+            <li><a href="#cancelRentSection" id="cancelRentMenuItem">Kiralama İptali</a></li>
           </ul>
         </li>
 
@@ -217,17 +217,17 @@
     <form id="add-customer-form">
       <div>
         <label for="name">Müşterinin İsmi</label>
-        <input type="text" name="customerName" id="customerName" value="Ali" />
+        <input type="text" name="customerName" id="customerName" />
       </div>
 
       <div>
         <label for="author">Müşterinin Soyismi</label>
-        <input type="text" name="customerSurname" id="customerSurname"  value="Ali"/>
+        <input type="text" name="customerSurname" id="customerSurname" />
       </div>
 
       <div>
         <label for="isbn">Müşterinin Telefon Numarası</label>
-        <input type="text" name="customerPhoneNumber" id="customerPhoneNumber"  value="5466965"/>
+        <input type="text" name="customerPhoneNumber" id="customerPhoneNumber" />
       </div>
 
       <!-- Submit button-->
@@ -242,17 +242,17 @@
     <form id="add-stock-form">
       <div>
         <label for="isbn">Stok Eklenecek Kitabın ISBN Numarası</label>
-        <input type="text" name="bookIsbnForAddStock" id="book-isbn-for-stock" />
+        <input type="text" name="bookIsbnForAddStock" id="book-isbn-for-stock" value="123-45" />
       </div>
 
       <div>
-        <label for="stock">Eklenecek Stok Adedi</label>
-        <input type="text" name="stockQuantity" id="book-stock-quantity" />
+        <label for="stock">Toplam Stok Adedi</label>
+        <input type="text" name="stockQuantity" id="book-stock-quantity" value="25" />
       </div>
 
       <div>
         <label for="shelfNumber">Raf Numarası</label>
-        <input type="text" name="shelfNumber" id="book-stock-shelfNumber" />
+        <input type="text" name="shelfNumber" id="book-stock-shelfNumber" value="A75-78B" />
       </div>
 
       <!-- Submit button-->
@@ -310,8 +310,21 @@
 
 
     <input type="button" id="btnBuy" class="btn" value="Satın Al" />
-    <span id="totalAmount">Toplam Ücreti: <span id="totalAmountTl">  </span></span>
-    
+    <span id="totalAmount">Toplam Ücreti: <span id="totalAmountTl"> </span></span>
+
+  </section>
+
+  <section id="cancelSaleSection" class="cancel-sale">
+    <form id="cancel-sale-form">
+      <div>
+        <label for="saleNumberforCancel">Satış Numarası</label>
+        <input type="text" name="saleNumberforCancel" id="sale-number-for-cancel" />
+      </div>
+      <div>
+        <input type="submit" value="İptal Et" />
+      </div>
+
+    </form>
   </section>
 
   <!-- TODO DİĞER SAYFA TASARIMLARI-->

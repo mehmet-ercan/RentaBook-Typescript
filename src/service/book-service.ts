@@ -6,7 +6,7 @@ import { BookSpecification } from "../domain/book-specification";
 export class BookService {
     private _bookList: Array<Book>;
     private _bookSpecList: Array<BookSpecification>;
-
+    bookApi: string = 'http://localhost:3002/api/books/';
     constructor(bookList: Array<Book>, bookSpecList: Array<BookSpecification>) {
         this._bookList = bookList;
         this._bookSpecList = bookSpecList;
@@ -66,7 +66,7 @@ export class BookService {
         return this.bookList.includes(b)
     }
 
-    async initializeBooksDataMock() {
+    async initializeDataMock() {
         try {
             const response = await fetch('http://localhost:3002/api/books', {
                 method: 'GET',
@@ -81,8 +81,7 @@ export class BookService {
             const result = (await response.json());
             const getResult = <Book[]>JSON.parse(JSON.stringify(result, null, 4));
             this.bookList = getResult as Array<Book>;
-            
-            this.listBooks();
+            //console.log(this.bookList);
 
         } catch (error) {
             console.error(error);
@@ -136,9 +135,9 @@ export class BookService {
 
     }
 
-    async addBookMock(b: Book) {
+    async addBookMock(b: Book): Promise<Boolean | undefined> {
         try {
-            const response = await fetch('http://localhost:3002/api/books/', {
+            const response = await fetch(this.bookApi, {
                 method: 'POST',
                 body: JSON.stringify({
                     isbn: b.isbn,
@@ -153,12 +152,16 @@ export class BookService {
                 },
             });
 
-            if (!response.ok) {
+            if (response.ok) {
+                const result = (await response.json());
+                console.log(result);
+                return true;
+            }else{
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+
             }
 
-            const result = (await response.json());
-            console.log(result);
+            
 
         } catch (Exception) {
             console.log('Hata Oluştu.');

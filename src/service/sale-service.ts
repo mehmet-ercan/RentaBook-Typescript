@@ -6,7 +6,7 @@ import { SaleCart } from "../domain/sale-cart";
 export class SaleService {
     private _saleList: Array<Sale>;
     private _saleCart: SaleCart;
-    public addSaleApi = 'http://localhost:3002/api/sales/';
+    public saleApi = 'http://localhost:3002/api/sales/';
 
     constructor(saleList: Array<Sale>, saleCart: SaleCart) {
         this._saleList = saleList;
@@ -68,14 +68,8 @@ export class SaleService {
     }
 
     public getSale(saleNumber: string): Sale {
-
         let sale = this.saleList.find(s => s.operationNumber === saleNumber);
-
-        if (sale) {
-            return sale;
-        }
-
-        throw new Error();
+        return sale!;
     }
 
     public removeSale(sale: Sale) {
@@ -176,7 +170,9 @@ export class SaleService {
 
     async addSaleMock(s: Sale) {
         try {
-            const response = await fetch(this.addSaleApi, {
+            console.log(s.bookAndQuantityMap);
+            
+            const response = await fetch(this.saleApi, {
                 method: 'POST',
                 body: JSON.stringify({
                     bookAndQuantity: s.bookAndQuantityMap,
