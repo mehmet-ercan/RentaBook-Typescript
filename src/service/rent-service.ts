@@ -1,9 +1,7 @@
 import { stockService } from "..";
-import { DataBase } from "../db/database";
 import { Book } from "../domain/book";
 import { Rent } from "../domain/rent";
 import { RentCart } from "../domain/rent-cart";
-import { SaleCart } from "../domain/sale-cart";
 
 export class RentService {
     private _rentList: Array<Rent>;
