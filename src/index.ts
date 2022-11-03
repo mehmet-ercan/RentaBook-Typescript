@@ -31,7 +31,7 @@ function initiliazeServices(db: DataBase) {
   bookService = new BookService(db.getBooksList, db.getBookSpecifications);
   customerService = new CustomerService(db.getCustomersList);
   cancelSaleService = new CancelSaleService(db.getCancaledSales);
-  rentService = new RentService(db.getRents);
+  rentService = new RentService(db.getRents, db.getRentCart);
   saleService = new SaleService(db.getSalesList, db.getSaleCart);
   stockService = new StockService(db.getStocksList);
   console.log("Services intiliazed.");
@@ -56,6 +56,7 @@ function addListenerForMenuItems() {
   showAndHide("addCustomerMenuItem", "addCustomerSection");
   showAndHide("addStockMenuItem", "addStockSection");
   showAndHide("saleBookMenuItem", "saleBookSection");
+  showAndHide("rentBookMenuItem", "rentBookSection");
   showAndHide("cancelSaleMenuItem", "cancelSaleSection");
 }
 
@@ -97,10 +98,10 @@ if (addBookForm != null) {
     //bookService.addBook(book);
 
     let success = await bookService.addBookMock(book);
-    if(success){
+    if (success) {
       alert(book.isbn + " numaralı Kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
       addBookForm.reset();
-    }else{
+    } else {
       alert(book.isbn + " numaralı Kitap Ekleme İşlemi Sırasında Bir Hata oluştu.");
     }
 
@@ -163,7 +164,7 @@ if (addCustomerForm) {
 }
 
 /**Burada mock servisi yok çünkü burada kitap satışı yapılırken, kitapları sepete ekliyoruz.
- * Sepete ekledikten sonra btnBuy idli butonun click eventi, mock servisi çağırıyor
+ * Sepete ekledikten sonra btnSale idli butonun click eventi, mock servisi çağırıyor
  */
 const saleBookForm = <HTMLFormElement>(document.getElementById("sale-book-form"));
 if (saleBookForm) {
@@ -174,7 +175,7 @@ if (saleBookForm) {
     const isbn = formData.get("isbnForSale") as string;
     const book = bookService.getBook(isbn);
     const customerId = parseInt(formData.get("customerIdForSale") as string);
-    const customer: boolean = customerService.isValidCustomer(customerId);
+    const isValidCustomer: boolean = customerService.isValidCustomer(customerId);
     const quantity = parseInt(formData.get("quantityForSale") as string);
 
     const stock = stockService.getStock(isbn)!;
@@ -183,7 +184,7 @@ if (saleBookForm) {
       if (book) {
         if (stock) {
           if (stock.quantity >= quantity) {
-            if (customer) {
+            if (isValidCustomer) {
               saleService.addBookToCart(book, quantity, customerId);
             } else {
               alert(customerId + " numaralı müşteri kayıtlı değildir.");
@@ -214,8 +215,8 @@ if (saleBookForm) {
  * Burada diğer butonlarda olduğu gibi direk mock servisine bağlanmak yerine servise gitmek durumundayız. 
  * Çünkü serviste Sale nesnesini oluşturup mock servisine parametre olark geçiyoruz.
  */
-const btnBuy = <HTMLButtonElement>(document.getElementById("btnBuy"));
-btnBuy.addEventListener("click", () => {
+const btnSale = <HTMLButtonElement>(document.getElementById("btnSale"));
+btnSale.addEventListener("click", () => {
   if (saleService.saleCart.bookAndQuantityMap.size === 0) {
     alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
   } else {
@@ -225,7 +226,7 @@ btnBuy.addEventListener("click", () => {
 });
 
 /**
- * Sepetteki kitapları mock servise göndererek satış yapılıyor.
+ * Kitapları listelemek için tıklanılan buton click eventi
  */
 const btnShowBooksMenuItem = <HTMLElement>(document.getElementById("showBooksMenuItem"));
 btnShowBooksMenuItem.addEventListener("click", () => {
@@ -263,3 +264,65 @@ if (cancelSaleForm) {
 
   }
 }
+
+/**Burada mock servisi yok çünkü burada kitap kiralaması yapılırken, kitapları sepete ekliyoruz.
+ * Sepete ekledikten sonra btnRent idli butonun click eventi, mock servisi çağırıyor
+ */
+const rentBookForm = <HTMLFormElement>(document.getElementById("rent-book-form"));
+if (rentBookForm) {
+  rentBookForm.onsubmit = () => {
+
+    const formData = new FormData(rentBookForm);
+
+    const isbn = formData.get("isbnForRent") as string;
+    const book = bookService.getBook(isbn);
+    const customerId = parseInt(formData.get("customerIdForRent") as string);
+    const isValidCustomer: boolean = customerService.isValidCustomer(customerId);
+    const quantity = parseInt(formData.get("quantityForRent") as string);
+
+    const stock = stockService.getStock(isbn)!;
+
+    try {
+      if (book) {
+        if (stock) {
+          if (stock.quantity >= quantity) {
+            if (isValidCustomer) {
+              rentService.addBookToCart(book, quantity, customerId);
+            } else {
+              alert(customerId + " numaralı müşteri kayıtlı değildir.");
+            }
+          }
+          else {
+            alert(quantity + " kadar kitap dükkanda mevcut değildir.");
+          }
+        } else {
+          alert(`Dükkanda ${isbn} numaralı kitabın stoğu mevcut değildir.`);
+        }
+      } else {
+        alert(isbn + " numaralı kitap yoktur.");
+      }
+
+      rentBookForm.reset();
+      return false;
+
+    } catch (error) {
+      alert(error);
+    }
+  }
+}
+
+/**
+ * Kitap satışı için işlem yapılırken kitaplar sepete ekleniyor.
+ * Ekleme işlemi bittikten sonra satın alm iiçin bu butona tıklandığında servise gidip sepetteki kitapların satışı gerçekleşiyor
+ * Burada diğer butonlarda olduğu gibi direk mock servisine bağlanmak yerine servise gitmek durumundayız. 
+ * Çünkü serviste Sale nesnesini oluşturup mock servisine parametre olark geçiyoruz.
+ */
+const btnRent = <HTMLButtonElement>(document.getElementById("btnRent"));
+btnRent.addEventListener("click", () => {
+  if (rentService.rentCart.bookAndQuantityMap.size === 0) {
+    alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
+  } else {
+    rentService.cartToRent();
+  }
+
+});

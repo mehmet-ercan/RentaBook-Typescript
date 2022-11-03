@@ -34,8 +34,13 @@
               <a href="#addBookSection" id="addBookMenuItem">Kitap Ekle</a>
             </li>
 
-            <li><a href="#saleBookSection" id="saleBookMenuItem">Kitap Satışı</a></li>
-            <li><a href="#">Kitap Kiralama</a></li>
+            <li>
+              <a href="#saleBookSection" id="saleBookMenuItem">Kitap Satışı</a>
+            </li>
+            
+            <li>
+              <a href="#rentBookSection" id="rentBookMenuItem">Kitap Kiralama</a>
+            </li>
 
             <li>
               <a href="#listBooksSection" id="showBooksMenuItem">Kitap Listesi</a>
@@ -292,25 +297,25 @@
     <h1 class="headLine">ALIŞ VERİŞ SEPETİ</h1>
 
     <div id="saleCart" class="sale-cart">
-      <div class="row-cart">
-        <div class="column-cart">
+      <div class="sale-cart-row">
+        <div class="sale-cart-column">
           Müşteri No
         </div>
-        <div class="column-cart">
+        <div class="sale-cart-column">
           Kitap İsmi
         </div>
-        <div class="column-cart">
+        <div class="sale-cart-column">
           Adet
         </div>
-        <div class="column-cart">
+        <div class="sale-cart-column">
           Ücreti
         </div>
       </div>
     </div>
 
 
-    <input type="button" id="btnBuy" class="btn" value="Satın Al" />
-    <span id="totalAmount">Toplam Ücreti: <span id="totalAmountTl"> </span></span>
+    <input type="button" id="btnSale" class="btn" value="Satın Al" />
+    <span id="totalSaleAmount">Toplam Ücreti: <span id="totalSaleAmountTl"> </span></span>
 
   </section>
 
@@ -325,6 +330,56 @@
       </div>
 
     </form>
+  </section>
+
+  <section id="rentBookSection" class="rent-book">
+
+    <form id="rent-book-form">
+      <div>
+        <label for="customerId">Müşteri Numarası</label>
+        <input type="text" name="customerIdForRent" id="customer-id-for-rent" />
+      </div>
+
+      <div>
+        <label for="isbn">ISBN Numarası</label>
+        <input type="text" name="isbnForRent" id="isbn-for-rent" />
+      </div>
+
+      <div>
+        <label for="quantityForRent">Kaç Adet Alınacak</label>
+        <input type="text" name="quantityForRent" id="quantity-for-rent" />
+      </div>
+
+      <!-- Submit button-->
+      <div>
+        <input type="submit" value="Ekle" />
+      </div>
+
+    </form>
+
+    <h1 class="headLine">ALIŞ VERİŞ SEPETİ</h1>
+
+    <div id="rentCart" class="rent-cart">
+      <div class="rent-cart-row">
+        <div class="rent-cart-column">
+          Müşteri No
+        </div>
+        <div class="rent-cart-column">
+          Kitap İsmi
+        </div>
+        <div class="rent-cart-column">
+          Adet
+        </div>
+        <div class="rent-cart-column">
+          Ücreti
+        </div>
+      </div>
+    </div>
+
+
+    <input type="button" id="btnRent" class="btn" value="Kirala" />
+    <span id="totalRentAmount">Toplam Ücreti: <span id="totalRentAmountTl"> </span></span>
+
   </section>
 
   <!-- TODO DİĞER SAYFA TASARIMLARI-->

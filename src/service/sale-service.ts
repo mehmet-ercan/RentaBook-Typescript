@@ -94,7 +94,7 @@ export class SaleService {
 
     public updateSaleCart() {
         const saleCart = document.getElementById("saleCart");
-        const subTotalSpan = document.getElementById("totalAmountTl");
+        const subTotalSpan = document.getElementById("totalSaleAmountTl");
 
         if (saleCart) {
 
@@ -108,27 +108,27 @@ export class SaleService {
             for (let index = 0; index < this.saleCart.bookAndQuantityMap.size; index++) {
 
                 row = document.createElement("div");
-                row.className = "row-cart";
+                row.className = "sale-cart-row";
 
                 for (let entry of this.saleCart.bookAndQuantityMap.entries()) {
 
                     column = document.createElement("div");
-                    column.className = "column-cart";
+                    column.className = "sale-cart-column";
                     column.textContent = this.saleCart.customerId.toString();
                     row.appendChild(column);
 
                     column = document.createElement("div");
-                    column.className = "column-cart";
+                    column.className = "sale-cart-column";
                     column.textContent = entry[0].name;
                     row.appendChild(column);
 
                     column = document.createElement("div");
-                    column.className = "column-cart";
+                    column.className = "sale-cart-column";
                     column.textContent = entry[1].toString();
                     row.appendChild(column);
 
                     column = document.createElement("div");
-                    column.className = "column-cart";
+                    column.className = "sale-cart-column";
                     column.textContent = (entry[0].bookSpec.price * entry[1]).toString();
                     row.appendChild(column);
                 }
@@ -144,9 +144,6 @@ export class SaleService {
                 subTotalSpan.textContent = subTotal.toString() + " TL";
             }
         }
-
-
-
     }
 
     public cartToSale() {

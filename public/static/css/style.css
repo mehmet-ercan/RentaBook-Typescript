@@ -48,7 +48,8 @@ section {
 #addCustomerSection,
 #saleBookSection,
 #addStockSection,
-#cancelSaleSection {
+#cancelSaleSection,
+#rentBookSection {
   display: none;
 }
 
@@ -290,7 +291,7 @@ body {
 
 /* Book Section End*/
 
-/* All Form Using - Start */
+/* All Form Element Using - Start */
 
 form {
   margin: 2% auto;
@@ -319,10 +320,11 @@ form div {
 form label {
   color: black;
 }
-/* All Form Using - End */
+/* All Form Element Using - End */
 
-/* Create four equal columns that floats next to each other */
-.column-cart {
+/* Sale Cart Start*/
+
+.sale-cart-column{
   text-align: center;
   float: left;
   width: 24%;
@@ -333,32 +335,74 @@ form label {
   height: 3rem; /* Should be removed. Only for demonstration */
 }
 
-/* Clear floats after the columns */
-.row-cart:after {
+.sale-cart-row:after {
   content: "";
   display: table;
   clear: both;
 }
 
-.sale-cart .row-cart:nth-child(1) > div {
+.sale-cart .sale-cart-row:nth-child(1) > div {
   font-weight: bold;
   font-size: 2.3rem;
   background-color: black;
   color: white;
 }
 
-#totalAmount{
+#totalSaleAmount{
   font-size: 2rem;
   display: flex;
   justify-content:flex-end;
 }
 
-#totalAmount>span{
+#totalSaleAmount>span{
   padding-left: .5rem;
   font-weight: bold;
   font-size: 2rem;
   color: green;
 }
+
+/* Sale Cart End*/
+
+/* Rent Cart Start*/
+
+.rent-cart-column{
+  text-align: center;
+  float: left;
+  width: 24%;
+  padding: 0.5 0.5rem;
+  margin: 0.1rem;
+  background-color: var(--cards);
+  font-size: 1.7rem;
+  height: 3rem; /* Should be removed. Only for demonstration */
+}
+
+.rent-cart-row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.rent-cart .rent-cart-row:nth-child(1) > div {
+  font-weight: bold;
+  font-size: 2.3rem;
+  background-color: black;
+  color: white;
+}
+
+#totalRentAmount{
+  font-size: 2rem;
+  display: flex;
+  justify-content:flex-end;
+}
+
+#totalRentAmount>span{
+  padding-left: .5rem;
+  font-weight: bold;
+  font-size: 2rem;
+  color: green;
+}
+
+/* Rent Cart End*/
 
 /* Create four equal columns that floats next to each other */
 .column-list-book {
