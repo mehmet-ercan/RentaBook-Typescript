@@ -25,8 +25,6 @@ initiliazeServices(db);
 initiliazeData();
 addListenerForMenuItems();
 
-
-
 function initiliazeServices(db: DataBase) {
   bookService = new BookService(db.getBooksList, db.getBookSpecifications);
   customerService = new CustomerService(db.getCustomersList);

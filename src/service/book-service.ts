@@ -1,4 +1,3 @@
-
 import { stockService } from "..";
 import { Book } from "../domain/book";
 import { BookSpecification } from "../domain/book-specification";

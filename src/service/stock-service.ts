@@ -1,4 +1,3 @@
-import { DataBase } from "../db/database";
 import { Stock } from "../domain/stock";
 
 export class StockService {

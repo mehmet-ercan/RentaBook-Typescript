@@ -1,4 +1,3 @@
-import { DataBase } from "../db/database";
 import { CancelSale } from "../domain/cancal-sale";
 
 export class CancelSaleService {
