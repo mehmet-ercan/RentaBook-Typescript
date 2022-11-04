@@ -80,7 +80,8 @@ body {
 }
 
 .btn:hover {
-  opacity: 0.4;
+  background-color: #ff9800;
+  color: #ffff;
 }
 
 .btnBuy {
@@ -107,7 +108,7 @@ body {
   background-color: white;
   display: flex; /* Öğeleri yan yana hizalar */
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 3%;
   margin: 2rem 7%;
   border-radius: 30rem;
@@ -126,8 +127,8 @@ body {
 
 .header .navbar .active,
 .header .navbar a:hover {
-  border-color: var(--black-color);
-  padding-bottom: 0.5rem;
+  /* border-color: #ffffff; */
+  /* padding-bottom: 0.5rem; */
 }
 
 .header .buttons button {
@@ -167,7 +168,9 @@ body {
 }
 
 #primary_nav_wrap ul li:hover {
-  background: #f6f6f6;
+  background: #ff9800;
+  border-radius: 8px;
+  z-index: 1;
 }
 
 #primary_nav_wrap ul ul {
@@ -177,6 +180,7 @@ body {
   left: 0;
   background: #fff;
   padding: 0;
+  border-radius: 8px;
 }
 
 #primary_nav_wrap ul ul li {
@@ -196,6 +200,7 @@ body {
 
 #primary_nav_wrap ul li:hover > ul {
   display: block;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 /*New Navbar End*/
 
@@ -301,6 +306,7 @@ form {
   border: 0.1em solid #ddd;
   border-radius: 0.5rem;
   font-size: 1.75rem;
+  box-shadow: 1rem 1rem 2rem 0rem rgb(0 0 0 / 75%);
 }
 
 form input {
@@ -344,8 +350,8 @@ form label {
 .sale-cart .sale-cart-row:nth-child(1) > div {
   font-weight: bold;
   font-size: 2.3rem;
-  background-color: black;
-  color: white;
+  background-color: #ff9800;
+  color: black;
 }
 
 #totalSaleAmount{
@@ -385,8 +391,8 @@ form label {
 .rent-cart .rent-cart-row:nth-child(1) > div {
   font-weight: bold;
   font-size: 2.3rem;
-  background-color: black;
-  color: white;
+  background-color: #ff9800;
+  color: black;
 }
 
 #totalRentAmount{
