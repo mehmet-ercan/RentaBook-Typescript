@@ -240,62 +240,6 @@ body {
   color: white;
 }
 
-/* Book Section Start*/
-
-.book-cards {
-  display: none;
-}
-
-.book-cards .box-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
-  gap: 1rem;
-}
-
-.book-cards .box-container .box {
-  padding: 3rem;
-  background-color: var(--cards);
-  border-radius: 3rem;
-  min-height: 60rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
-.book-cards .box-container .box img {
-  width: 100%;
-  object-fit: cover;
-}
-
-.book-cards .box-container .box .book-publisher {
-  font-size: 1.8rem;
-}
-
-.book-cards .box-container .box h3 {
-  font-size: 2.5rem;
-  padding: 1rem 0;
-}
-
-.book-cards .box-container .box .price {
-  font-size: 2.5rem;
-  padding: 0.5rem 0;
-}
-
-.book-cards .box-container .box .price span {
-  font-size: 2rem;
-  padding: 0.5rem 0;
-  text-decoration: line-through;
-  font-style: italic;
-  font-weight: 300;
-}
-
-.book-cards .box-container .box .box-bottom {
-  align-self: flex-end;
-}
-
-/* Book Section End*/
-
 /* All Form Element Using - Start */
 
 form {

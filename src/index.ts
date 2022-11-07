@@ -91,16 +91,19 @@ if (addBookForm != null) {
     const startDate = new Date();
     const endDate = new Date('Dec 31, 9999 23:59:59');
 
+    title.match("");
+
+
     const bookSpec = new BookSpecification(isbn, price, startDate, endDate);
     const book = new Book(isbn, title, author, publishYear, pages, bookSpec);
     //bookService.addBook(book);
 
     let success = await bookService.addBookMock(book);
     if (success) {
-      alert(book.isbn + " numaralı Kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
+      alert(book.isbn + " numaralı kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
       addBookForm.reset();
     } else {
-      alert(book.isbn + " numaralı Kitap Ekleme İşlemi Sırasında Bir Hata oluştu.");
+      alert(book.isbn + " numaralı kitap Ekleme İşlemi Sırasında Bir Hata oluştu.");
     }
 
     return false; // prevent reload

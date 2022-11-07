@@ -1,3 +1,6 @@
+/**
+ * @author Mehmet E. Akcan - 21.10.22
+ */
 import { stockService } from "..";
 import { Book } from "../domain/book";
 import { BookSpecification } from "../domain/book-specification";
@@ -44,13 +47,21 @@ export class BookService {
         this._bookSpecList = value;
     }
 
-
+    /**
+     * parametre olarak gelen isbn bilgisine göre ilgili kitabı bulur.
+     * @param isbn Bulunacak olan kitabın isbn numarası
+     * @returns isbn numarasına göre ilgili kitabı Book nesnesi olarak geri döndürür
+     */
     public getBook(isbn: string): Book {
         //Buradan null bir değer de dönebileceği için hata veriyor
         //ama biz sondaki ! operatörü ile null değer dönmeyecek diye garanti veriyoruz
         return this.bookList.find(b => b.isbn === isbn)!;
     }
 
+    /**
+     * Parametre olarak gelen Book nesnesini kitap nesnesine ekler
+     * @param newBook eklenecek olan kitap nesnesi
+     */
     public addBook(newBook: Book) {
         try {
             this.bookList.push(newBook);
@@ -134,7 +145,7 @@ export class BookService {
 
     }
 
-    async addBookMock(b: Book): Promise<Boolean | undefined> {
+    async addBookMock(b: Book) {
         try {
             const response = await fetch(this.bookApi, {
                 method: 'POST',
@@ -153,15 +164,11 @@ export class BookService {
 
             if (response.ok) {
                 const result = (await response.json());
-                console.log(result);
+                console.log("Mock servisinden dönen cevap =>" + JSON.stringify(result));
                 return true;
-            }else{
+            } else {
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
-
             }
-
-            
-
         } catch (Exception) {
             console.log('Hata Oluştu.');
         }
