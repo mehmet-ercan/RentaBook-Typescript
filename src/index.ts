@@ -2,12 +2,13 @@
 import { DataBase } from "./db/database";
 import { Book } from "./domain/book";
 import { BookSpecification } from "./domain/book-specification";
-import { CancelSale } from "./domain/cancal-sale";
+import { Cancel } from "./domain/cancel";
 import { Customer } from "./domain/customer";
+import { Rent } from "./domain/rent";
 import { Sale } from "./domain/sale";
 import { Stock } from "./domain/stock";
 import { BookService } from "./service/book-service";
-import { CancelSaleService } from "./service/cancal-sale-service";
+import { CancelService } from "./service/cancel-service";
 import { CustomerService } from "./service/customer-service";
 import { RentService } from "./service/rent-service";
 import { SaleService } from "./service/sale-service";
@@ -15,7 +16,7 @@ import { StockService } from "./service/stock-service";
 
 export let bookService: BookService;
 export let customerService: CustomerService;
-export let cancelSaleService: CancelSaleService;
+export let cancelService: CancelService;
 export let rentService: RentService;
 export let saleService: SaleService;
 export let stockService: StockService;
@@ -28,7 +29,7 @@ addListenerForMenuItems();
 function initiliazeServices(db: DataBase) {
   bookService = new BookService(db.getBooksList, db.getBookSpecifications);
   customerService = new CustomerService(db.getCustomersList);
-  cancelSaleService = new CancelSaleService(db.getCancaledSales);
+  cancelService = new CancelService(db.getCancaledSales);
   rentService = new RentService(db.getRents, db.getRentCart);
   saleService = new SaleService(db.getSalesList, db.getSaleCart);
   stockService = new StockService(db.getStocksList);
@@ -56,6 +57,7 @@ function addListenerForMenuItems() {
   showAndHide("saleBookMenuItem", "saleBookSection");
   showAndHide("rentBookMenuItem", "rentBookSection");
   showAndHide("cancelSaleMenuItem", "cancelSaleSection");
+  showAndHide("cancelRentMenuItem", "cancelRentSection");
 }
 
 function showAndHide(btnId: string, elementId: string) {
@@ -239,7 +241,7 @@ if (cancelSaleForm) {
   cancelSaleForm.onsubmit = async (e) => {
     e.preventDefault();
 
-    let bq = new Map<Book, number>();
+    let bq = new Map<Book, number>(); // bq > book abd quantity
     bq.set(bookService.getBook("123-45"), 3);
 
     let a = new Sale(bq, new Date, 1, "S021122163045", 123);
@@ -251,8 +253,8 @@ if (cancelSaleForm) {
     let sale = saleService.getSale(saleNumber);
 
     if (sale) {
-      let cancelSale: CancelSale = new CancelSale(sale, sale.total, new Date);
-      let state = await cancelSaleService.cancelSaleMock(cancelSale);
+      let cancelSale: Cancel = new Cancel(sale, sale.total, new Date);
+      let state = await cancelService.cancelSaleMock(cancelSale);
 
       if (state) {
         alert(sale.operationNumber + " numaralı satış iptal edilmiştir.");
@@ -264,6 +266,30 @@ if (cancelSaleForm) {
     }
 
   }
+}
+
+const cancelRentForm = <HTMLFormElement>document.getElementById("cancel-rent-form");
+if (cancelRentForm) {
+  cancelRentForm.onsubmit = async (e) => {
+    e.preventDefault();
+
+    let bq = new Map<Book, number>(); // bq > book abd quantity
+    bq.set(bookService.getBook("123-45"), 3);
+
+    let rDate = new Date;
+    rDate.setDate(rDate.getDate() + 14);
+
+    let a = new Rent(bq, new Date, 1, "R021122163045", 123, rDate, 200);
+    rentService.rentList.push(a);
+
+    const formData = new FormData(cancelRentForm);
+    const rentNumber = formData.get("rentNumberforCancel") as string;
+
+    let rent = rentService.getRent(rentNumber);
+
+
+  }
+
 }
 
 /**Burada mock servisi yok çünkü burada kitap kiralaması yapılırken, kitapları sepete ekliyoruz.

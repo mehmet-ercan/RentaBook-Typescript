@@ -83,6 +83,11 @@ export class RentService {
         rent.refund = rent.total * this.refundPercent;
     }
 
+    public getRent(rentNumber: string): Rent {
+        let rent = this.rentList.find(s => s.operationNumber === rentNumber);
+        return rent!;
+    }
+
     public addBookToCart(book: Book, quantity: number, customerId: number) {
         if (this.rentCart.bookAndQuantityMap.size === 0) {
             this.rentCart.customerId = customerId;

@@ -62,8 +62,13 @@
         <li>
           <a href="#">İptal İşlemleri</a>
           <ul>
-            <li><a href="#cancelSaleSection" id="cancelSaleMenuItem">Satış İptali</a></li>
-            <li><a href="#cancelRentSection" id="cancelRentMenuItem">Kiralama İptali</a></li>
+            <li>
+              <a href="#cancelSaleSection" id="cancelSaleMenuItem">Satış İptali</a>
+            </li>
+
+            <li>
+              <a href="#cancelRentSection" id="cancelRentMenuItem">Kiralama İptali</a>
+            </li>
           </ul>
         </li>
 
@@ -71,19 +76,6 @@
         <li><a href="#">Hakkımızda</a></li>
       </ul>
     </nav>
-    <!--
-    <div class="buttons">
-      <button>
-        <i class="fa-solid fa-magnifying-glass"></i>
-      </button>
-      <button>
-        <i class="fas fa-shopping-cart"></i>
-      </button>
-      <button>
-        <i class="fas fa-bars"></i>
-      </button>
-    </div>
-    -->
 
   </header>
 
@@ -288,9 +280,9 @@
   <section id="cancelSaleSection" class="cancel-sale">
     <form id="cancel-sale-form">
       <div>
-        <label for="saleNumberforCancel">Satış Numarası</label>
+        <label for="saleNumberforCancel">İşlem Numarası</label>
         <input type="text" name="saleNumberforCancel" id="sale-number-for-cancel" 
-        required="required" pattern="[R-S]{1}[0-9]{12}"/>
+        required="required" pattern="[S]{1}[0-9]{12}"/>
       </div>
       <div>
         <input type="submit" value="İptal Et" />
@@ -349,6 +341,20 @@
     <input type="button" id="btnRent" class="btn" value="Kirala" />
     <span id="totalRentAmount">Toplam Ücreti: <span id="totalRentAmountTl"> </span></span>
 
+  </section>
+
+  <section id="cancelRentSection" class="cancel-rent">
+    <form id="cancel-rent-form">
+      <div>
+        <label for="rentNumberforCancel">İşlem Numarası</label>
+        <input type="text" name="rentNumberforCancel" id="rent-number-for-cancel" 
+        required="required" pattern="[R]{1}[0-9]{12}"/>
+      </div>
+      <div>
+        <input type="submit" value="İptal Et" />
+      </div>
+
+    </form>
   </section>
 
   <!-- TODO DİĞER SAYFA TASARIMLARI-->
