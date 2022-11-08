@@ -58,6 +58,7 @@ function addListenerForMenuItems() {
   showAndHide("rentBookMenuItem", "rentBookSection");
   showAndHide("cancelSaleMenuItem", "cancelSaleSection");
   showAndHide("cancelRentMenuItem", "cancelRentSection");
+  showAndHide("refundBookMenuItem", "refundBookSection");
 }
 
 function showAndHide(btnId: string, elementId: string) {

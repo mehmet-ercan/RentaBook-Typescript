@@ -4,7 +4,8 @@
   --main-color: #f5f5f5;
   --black-color: #353535;
   --border: 01rem solid rgba(255, 255, 255, 0.3);
-  --cards: rgba(249, 167, 74, 0.6);
+  --cards: rgba(246, 135, 10, 0.6);
+  --btnHover: #ff9800;
 }
 
 /*! base html codes*/
@@ -28,16 +29,6 @@ html {
   scroll-padding-top: 9rem;
 }
 
-html::-webkit-scrollbar {
-  width: 1rem;
-  background-color: white;
-}
-
-html::-webkit-scrollbar-thumb {
-  width: 1rem;
-  background-color: black;
-}
-
 section {
   padding: 3.5rem 7%;
 }
@@ -50,7 +41,9 @@ section {
 #addStockSection,
 #cancelSaleSection,
 #rentBookSection,
-#cancelRentSection {
+#cancelRentSection,
+#refundBookSection
+{
   display: none;
 }
 
@@ -75,13 +68,14 @@ body {
   padding: 2rem 3.75rem;
   border-radius: 30rem;
   font-size: 2rem;
+
   color: white;
   background-color: var(--black-color);
   font-weight: bold;
 }
 
 .btn:hover {
-  background-color: #ff9800;
+  background-color:var(--btnHover);
   color: #ffff;
 }
 
@@ -126,11 +120,11 @@ body {
   border-bottom: 0.1rem solid transparent;
 }
 
-.header .navbar .active,
+/*.header .navbar .active,
 .header .navbar a:hover {
  border-color: #ffffff;
  padding-bottom: 0.5rem; 
-}
+}*/
 
 .header .buttons button {
   cursor: pointer;
@@ -264,6 +258,25 @@ form input {
   font-size: 1.75rem;
 }
 
+form input[type=submit] {
+  margin-top: 1.5rem;
+  height: 5rem;
+  text-indent: 0em;
+  text-align: center;
+  background-color: var(--black-color);
+  border-radius: 1.5rem;
+  color: var(--main-color);
+  font-weight: bold;
+  font-family: 'Lato', sans-serif;
+  cursor: pointer;
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+
+form input[type=submit]:hover {
+  background-color: var(--btnHover);
+}
+
 form div {
   margin-top: 1.5rem;
 }
@@ -275,7 +288,7 @@ form label {
 
 /* Sale Cart Start*/
 
-.sale-cart-column{
+.sale-cart-column {
   text-align: center;
   float: left;
   width: 24%;
@@ -299,14 +312,14 @@ form label {
   color: black;
 }
 
-#totalSaleAmount{
+#totalSaleAmount {
   font-size: 2rem;
   display: flex;
-  justify-content:flex-end;
+  justify-content: flex-end;
 }
 
-#totalSaleAmount>span{
-  padding-left: .5rem;
+#totalSaleAmount > span {
+  padding-left: 0.5rem;
   font-weight: bold;
   font-size: 2rem;
   color: green;
@@ -316,7 +329,7 @@ form label {
 
 /* Rent Cart Start*/
 
-.rent-cart-column{
+.rent-cart-column {
   text-align: center;
   float: left;
   width: 24%;
@@ -340,14 +353,14 @@ form label {
   color: black;
 }
 
-#totalRentAmount{
+#totalRentAmount {
   font-size: 2rem;
   display: flex;
-  justify-content:flex-end;
+  justify-content: flex-end;
 }
 
-#totalRentAmount>span{
-  padding-left: .5rem;
+#totalRentAmount > span {
+  padding-left: 0.5rem;
   font-weight: bold;
   font-size: 2rem;
   color: green;

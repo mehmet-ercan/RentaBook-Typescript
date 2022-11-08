@@ -43,6 +43,10 @@
             </li>
 
             <li>
+              <a href="#refundBookSection" id="refundBookMenuItem">Kiralık Kitabı Geri Al</a>
+            </li>
+
+            <li>
               <a href="#listBooksSection" id="showBooksMenuItem">Kitap Listesi</a>
             </li>
 
@@ -352,6 +356,20 @@
       </div>
       <div>
         <input type="submit" value="İptal Et" />
+      </div>
+
+    </form>
+  </section>
+
+  <section id="refundBookSection" class="refund-book">
+    <form id="refund-book-form">
+      <div>
+        <label for="rentNumberforRefund">İşlem Numarası</label>
+        <input type="text" name="rentNumberforRefund" id="rent-number-for-refund" 
+        required="required" pattern="[R]{1}[0-9]{12}"/>
+      </div>
+      <div>
+        <input type="submit" value="Geri Al" />
       </div>
 
     </form>
