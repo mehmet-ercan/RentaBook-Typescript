@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rent a Book App</title>
-  <link rel="icon" href="./images/icon1.svg" />
+  <link rel="icon" href="./images/logo_transparent.svg" />
   <link rel="stylesheet" href="./static/css/style.css" />
   <script src="./static/bundle/script.js" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -18,7 +18,7 @@
 
   <header class="header">
     <a href="#" class="logo">
-      <img src="../public/images/logo-svg.svg" alt="Logo" />
+      <img src="../public/images/logo_transparent.svg" alt="Logo" />
     </a>
 
     <nav class="navbar" id="primary_nav_wrap">
@@ -92,7 +92,7 @@
         de diğer okuyucular kazansın. Diğer kitaplara yelken açmaya var
         mısınız?
       </p>
-      <a class="btn" href="#">Hemen Kirala</a>
+      <a class="btn" id="rentNow" href="#rentBookSection">Hemen Kirala</a>
     </div>
   </section>
 
@@ -116,8 +116,8 @@
 
       <div>
         <label for="isbn">ISBN Numarası</label>
-        <input type="number" name="bookIsbn" id="isbn" class="myBook" 
-        required="required" pattern="[0-9-]{1,20}"/>
+        <input type="text" name="bookIsbn" id="isbn" class="myBook" 
+        required="required" pattern="[0-9 -]{1,20}"/>
       </div>
 
       <div>

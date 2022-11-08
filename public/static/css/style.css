@@ -42,20 +42,8 @@ section {
 #cancelSaleSection,
 #rentBookSection,
 #cancelRentSection,
-#refundBookSection
-{
+#refundBookSection {
   display: none;
-}
-
-.book-cards .headLine {
-  color: black;
-  font-size: 3.5rem;
-  margin-bottom: 3.5rem;
-  border-bottom: 0.1rem solid #fff;
-}
-
-.book-cards .headLine span {
-  color: var(--cards);
 }
 
 body {
@@ -66,16 +54,15 @@ body {
   margin-top: 1rem;
   display: inline-block;
   padding: 2rem 3.75rem;
-  border-radius: 30rem;
+  border-radius: 2rem;
   font-size: 2rem;
-
   color: white;
   background-color: var(--black-color);
   font-weight: bold;
 }
 
 .btn:hover {
-  background-color:var(--btnHover);
+  background-color: var(--btnHover);
   color: #ffff;
 }
 
@@ -83,7 +70,7 @@ body {
   margin-left: auto;
   margin-right: 0;
   padding: 2rem 3.75rem;
-  border-radius: 5rem;
+  border-radius: 2rem;
   font-size: 2rem;
   color: white;
   background-color: var(--black-color);
@@ -96,7 +83,7 @@ body {
 
 /* Header Sectiom Start*/
 .logo img {
-  height: 10rem;
+  height: 9rem;
 }
 
 .header {
@@ -106,7 +93,7 @@ body {
   justify-content: center;
   padding: 0 3%;
   margin: 2rem 7%;
-  border-radius: 30rem;
+  border-radius: 2rem;
   box-shadow: 0px 0px 17px -3px rgba(0, 0, 0, 0.75);
   position: sticky; /*aşağı doğru kaydırma yaptığımızda ekranın en üstüne yapışır*/
   top: 0.5em;
@@ -114,23 +101,10 @@ body {
 }
 
 .header .navbar a {
-  font-size: 1.6rem;
-  margin: 0 1.5rem; /* ilk değer üst alt, sonraki de sağ ve soldan %7 kadar boşluk verir */
+  font-size: 2rem !important; /* html etiketi içerisindeki font size iptal ederk kendi bıyutumuzu vermiş oluyoruz */
+  margin: 0.5rem 1rem; /* ilk değer üst alt, sonraki de sağ ve soldan 1.5rem kadar boşluk verir */
   color: var(--black-color);
   border-bottom: 0.1rem solid transparent;
-}
-
-/*.header .navbar .active,
-.header .navbar a:hover {
- border-color: #ffffff;
- padding-bottom: 0.5rem; 
-}*/
-
-.header .buttons button {
-  cursor: pointer;
-  font-size: 2.5em;
-  margin-left: 2rem;
-  background-color: transparent;
 }
 
 /*New Navbar Start*/
@@ -164,7 +138,7 @@ body {
 
 #primary_nav_wrap ul li:hover {
   background: #ff9800;
-  border-radius: 8px;
+  border-radius: 1rem;
   z-index: 1;
 }
 
@@ -175,7 +149,7 @@ body {
   left: 0;
   background: #fff;
   padding: 0;
-  border-radius: 8px;
+  border-radius: 1rem;
 }
 
 #primary_nav_wrap ul ul li {
@@ -195,7 +169,7 @@ body {
 
 #primary_nav_wrap ul li:hover > ul {
   display: block;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 0.8rem 2.4rem;
 }
 /*New Navbar End*/
 
@@ -210,7 +184,7 @@ body {
   background: url(../../images/home2.jpg) no-repeat;
   background-size: cover;
   background-position: center;
-  margin-top: -14.5rem;
+  margin-top: -13.5rem; /*header 94.8px + (20+20 = alt ve üstten padding var) = 134.8 ~ 135px = 13.5 rem */
   display: flex;
   align-items: center;
 }
@@ -253,27 +227,27 @@ form input {
   height: 4rem;
   text-indent: 1.5em;
   border: 0.1em solid #ddd;
-  border-radius: 2rem;
+  border-radius: 1rem;
   outline-color: #1abc9c;
   font-size: 1.75rem;
 }
 
-form input[type=submit] {
+form input[type="submit"] {
   margin-top: 1.5rem;
   height: 5rem;
   text-indent: 0em;
   text-align: center;
   background-color: var(--black-color);
-  border-radius: 1.5rem;
+  border-radius: 1rem;
   color: var(--main-color);
   font-weight: bold;
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   cursor: pointer;
   font-size: 2rem;
   text-transform: uppercase;
 }
 
-form input[type=submit]:hover {
+form input[type="submit"]:hover {
   background-color: var(--btnHover);
 }
 

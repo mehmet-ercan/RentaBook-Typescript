@@ -17,7 +17,6 @@ export class RentService {
         this._rentCart = rentCart;
     }
 
-
     /**
      * Getter rentList
      * @return {Array<Rent>}
@@ -33,7 +32,6 @@ export class RentService {
     public set rentList(value: Array<Rent>) {
         this._rentList = value;
     }
-
 
     /**
      * Getter rentCart
@@ -51,12 +49,15 @@ export class RentService {
         this._rentCart = value;
     }
 
-
-
     public addRent(rent: Rent): void {
         this.rentList.push(rent);
     }
 
+    /**
+     * Kitapların hepsi sepete eklendikten sonra toplma ücreti hesaplauan fonksiyon
+     * @param rent Kitapların listesinin bulunduğu nesne
+     * @returns Toplam ücret
+     */
     public calculateTotal(rent: Rent): number {
 
         let map: Map<Book, number> = rent.bookAndQuantityMap;
@@ -79,8 +80,47 @@ export class RentService {
         return receiptNumber;
     }
 
+    /**
+     * 
+     * @param d1 Kitaplaın kiralık olarak alındığı tarih
+     * @param d2 Kitapların geri getirildiği tarih
+     * @returns İki tarih arasındaki fark (saat olarak)
+     */
+    public calculateDiffHours(d1: Date, d2: Date): number {
+
+        let diffMilis: number = (d1.getTime() - d2.getTime());// mili seconds
+        let diffHour = Math.floor(diffMilis / 1000 / 60 / 60); // /1000 > second / 60 > min / 60 > hour
+        return diffHour;
+    }
+
+    /**
+     * Kitap ilk kiralandığı anda, zamanında getirildiği gibi düşünülerek verilecek olan varsayılan geri ödeme miktarı
+     * @param rent Hesaplanacak olan geri ödeme miktarının içinde bulunduğu nesne
+     */
     public calculateRefund(rent: Rent): void {
         rent.refund = rent.total * this.refundPercent;
+    }
+
+    /**
+     * Kitap kiralandı, okundu ve geri getirildiği zaman ne kadar geri ödeme verileceğini hesaplar
+     * @param rent Hesaplanacak olan geri ödeme miktarının içinde bulunduğu nesne
+     * @returns Geri ödeme miktarı
+     */
+    public calculateRefundAmount(rent: Rent): number {
+        let diff = this.calculateDiffHours(rent.refundDate, rent.operationDateTime) / 24;
+        let refund: number;
+
+        if (diff <= 14) {
+            refund = rent.total * 0.75;
+        } else if (diff <= 24) {
+            let fine = (0.75 - ((diff - 14) * 0.05));
+            refund = rent.total * fine;
+        }
+        else {
+            refund = rent.total * 0.25;
+        }
+
+        return refund;
     }
 
     public getRent(rentNumber: string): Rent {
@@ -182,8 +222,6 @@ export class RentService {
 
     async addRentMock(r: Rent): Promise<Boolean | undefined> {
         try {
-            console.log(r.bookAndQuantityMap);
-
             const response = await fetch(this.rentApi, {
                 method: 'POST',
                 body: JSON.stringify({
@@ -207,13 +245,37 @@ export class RentService {
             } else {
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
             }
-
-
-
         } catch (Exception) {
             console.log('Hata Oluştu.');
         }
     }
 
+    async refundRentMock(r: Rent) {
+
+        //PATCH Belirli bir kaynaktaki verilerin bir kısmının değiştirilmesi için kullanılan metodtur.
+        try {
+            const response = await fetch(this.rentApi + "/" + r.operationNumber, {
+                method: 'PATCH',
+                body: JSON.stringify({
+                    refundDate: r.refundDate,
+                    refund: r.refund
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const result = (await response.json());
+                console.log(result);
+                return r.refund;
+            } else {
+                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+            }
+        } catch (Exception) {
+            console.log('Hata Oluştu.');
+        }
+    }
 
 }

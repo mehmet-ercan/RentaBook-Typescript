@@ -113,10 +113,10 @@ export class CancelService {
         cancelRent.refund = refund;
 
         try {
-            const response = await fetch(this.cancelSaleApi, {
+            const response = await fetch(this.cancelRentApi, {
                 method: 'POST',
                 body: JSON.stringify({
-                    sale: cancelRent.cancelType,
+                    rent: cancelRent.cancelType,
                     refund: cancelRent.refund,
                     canceledDateTime: cancelRent.canceledDateTime
                 }),

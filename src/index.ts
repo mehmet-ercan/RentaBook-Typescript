@@ -59,6 +59,8 @@ function addListenerForMenuItems() {
   showAndHide("cancelSaleMenuItem", "cancelSaleSection");
   showAndHide("cancelRentMenuItem", "cancelRentSection");
   showAndHide("refundBookMenuItem", "refundBookSection");
+  showAndHide("rentNow", "rentBookSection");
+  
 }
 
 function showAndHide(btnId: string, elementId: string) {
@@ -242,7 +244,7 @@ if (cancelSaleForm) {
   cancelSaleForm.onsubmit = async (e) => {
     e.preventDefault();
 
-    let bq = new Map<Book, number>(); // bq > book abd quantity
+    let bq = new Map<Book, number>(); // bq > book and quantity
     bq.set(bookService.getBook("123-45"), 3);
 
     let a = new Sale(bq, new Date, 1, "S021122163045", 123);
@@ -274,7 +276,8 @@ if (cancelRentForm) {
   cancelRentForm.onsubmit = async (e) => {
     e.preventDefault();
 
-    let bq = new Map<Book, number>(); // bq > book abd quantity
+    // Kiralama iptalinin çalışabilmesi için önce veri ekledim, sonra iptal işlemi çalışıyor
+    let bq = new Map<Book, number>(); // bq > book and quantity
     bq.set(bookService.getBook("123-45"), 3);
 
     let rDate = new Date;
@@ -288,6 +291,18 @@ if (cancelRentForm) {
 
     let rent = rentService.getRent(rentNumber);
 
+    if (rent) {
+      let cancelRent: Cancel = new Cancel(rent, rent.total, new Date);
+      let state = await cancelService.cancelRentMock(cancelRent);
+
+      if (state) {
+        alert(rent.operationNumber + " numaralı kiralama iptal edilmiştir.");
+      } else {
+        alert(rent.operationNumber + " numaralı kiralama iptal edilirken hata meydana geldi.");
+      }
+    } else {
+      alert(rentNumber + " numaralı kiralma bulunamamıştır. Tekrar deneyiniz.");
+    }
 
   }
 
@@ -354,3 +369,42 @@ btnRent.addEventListener("click", () => {
   }
 
 });
+
+const refundBookForm = <HTMLFormElement>(document.getElementById("refund-book-form"));
+if (refundBookForm) {
+  refundBookForm.onsubmit = async (e) => {
+
+    // Kiralama iptalinin çalışabilmesi için önce veri ekledim, sonra iptal işlemi çalışıyor
+    let bq = new Map<Book, number>(); // bq > book and quantity
+    bq.set(bookService.getBook("123-45"), 3);
+
+    let rDate = new Date;
+    rDate.setDate(rDate.getDate() + 23);
+
+    let a = new Rent(bq, new Date, 1, "R021122163045", 123, rDate, 0);
+    a.refund = rentService.calculateRefundAmount(a);
+
+    rentService.rentList.push(a);
+    //Veri Girişi son alanı
+
+    e.preventDefault();
+    const formData = new FormData(refundBookForm);
+    const rentNumber = formData.get("rentNumberforRefund") as string;
+
+    let rent = rentService.getRent(rentNumber);
+    if (rent) {
+
+      let refund = await rentService.refundRentMock(rent);
+
+      if (refund) {
+        alert(rent.operationNumber + " numaralı kiralama geri alınmıştır.");
+        alert("Geri ödeme miktarı:" + refund + " ₺ .")
+      } else {
+        alert(rent.operationNumber + " numaralı kiralama iptal edilirken hata meydana geldi.");
+      }
+    } else {
+      alert(rentNumber + " numaralı kiralama bulunamamıştır. Tekrar deneyiniz.");
+    }
+
+  };
+}
