@@ -84,6 +84,7 @@ body {
 /* Header Sectiom Start*/
 .logo img {
   height: 9rem;
+  padding-right: 3rem;
 }
 
 .header {
@@ -209,6 +210,29 @@ body {
   color: white;
 }
 
+/**
+ * ----------------------------------------
+ * animation tracking-in-expand
+ * ----------------------------------------
+ */
+
+ .text-focus-in {
+	animation: text-focus-in 1.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}
+
+@keyframes text-focus-in {
+  0% {
+    filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+/* Home Sectiom End*/
+
+
 /* All Form Element Using - Start */
 
 form {
@@ -325,6 +349,13 @@ form label {
   font-size: 2.3rem;
   background-color: #ff9800;
   color: black;
+}
+
+.headLine{
+  font-size: 2.5rem;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-style: italic;
+  margin-bottom: 1rem;
 }
 
 #totalRentAmount {
