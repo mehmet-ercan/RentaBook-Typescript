@@ -24,8 +24,11 @@ export class StockService {
         this._stockList = value;
     }
 
-    /**
-     * Kitap henüz eklendikten sonra hemen giriyor,
+    /** !attention, *important, ?question, TODO
+     * ! Öncelikle increaseStock fonksiyonundan farklı bir iş yapıyor,
+     * * Kitap henüz eklendikten sonra hemen giriyor,
+     * ? Kitap ilk defa eklendiyse bu fonksiyon mu çalışacak ? EVET.
+     * TODO increaseStock fonksiyonunu incele
      * Elimizde hiç stock kaydı/nesnesi yok, yeni kayıt/nesne oluşturuyoruz
      * Yeni eklenen kitaba stok ekleme işlemi
      * @param isbn  stok eklenecek olan kitabın isbn numarası

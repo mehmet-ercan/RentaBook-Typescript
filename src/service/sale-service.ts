@@ -54,7 +54,7 @@ export class SaleService {
         let subTotal = 0.0;
 
         for (let entry of sale.bookAndQuantityMap.entries()) {
-            subTotal += entry[0].bookSpec.price * entry[1];
+            subTotal += entry[0].bookSpecification.price * entry[1];
         }
 
         return subTotal;
@@ -129,7 +129,7 @@ export class SaleService {
 
                     column = document.createElement("div");
                     column.className = "sale-cart-column";
-                    column.textContent = (entry[0].bookSpec.price * entry[1]).toString();
+                    column.textContent = (entry[0].bookSpecification.price * entry[1]).toString();
                     row.appendChild(column);
                 }
             }
@@ -137,7 +137,7 @@ export class SaleService {
             if (row && subTotalSpan) {
 
                 for (let t of this.saleCart.bookAndQuantityMap) {
-                    subTotal += t[0].bookSpec.price * t[1];
+                    subTotal += t[0].bookSpecification.price * t[1];
                 }
 
                 saleCart.appendChild(row);
@@ -172,7 +172,7 @@ export class SaleService {
             const response = await fetch(this.saleApi, {
                 method: 'POST',
                 body: JSON.stringify({
-                    bookAndQuantity: s.bookAndQuantityMap,
+                    bookAndQuantity: Array.from(s.bookAndQuantityMap.entries()),
                     customerId: s.customerId,
                     operationDateTime: s.operationDateTime,
                     operationNumber: s.operationNumber,

@@ -66,7 +66,7 @@ export class RentService {
 
         //it can be => let entry of rent.bookAndQuantityMap.entries()
         for (let entry of rent.bookAndQuantityMap) {
-            subTotal += entry[0].bookSpec.price * entry[1];
+            subTotal += entry[0].bookSpecification.price * entry[1];
         }
 
         return subTotal;
@@ -179,7 +179,7 @@ export class RentService {
 
                     column = document.createElement("div");
                     column.className = "rent-cart-column";
-                    column.textContent = (entry[0].bookSpec.price * entry[1]).toString();
+                    column.textContent = (entry[0].bookSpecification.price * entry[1]).toString();
                     row.appendChild(column);
                 }
             }
@@ -187,7 +187,7 @@ export class RentService {
             if (row && subTotalSpan) {
 
                 for (let t of this.rentCart.bookAndQuantityMap) {
-                    subTotal += t[0].bookSpec.price * t[1];
+                    subTotal += t[0].bookSpecification.price * t[1];
                 }
 
                 rentCart.appendChild(row);
