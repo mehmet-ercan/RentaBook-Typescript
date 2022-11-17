@@ -8,46 +8,44 @@ import { BookSpecification } from "../domain/book-specification";
 export class BookService {
     private _bookList: Array<Book>;
     private _bookSpecification: Array<BookSpecification>;
-    bookApi: string = 'http://localhost:3002/api/v1';
+    bookApi: string = 'http://localhost:3002/api/v1/books';
 
     constructor(bookList: Array<Book>, bookSpecification: Array<BookSpecification>) {
         this._bookList = bookList;
         this._bookSpecification = bookSpecification;
     }
 
-
     /**
      * Getter bookList
      * @return {Array<Book>}
      */
-	public get bookList(): Array<Book> {
-		return this._bookList;
-	}
+    public get bookList(): Array<Book> {
+        return this._bookList;
+    }
 
     /**
      * Getter bookSpecification
      * @return {Array<BookSpecification>}
      */
-	public get bookSpecification(): Array<BookSpecification> {
-		return this._bookSpecification;
-	}
+    public get bookSpecification(): Array<BookSpecification> {
+        return this._bookSpecification;
+    }
 
     /**
      * Setter bookList
      * @param {Array<Book>} value
      */
-	public set bookList(value: Array<Book>) {
-		this._bookList = value;
-	}
+    public set bookList(value: Array<Book>) {
+        this._bookList = value;
+    }
 
     /**
      * Setter bookSpecification
      * @param {Array<BookSpecification>} value
      */
-	public set bookSpecification(value: Array<BookSpecification>) {
-		this._bookSpecification = value;
-	}
-   
+    public set bookSpecification(value: Array<BookSpecification>) {
+        this._bookSpecification = value;
+    }
 
     /**
      * parametre olarak gelen isbn bilgisine göre ilgili kitabı bulur.
@@ -80,7 +78,7 @@ export class BookService {
 
     async initializeDataMock() {
         try {
-            const response = await fetch(this.bookApi+'/books', {
+            const response = await fetch(this.bookApi, {
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',
@@ -156,7 +154,13 @@ export class BookService {
                     name: b.name,
                     author: b.author,
                     pages: b.pages,
-                    publishYear: b.publishYear
+                    publishYear: b.publishYear,
+                    bookSpecification: {
+                        isbn: b.bookSpecification.isbn,
+                        price: b.bookSpecification.price,
+                        startDate: b.bookSpecification.startDate,
+                        endDate: b.bookSpecification.endDate
+                    }
                 }),
                 headers: {
                     'Content-Type': 'application/json',
@@ -166,7 +170,8 @@ export class BookService {
 
             if (response.ok) {
                 const result = (await response.json());
-                console.log("Mock servisinden dönen cevap =>" + JSON.stringify(result));
+                console.log("Rest servisinden dönen cevap =>");
+                console.log(result);
                 return true;
             } else {
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);

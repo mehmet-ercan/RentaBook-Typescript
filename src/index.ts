@@ -35,8 +35,8 @@ function initiliazeServices(db: DataBase) {
   stockService = new StockService(db.getStocksList);
   console.log("Services intiliazed.");
 
-  customerService.addCustomer(new Customer(1, "", "", ""));
-  customerService.addCustomer(new Customer(2, "", "", ""));
+  customerService.addCustomer(new Customer("", "", ""));
+  customerService.addCustomer(new Customer("", "", ""));
 
   stockService.addStock("123-45", "A45-52", 10);
   stockService.addStock("123-46", "A45-52", 10);
@@ -60,7 +60,7 @@ function addListenerForMenuItems() {
   showAndHide("cancelRentMenuItem", "cancelRentSection");
   showAndHide("refundBookMenuItem", "refundBookSection");
   showAndHide("rentNow", "rentBookSection");
-  
+
 }
 
 function showAndHide(btnId: string, elementId: string) {
@@ -160,11 +160,16 @@ if (addCustomerForm) {
     const surname = formData.get("customerSurname") as string;
     const phoneNumber = formData.get("customerPhoneNumber") as string;
 
-    const customer = new Customer(customerService.getNewCustomerId(), name, surname, phoneNumber);
-    await customerService.addCustomerMock(customer);
+    const customer = new Customer(name, surname, phoneNumber);
+    let success = await customerService.addCustomerMock(customer);
 
-    alert("Müşteri Ekleme İşlemi Başarı İle Tamamlanmıştır. ");
-    addCustomerForm.reset();
+    if (success) {
+      alert("Müşteri Ekleme İşlemi Başarı İle Tamamlanmıştır. ");
+      addCustomerForm.reset();
+    } else {
+      alert("Müşteri Ekleme İşlemi Sırasında bir hata ile karşılıldı. ");
+    }
+
     return false; // prevent reload
   };
 }
@@ -181,7 +186,8 @@ if (saleBookForm) {
     const isbn = formData.get("isbnForSale") as string;
     const book = bookService.getBook(isbn);
     const customerId = parseInt(formData.get("customerIdForSale") as string);
-    const isValidCustomer: boolean = customerService.isValidCustomer(customerId);
+    //isValidCustomer rest servisten döenen veriye göre şekillenecek
+    const isValidCustomer: boolean = true; //customerService.isValidCustomer(customerId);
     const quantity = parseInt(formData.get("quantityForSale") as string);
 
     const stock = stockService.getStock(isbn)!;
@@ -320,7 +326,8 @@ if (rentBookForm) {
     const isbn = formData.get("isbnForRent") as string;
     const book = bookService.getBook(isbn);
     const customerId = parseInt(formData.get("customerIdForRent") as string);
-    const isValidCustomer: boolean = customerService.isValidCustomer(customerId);
+    //isValidCustomer rest servisten döenen veriye göre şekillenecek
+    const isValidCustomer: boolean = true; //customerService.isValidCustomer(customerId);
     const quantity = parseInt(formData.get("quantityForRent") as string);
 
     const stock = stockService.getStock(isbn)!;

@@ -2,12 +2,11 @@ import { Customer } from "../domain/customer";
 
 export class CustomerService {
     private _customerList: Array<Customer>;
-    private customerApi: string = "http://localhost:3002/api/customers";
+    private customerApi: string = "http://localhost:3002/api/v1/customers";
 
     constructor(customerList: Array<Customer>) {
         this._customerList = customerList;
     }
-
 
     /**
      * Getter customerList
@@ -25,52 +24,39 @@ export class CustomerService {
         this._customerList = value;
     }
 
-
     public addCustomer(newCustomer: Customer) {
         this.customerList.push(newCustomer);
     }
 
-    public getNewCustomerId(): number {
-        let lastCustomerId: number = 0;
-
-        if (this.customerList.length > 0) {
-
-            lastCustomerId = this.customerList.at(this.customerList.length - 1)!.id;
+    /*
+        public getCustomerInfo(id: number): Customer | undefined {
+    
+            let customer = this.customerList.find(customer => customer.id === id);
+    
+            if (customer) {
+                return customer;
+            } else {
+                return undefined;
+            }
         }
-
-        lastCustomerId = lastCustomerId + 1;
-
-        return lastCustomerId;
-    }
-
-    public getCustomerInfo(id: number): Customer | undefined {
-
-        let customer = this.customerList.find(customer => customer.id === id);
-
-        if (customer) {
-            return customer;
-        } else {
-            return undefined;
+    
+        public isValidCustomer(customerId: number): boolean {
+    
+            let isValid = this.customerList.some(customer => customer.id === customerId);
+    
+            if (isValid) {
+                return true;
+            } else {
+                return false;
+            }
         }
-    }
-
-    public isValidCustomer(customerId: number): boolean {
-
-        let isValid = this.customerList.some(customer => customer.id === customerId);
-
-        if (isValid) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    */
 
     async addCustomerMock(newCustomer: Customer) {
         try {
             const response = await fetch(this.customerApi, {
                 method: 'POST',
                 body: JSON.stringify({
-                    id: newCustomer.id,
                     name: newCustomer.name,
                     surName: newCustomer.surName,
                     phoneNumber: newCustomer.phoneNumber
@@ -81,13 +67,14 @@ export class CustomerService {
                 },
             });
 
-            if (!response.ok) {
+            if (response.ok) {
+                const result = (await response.json());
+                console.log("Rest servisinden dönen cevap =>");
+                console.log(result);
+                return true;
+            } else {
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
             }
-
-            const result = (await response.json());
-            console.log(result);
-
         } catch (Exception) {
             console.log('Hata Oluştu.');
         }
