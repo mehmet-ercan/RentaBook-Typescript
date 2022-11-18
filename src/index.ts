@@ -251,10 +251,11 @@ if (cancelSaleForm) {
   cancelSaleForm.onsubmit = async (e) => {
     e.preventDefault();
 
-    let bq = new Array<SaleBookItems>;
-    bq.push(new SaleBookItems(bookService.getBook("123-45"), 3))
+    // İptal işleminin çalışabilmesi için önce satış verisi ekledim, sonra satış iptali işlemi çalışıyor
+    let sbi = new Array<SaleBookItems>;
+    sbi.push(new SaleBookItems(bookService.getBook("123-45"), 3))
 
-    let a = new Sale(bq, new Date, 1, "S021122163045", 123);
+    let a = new Sale(sbi, new Date, 1, "S021122163045", 123);
     saleService.saleList.push(a);
 
     const formData = new FormData(cancelSaleForm);
@@ -284,13 +285,13 @@ if (cancelRentForm) {
     e.preventDefault();
 
     // Kiralama iptalinin çalışabilmesi için önce veri ekledim, sonra iptal işlemi çalışıyor
-    let bq = new Map<Book, number>(); // bq > book and quantity
-    bq.set(bookService.getBook("123-45"), 3);
+    let sbi = new Array<SaleBookItems>;
+    sbi.push(new SaleBookItems(bookService.getBook("123-45"), 3));
 
     let rDate = new Date;
     rDate.setDate(rDate.getDate() + 14);
 
-    let a = new Rent(bq, new Date, 1, "R021122163045", 123, rDate, 200);
+    let a = new Rent(sbi, new Date, 1, "R021122163045", 123, rDate, 200);
     rentService.rentList.push(a);
 
     const formData = new FormData(cancelRentForm);
@@ -382,14 +383,15 @@ const refundBookForm = <HTMLFormElement>(document.getElementById("refund-book-fo
 if (refundBookForm) {
   refundBookForm.onsubmit = async (e) => {
 
-    // Kiralama iptalinin çalışabilmesi için önce veri ekledim, sonra iptal işlemi çalışıyor
-    let bq = new Map<Book, number>(); // bq > book and quantity
-    bq.set(bookService.getBook("123-45"), 3);
+    // Kiralama işleminden geri ödeme işlemi çalışabilmesi için önce kiralama verisi ekledim, 
+    // Sonra geri ödeme işlemi çalışıyor
+    let sbi = new Array<SaleBookItems>;
+    sbi.push(new SaleBookItems(bookService.getBook("123-45"), 3))
 
     let rDate = new Date;
     rDate.setDate(rDate.getDate() + 23);
 
-    let a = new Rent(bq, new Date, 1, "R021122163045", 123, rDate, 0);
+    let a = new Rent(sbi, new Date, 1, "R021122163045", 123, rDate, 0);
     a.refund = rentService.calculateRefundAmount(a);
 
     rentService.rentList.push(a);

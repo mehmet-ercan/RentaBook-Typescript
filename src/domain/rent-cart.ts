@@ -1,10 +1,12 @@
+import { ListFormat } from "typescript";
 import { Book } from "./book";
+import { SaleBookItems } from "./sale-book-item";
 
 export class RentCart {
     customerId!: number;
-    bookAndQuantityMap: Map<Book, number>;
+    saleBookItems: Array<SaleBookItems>;
 
     constructor() {
-        this.bookAndQuantityMap = new Map<Book, number>();
+        this.saleBookItems = new Array<SaleBookItems>();
     }
 }
