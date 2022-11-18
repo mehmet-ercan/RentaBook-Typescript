@@ -231,9 +231,16 @@ if (saleBookForm) {
 const btnSale = <HTMLButtonElement>(document.getElementById("btnSale"));
 btnSale.addEventListener("click", () => {
   if (saleService.saleCart.saleBookItems.length === 0) {
+
     alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
   } else {
-    saleService.cartToSale();
+
+    let success = saleService.cartToSale();
+    if (success) {
+      alert("Satış işlemi başarıyla gerçekleştirilmiştir.");
+    }else{
+      alert("Satış işlemi sırasında hata oluştu, lütfen tekrar deneyiniz.");
+    }
   }
 
 });
@@ -331,7 +338,6 @@ if (rentBookForm) {
     //isValidCustomer rest servisten döenen veriye göre şekillenecek
     const isValidCustomer: boolean = true; //customerService.isValidCustomer(customerId);
     const quantity = parseInt(formData.get("quantityForRent") as string);
-
     const stock = stockService.getStock(isbn)!;
 
     try {
@@ -371,7 +377,7 @@ if (rentBookForm) {
  */
 const btnRent = <HTMLButtonElement>(document.getElementById("btnRent"));
 btnRent.addEventListener("click", () => {
-  if (rentService.rentCart.bookAndQuantityMap.size === 0) {
+  if (rentService.rentCart.saleBookItems.length === 0) {
     alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
   } else {
     rentService.cartToRent();

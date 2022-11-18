@@ -8,7 +8,7 @@ export class RentService {
     private _rentList: Array<Rent>;
 
     private _rentCart: RentCart;
-    public rentApi = 'http://localhost:3002/api/rents';
+    public rentApi = 'http://localhost:3002/api/v1/rents';
     refundPercent: number;
 
 
@@ -73,7 +73,10 @@ export class RentService {
     // R051022145509 => domain.Rent 05.10.2022 14:55.09
     generateRentNumber(customerId: number): string {
         let today = new Date();
-        let receiptNumber: string = "R" + today.getDay().toString + today.getMonth().toString + today.getFullYear().toString + today.getHours().toString + today.getMinutes().toString + today.getSeconds().toString + customerId.toString;
+        let receiptNumber: string = "R" + today.getDay().toString() + 
+        today.getMonth().toString() + today.getFullYear().toString() + 
+        today.getHours().toString() + today.getMinutes().toString() + 
+        today.getSeconds().toString() + customerId.toString();
 
         return receiptNumber;
     }
@@ -223,7 +226,7 @@ export class RentService {
             const response = await fetch(this.rentApi, {
                 method: 'POST',
                 body: JSON.stringify({
-                    bookAndQuantity: Array.from(r.saleBookItems),
+                    saleBookItems: Array.from(r.saleBookItems),
                     customerId: r.customerId,
                     operationDateTime: r.operationDateTime,
                     operationNumber: r.operationNumber,

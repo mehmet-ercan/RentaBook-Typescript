@@ -7,7 +7,7 @@ import { SaleCart } from "../domain/sale-cart";
 export class SaleService {
     private _saleList: Array<Sale>;
     private _saleCart: SaleCart;
-    public saleApi = 'http://localhost:3002/api/sales';
+    public saleApi = 'http://localhost:3002/api/v1/sales';
 
     constructor(saleList: Array<Sale>, saleCart: SaleCart) {
         this._saleList = saleList;
@@ -147,7 +147,7 @@ export class SaleService {
         }
     }
 
-    public cartToSale() {
+    public cartToSale(): any {
         let saleCart: SaleCart = this.saleCart;
         let sale = new Sale();
 
@@ -161,19 +161,20 @@ export class SaleService {
             stockService.increaseStock(q.book.isbn, - q.quantity)
         }
 
-        this.addSaleMock(sale);
+        let success = this.addSaleMock(sale);
         this.saleCart = new SaleCart(); // sepeti boşalt
         this.updateSaleCart();
+        return success;
     }
 
     async addSaleMock(s: Sale) {
-        try {
-            console.log(s.saleBookItems);
 
+
+        try {
             const response = await fetch(this.saleApi, {
                 method: 'POST',
                 body: JSON.stringify({
-                    bookAndQuantity: Array.from(s.saleBookItems),
+                    saleBookItems: Array.from(s.saleBookItems),
                     customerId: s.customerId,
                     operationDateTime: s.operationDateTime,
                     operationNumber: s.operationNumber,
@@ -185,14 +186,16 @@ export class SaleService {
                 },
             });
 
-            if (!response.ok) {
+            console.log(response);
+
+            if (response.ok) {
+                const result = (await response.json());
+                console.log(result);
+                alert("Fişinizi kaybetmeyiniz. Fiş Numarası: " + s.operationNumber);
+                return true;
+            } else {
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
             }
-
-            const result = (await response.json());
-            console.log(result);
-
-            alert(result.message + " " + result.saleNumber);
 
         } catch (Exception) {
             console.log('Hata Oluştu.');
