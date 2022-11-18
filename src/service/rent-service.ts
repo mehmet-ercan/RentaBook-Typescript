@@ -73,10 +73,10 @@ export class RentService {
     // R051022145509 => domain.Rent 05.10.2022 14:55.09
     generateRentNumber(customerId: number): string {
         let today = new Date();
-        let receiptNumber: string = "R" + today.getDay().toString() + 
-        today.getMonth().toString() + today.getFullYear().toString() + 
-        today.getHours().toString() + today.getMinutes().toString() + 
-        today.getSeconds().toString() + customerId.toString();
+        let receiptNumber: string = "R" + today.getDay().toString() +
+            today.getMonth().toString() + today.getFullYear().toString() +
+            today.getHours().toString() + today.getMinutes().toString() +
+            today.getSeconds().toString() + customerId.toString();
 
         return receiptNumber;
     }
@@ -209,28 +209,32 @@ export class RentService {
         rent.operationNumber = this.generateRentNumber(rentCart.customerId);
         rent.operationDateTime = new Date();
         rent.total = this.calculateTotal(rent);
+        let rDate = new Date();
+        rDate.setDate(rDate.getDate() + 14);
+        rent.refundDate = rDate;
+        this.calculateRefund(rent);
 
         for (let i of rent.orderBookItems) {
             stockService.increaseStock(i.book.isbn, -i.quantity)
         }
 
-
         this.rentCart = new RentCart; // sepeti boşalt
         this.updateRentCart();
-
-        let success = this.addRentMock(rent);
+        this.addRentMock(rent);
     }
 
-    async addRentMock(r: Rent): Promise<Boolean | undefined> {
+    async addRentMock(r: Rent) {
         try {
             const response = await fetch(this.rentApi, {
                 method: 'POST',
                 body: JSON.stringify({
-                    saleBookItems: Array.from(r.orderBookItems),
+                    orderBookItems: Array.from(r.orderBookItems),
                     customerId: r.customerId,
                     operationDateTime: r.operationDateTime,
                     operationNumber: r.operationNumber,
-                    total: r.total
+                    total: r.total,
+                    refundDate: r.refundDate,
+                    refund: r.refund
                 }),
                 headers: {
                     'Content-Type': 'application/json',
@@ -240,19 +244,20 @@ export class RentService {
 
             if (response.ok) {
                 const result = (await response.json());
+                console.log("Rest apidan dönen cevap:\n");
                 console.log(result);
-                alert(result.message + " " + result.saleNumber);
-                return true;
+                alert("Kitap kiralama işlemi başarıyla gerçekleşmiştir.");
+                alert("Fişinizi kaybetneyiniz. Fiş numaranız: " + r.operationNumber);
             } else {
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
             }
         } catch (Exception) {
             console.log('Hata Oluştu.');
+            alert("Kitap kiralama işlemi sırasında bir hata oluştu. Lütfen tekrar deneyiniz.");
         }
     }
 
     async refundRentMock(r: Rent) {
-
         //PATCH Belirli bir kaynaktaki verilerin bir kısmının değiştirilmesi için kullanılan metodtur.
         try {
             const response = await fetch(this.rentApi + "/" + r.operationNumber, {

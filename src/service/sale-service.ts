@@ -168,8 +168,6 @@ export class SaleService {
     }
 
     async addSaleMock(s: Sale) {
-
-
         try {
             const response = await fetch(this.saleApi, {
                 method: 'POST',
@@ -190,7 +188,9 @@ export class SaleService {
 
             if (response.ok) {
                 const result = (await response.json());
+                console.log("Rest apidan dönen cevap:\n");
                 console.log(result);
+                alert("Kitap satış işlemi başarıyla gerçekleşmiştir.");
                 alert("Fişinizi kaybetmeyiniz. Fiş Numarası: " + s.operationNumber);
                 return true;
             } else {

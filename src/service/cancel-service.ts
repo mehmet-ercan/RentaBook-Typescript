@@ -2,8 +2,8 @@ import { Cancel } from "../domain/cancel";
 
 export class CancelService {
     private _cancelledList: Array<Cancel>;
-    cancelSaleApi: string = 'http://localhost:3002/api/cancelSale';
-    cancelRentApi: string = 'http://localhost:3002/api/cancelRent';
+    cancelSaleApi: string = 'http://localhost:3002/api/v1/cancelSale';
+    cancelRentApi: string = 'http://localhost:3002/api/v1/cancelRent';
 
     constructor(cancelledList: Array<Cancel>) {
         this._cancelledList = cancelledList;

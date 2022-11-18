@@ -45,8 +45,6 @@ function initiliazeServices(db: DataBase) {
 
 async function initiliazeData() {
   await bookService.initializeDataMock();
-
-
 }
 
 function addListenerForMenuItems() {
@@ -234,13 +232,7 @@ btnSale.addEventListener("click", () => {
 
     alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
   } else {
-
-    let success = saleService.cartToSale();
-    if (success) {
-      alert("Satış işlemi başarıyla gerçekleştirilmiştir.");
-    }else{
-      alert("Satış işlemi sırasında hata oluştu, lütfen tekrar deneyiniz.");
-    }
+    saleService.cartToSale();
   }
 
 });
