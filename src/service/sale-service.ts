@@ -1,7 +1,7 @@
 import { stockService } from "..";
 import { Book } from "../domain/book";
 import { Sale } from "../domain/sale";
-import { SaleBookItems } from "../domain/sale-book-item";
+import { OrderBookItems } from "../domain/order-book-item";
 import { SaleCart } from "../domain/sale-cart";
 
 export class SaleService {
@@ -54,7 +54,7 @@ export class SaleService {
     calculateTotal(sale: Sale): number {
         let subTotal = 0.0;
 
-        for (let entry of sale.saleBookItems) {
+        for (let entry of sale.orderBookItems) {
             subTotal += entry.book.bookSpecification.price * entry.quantity;
         }
 
@@ -80,16 +80,16 @@ export class SaleService {
 
     public addBookToCart(book: Book, quantity: number, customerId: number) {
 
-        if (this.saleCart.saleBookItems.length === 0) {
+        if (this.saleCart.orderBookItems.length === 0) {
             this.saleCart.customerId = customerId;
-        } else if (this.saleCart.saleBookItems.length > 0) {
+        } else if (this.saleCart.orderBookItems.length > 0) {
             if (this.saleCart.customerId !== customerId) {
                 alert("Farklı müşteriye kitap satılmaya çalışılıyor. Lütfen tek müşteri için işlem yapınız");
                 return false;
             }
         }
-        let saleBookItems: SaleBookItems = new SaleBookItems(book, quantity);
-        this.saleCart.saleBookItems.push(saleBookItems);
+        let orderBookItems: OrderBookItems = new OrderBookItems(book, quantity);
+        this.saleCart.orderBookItems.push(orderBookItems);
         this.updateSaleCart();
     }
 
@@ -106,12 +106,12 @@ export class SaleService {
             }
             subTotalSpan!.textContent = "";
 
-            for (let index = 0; index < this.saleCart.saleBookItems.length; index++) {
+            for (let index = 0; index < this.saleCart.orderBookItems.length; index++) {
 
                 row = document.createElement("div");
                 row.className = "sale-cart-row";
 
-                for (let item of this.saleCart.saleBookItems) {
+                for (let item of this.saleCart.orderBookItems) {
 
                     column = document.createElement("div");
                     column.className = "sale-cart-column";
@@ -137,7 +137,7 @@ export class SaleService {
 
             if (row && subTotalSpan) {
 
-                for (let t of this.saleCart.saleBookItems) {
+                for (let t of this.saleCart.orderBookItems) {
                     subTotal += t.book.bookSpecification.price * t.quantity;
                 }
 
@@ -151,13 +151,13 @@ export class SaleService {
         let saleCart: SaleCart = this.saleCart;
         let sale = new Sale();
 
-        sale.saleBookItems = saleCart.saleBookItems;
+        sale.orderBookItems = saleCart.orderBookItems;
         sale.customerId = saleCart.customerId;
         sale.operationNumber = this.generateSaleNumber(saleCart.customerId);
         sale.operationDateTime = new Date();
         sale.total = this.calculateTotal(sale);
 
-        for (let q of sale.saleBookItems) {
+        for (let q of sale.orderBookItems) {
             stockService.increaseStock(q.book.isbn, - q.quantity)
         }
 
@@ -174,7 +174,7 @@ export class SaleService {
             const response = await fetch(this.saleApi, {
                 method: 'POST',
                 body: JSON.stringify({
-                    saleBookItems: Array.from(s.saleBookItems),
+                    orderBookItems: Array.from(s.orderBookItems),
                     customerId: s.customerId,
                     operationDateTime: s.operationDateTime,
                     operationNumber: s.operationNumber,

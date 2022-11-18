@@ -6,7 +6,7 @@ import { Cancel } from "./domain/cancel";
 import { Customer } from "./domain/customer";
 import { Rent } from "./domain/rent";
 import { Sale } from "./domain/sale";
-import { SaleBookItems } from "./domain/sale-book-item";
+import { OrderBookItems } from "./domain/order-book-item";
 import { Stock } from "./domain/stock";
 import { BookService } from "./service/book-service";
 import { CancelService } from "./service/cancel-service";
@@ -230,7 +230,7 @@ if (saleBookForm) {
  */
 const btnSale = <HTMLButtonElement>(document.getElementById("btnSale"));
 btnSale.addEventListener("click", () => {
-  if (saleService.saleCart.saleBookItems.length === 0) {
+  if (saleService.saleCart.orderBookItems.length === 0) {
 
     alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
   } else {
@@ -259,10 +259,10 @@ if (cancelSaleForm) {
     e.preventDefault();
 
     // İptal işleminin çalışabilmesi için önce satış verisi ekledim, sonra satış iptali işlemi çalışıyor
-    let sbi = new Array<SaleBookItems>;
-    sbi.push(new SaleBookItems(bookService.getBook("123-45"), 3))
+    let sbi = new Array<OrderBookItems>;
+    sbi.push(new OrderBookItems(bookService.getBook("123-45"), 3))
 
-    let a = new Sale(sbi, new Date, 1, "S021122163045", 123);
+    let a = new Sale(sbi, 1, new Date, "S021122163045", 123);
     saleService.saleList.push(a);
 
     const formData = new FormData(cancelSaleForm);
@@ -292,8 +292,8 @@ if (cancelRentForm) {
     e.preventDefault();
 
     // Kiralama iptalinin çalışabilmesi için önce veri ekledim, sonra iptal işlemi çalışıyor
-    let sbi = new Array<SaleBookItems>;
-    sbi.push(new SaleBookItems(bookService.getBook("123-45"), 3));
+    let sbi = new Array<OrderBookItems>;
+    sbi.push(new OrderBookItems(bookService.getBook("123-45"), 3));
 
     let rDate = new Date;
     rDate.setDate(rDate.getDate() + 14);
@@ -377,7 +377,7 @@ if (rentBookForm) {
  */
 const btnRent = <HTMLButtonElement>(document.getElementById("btnRent"));
 btnRent.addEventListener("click", () => {
-  if (rentService.rentCart.saleBookItems.length === 0) {
+  if (rentService.rentCart.orderBookItems.length === 0) {
     alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
   } else {
     rentService.cartToRent();
@@ -391,8 +391,8 @@ if (refundBookForm) {
 
     // Kiralama işleminden geri ödeme işlemi çalışabilmesi için önce kiralama verisi ekledim, 
     // Sonra geri ödeme işlemi çalışıyor
-    let sbi = new Array<SaleBookItems>;
-    sbi.push(new SaleBookItems(bookService.getBook("123-45"), 3))
+    let sbi = new Array<OrderBookItems>;
+    sbi.push(new OrderBookItems(bookService.getBook("123-45"), 3))
 
     let rDate = new Date;
     rDate.setDate(rDate.getDate() + 23);

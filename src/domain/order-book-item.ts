@@ -1,6 +1,6 @@
 import { Book } from "./book";
 
-export class SaleBookItems {
+export class OrderBookItems {
     private _book: Book;
     private _quantity: number;
 

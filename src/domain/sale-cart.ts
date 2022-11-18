@@ -1,13 +1,13 @@
 import { Book } from "./book";
-import { SaleBookItems } from "./sale-book-item";
+import { OrderBookItems } from "./order-book-item";
 
 export class SaleCart {
     customerId!: number;
-    saleBookItems: Array<SaleBookItems>;
+    orderBookItems: Array<OrderBookItems>;
 
 
 	constructor() {
-		this.saleBookItems = new Array<SaleBookItems>;
+		this.orderBookItems = new Array<OrderBookItems>;
 	}
 
 

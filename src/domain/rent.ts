@@ -1,14 +1,13 @@
-import { Book } from "./book";
 import { Sale } from "./sale";
-import { SaleBookItems } from "./sale-book-item";
+import { OrderBookItems } from "./order-book-item";
 
 export class Rent extends Sale {
     private _refundDate?: Date;
     private _refund?: number;
 
 
-    constructor(saleBookItems?: Array<SaleBookItems>, operationDateTime?: Date, customerId?: number, operationNumber?: string, total?: number, refundDate?: Date, refund?: number) {
-        super(saleBookItems, operationDateTime, customerId, operationNumber, total)
+    constructor(saleBookItems?: Array<OrderBookItems>, operationDateTime?: Date, customerId?: number, operationNumber?: string, total?: number, refundDate?: Date, refund?: number) {
+        super(saleBookItems, customerId, operationDateTime, operationNumber, total)
 
         this._refundDate = refundDate;
         this._refund = refund;

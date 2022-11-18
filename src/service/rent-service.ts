@@ -2,7 +2,7 @@ import { stockService } from "..";
 import { Book } from "../domain/book";
 import { Rent } from "../domain/rent";
 import { RentCart } from "../domain/rent-cart";
-import { SaleBookItems } from "../domain/sale-book-item";
+import { OrderBookItems } from "../domain/order-book-item";
 
 export class RentService {
     private _rentList: Array<Rent>;
@@ -63,7 +63,7 @@ export class RentService {
         let subTotal: number = 0;
 
         //it can be => let entry of rent.bookAndQuantityMap.entries()
-        for (let item of rent.saleBookItems) {
+        for (let item of rent.orderBookItems) {
             subTotal += item.book.bookSpecification.price * item.quantity
         }
 
@@ -130,16 +130,16 @@ export class RentService {
     }
 
     public addBookToCart(book: Book, quantity: number, customerId: number) {
-        if (this.rentCart.saleBookItems.length === 0) {
+        if (this.rentCart.orderBookItems.length === 0) {
             this.rentCart.customerId = customerId;
-        } else if (this.rentCart.saleBookItems.length > 0) {
+        } else if (this.rentCart.orderBookItems.length > 0) {
             if (this.rentCart.customerId !== customerId) {
                 alert("Farklı müşteriye kitap kiralanmaya çalışılıyor. Lütfen tek müşteri için işlem yapınız");
                 return false;
             }
         }
 
-        this.rentCart.saleBookItems.push(new SaleBookItems(book, quantity))
+        this.rentCart.orderBookItems.push(new OrderBookItems(book, quantity))
         this.updateRentCart();
     }
 
@@ -156,12 +156,12 @@ export class RentService {
             }
             subTotalSpan!.textContent = "";
 
-            for (let index = 0; index < this.rentCart.saleBookItems.length; index++) {
+            for (let index = 0; index < this.rentCart.orderBookItems.length; index++) {
 
                 row = document.createElement("div");
                 row.className = "rent-cart-row";
 
-                for (let item of this.rentCart.saleBookItems) {
+                for (let item of this.rentCart.orderBookItems) {
 
                     column = document.createElement("div");
                     column.className = "rent-cart-column";
@@ -187,7 +187,7 @@ export class RentService {
 
             if (row && subTotalSpan) {
 
-                for (let t of this.rentCart.saleBookItems) {
+                for (let t of this.rentCart.orderBookItems) {
                     subTotal += t.book.bookSpecification.price * t.quantity;
                 }
 
@@ -204,13 +204,13 @@ export class RentService {
         let rentCart: RentCart = this.rentCart;
         let rent = new Rent();
 
-        rent.saleBookItems = rentCart.saleBookItems;
+        rent.orderBookItems = rentCart.orderBookItems;
         rent.customerId = rentCart.customerId;
         rent.operationNumber = this.generateRentNumber(rentCart.customerId);
         rent.operationDateTime = new Date();
         rent.total = this.calculateTotal(rent);
 
-        for (let i of rent.saleBookItems) {
+        for (let i of rent.orderBookItems) {
             stockService.increaseStock(i.book.isbn, -i.quantity)
         }
 
@@ -226,7 +226,7 @@ export class RentService {
             const response = await fetch(this.rentApi, {
                 method: 'POST',
                 body: JSON.stringify({
-                    saleBookItems: Array.from(r.saleBookItems),
+                    saleBookItems: Array.from(r.orderBookItems),
                     customerId: r.customerId,
                     operationDateTime: r.operationDateTime,
                     operationNumber: r.operationNumber,
