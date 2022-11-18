@@ -6,6 +6,7 @@ import { Cancel } from "./domain/cancel";
 import { Customer } from "./domain/customer";
 import { Rent } from "./domain/rent";
 import { Sale } from "./domain/sale";
+import { SaleBookItems } from "./domain/sale-book-item";
 import { Stock } from "./domain/stock";
 import { BookService } from "./service/book-service";
 import { CancelService } from "./service/cancel-service";
@@ -223,13 +224,13 @@ if (saleBookForm) {
 
 /**
  * Kitap satışı için işlem yapılırken kitaplar sepete ekleniyor.
- * Ekleme işlemi bittikten sonra satın alm iiçin bu butona tıklandığında servise gidip sepetteki kitapların satışı gerçekleşiyor
+ * Ekleme işlemi bittikten sonra satın alm için bu butona tıklandığında servise gidip sepetteki kitapların satışı gerçekleşiyor
  * Burada diğer butonlarda olduğu gibi direk mock servisine bağlanmak yerine servise gitmek durumundayız. 
- * Çünkü serviste Sale nesnesini oluşturup mock servisine parametre olark geçiyoruz.
+ * Çünkü serviste Sale nesnesini oluşturup mock servisine parametre olarak geçiyoruz.
  */
 const btnSale = <HTMLButtonElement>(document.getElementById("btnSale"));
 btnSale.addEventListener("click", () => {
-  if (saleService.saleCart.bookAndQuantityMap.size === 0) {
+  if (saleService.saleCart.saleBookItems.length === 0) {
     alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
   } else {
     saleService.cartToSale();
@@ -250,8 +251,8 @@ if (cancelSaleForm) {
   cancelSaleForm.onsubmit = async (e) => {
     e.preventDefault();
 
-    let bq = new Map<Book, number>(); // bq > book and quantity
-    bq.set(bookService.getBook("123-45"), 3);
+    let bq = new Array<SaleBookItems>;
+    bq.push(new SaleBookItems(bookService.getBook("123-45"), 3))
 
     let a = new Sale(bq, new Date, 1, "S021122163045", 123);
     saleService.saleList.push(a);

@@ -17,7 +17,6 @@ export class Book {
     this._bookSpecification = bookSpecification;
   }
 
-
     /**
      * Getter isbn
      * @return {string}
@@ -113,7 +112,4 @@ export class Book {
 	public set bookSpecification(value: BookSpecification) {
 		this._bookSpecification = value;
 	}
-  
-  
-
 }

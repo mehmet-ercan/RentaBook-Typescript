@@ -1,10 +1,17 @@
 import { Book } from "./book";
+import { SaleBookItems } from "./sale-book-item";
 
 export class SaleCart {
     customerId!: number;
-    bookAndQuantityMap: Map<Book, number>;
+    saleBookItems: Array<SaleBookItems>;
 
-    constructor() {
-        this.bookAndQuantityMap = new Map<Book, number>();
-    }
+
+	constructor() {
+		this.saleBookItems = new Array<SaleBookItems>;
+	}
+
+
+
+
+
 }

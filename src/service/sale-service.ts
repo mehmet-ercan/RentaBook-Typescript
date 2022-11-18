@@ -1,6 +1,7 @@
 import { stockService } from "..";
 import { Book } from "../domain/book";
 import { Sale } from "../domain/sale";
+import { SaleBookItems } from "../domain/sale-book-item";
 import { SaleCart } from "../domain/sale-cart";
 
 export class SaleService {
@@ -53,8 +54,8 @@ export class SaleService {
     calculateTotal(sale: Sale): number {
         let subTotal = 0.0;
 
-        for (let entry of sale.bookAndQuantityMap.entries()) {
-            subTotal += entry[0].bookSpecification.price * entry[1];
+        for (let entry of sale.saleBookItems) {
+            subTotal += entry.book.bookSpecification.price * entry.quantity;
         }
 
         return subTotal;
@@ -79,16 +80,16 @@ export class SaleService {
 
     public addBookToCart(book: Book, quantity: number, customerId: number) {
 
-        if (this.saleCart.bookAndQuantityMap.size === 0) {
+        if (this.saleCart.saleBookItems.length === 0) {
             this.saleCart.customerId = customerId;
-        } else if (this.saleCart.bookAndQuantityMap.size > 0) {
+        } else if (this.saleCart.saleBookItems.length > 0) {
             if (this.saleCart.customerId !== customerId) {
                 alert("Farklı müşteriye kitap satılmaya çalışılıyor. Lütfen tek müşteri için işlem yapınız");
                 return false;
             }
         }
-
-        this.saleCart.bookAndQuantityMap.set(book, quantity);
+        let saleBookItems: SaleBookItems = new SaleBookItems(book, quantity);
+        this.saleCart.saleBookItems.push(saleBookItems);
         this.updateSaleCart();
     }
 
@@ -105,12 +106,12 @@ export class SaleService {
             }
             subTotalSpan!.textContent = "";
 
-            for (let index = 0; index < this.saleCart.bookAndQuantityMap.size; index++) {
+            for (let index = 0; index < this.saleCart.saleBookItems.length; index++) {
 
                 row = document.createElement("div");
                 row.className = "sale-cart-row";
 
-                for (let entry of this.saleCart.bookAndQuantityMap.entries()) {
+                for (let item of this.saleCart.saleBookItems) {
 
                     column = document.createElement("div");
                     column.className = "sale-cart-column";
@@ -119,25 +120,25 @@ export class SaleService {
 
                     column = document.createElement("div");
                     column.className = "sale-cart-column";
-                    column.textContent = entry[0].name;
+                    column.textContent = item.book.name;
                     row.appendChild(column);
 
                     column = document.createElement("div");
                     column.className = "sale-cart-column";
-                    column.textContent = entry[1].toString();
+                    column.textContent = item.quantity.toString();
                     row.appendChild(column);
 
                     column = document.createElement("div");
                     column.className = "sale-cart-column";
-                    column.textContent = (entry[0].bookSpecification.price * entry[1]).toString();
+                    column.textContent = (item.book.bookSpecification.price * item.quantity).toString();
                     row.appendChild(column);
                 }
             }
 
             if (row && subTotalSpan) {
 
-                for (let t of this.saleCart.bookAndQuantityMap) {
-                    subTotal += t[0].bookSpecification.price * t[1];
+                for (let t of this.saleCart.saleBookItems) {
+                    subTotal += t.book.bookSpecification.price * t.quantity;
                 }
 
                 saleCart.appendChild(row);
@@ -150,29 +151,29 @@ export class SaleService {
         let saleCart: SaleCart = this.saleCart;
         let sale = new Sale();
 
-        sale.bookAndQuantityMap = saleCart.bookAndQuantityMap;
+        sale.saleBookItems = saleCart.saleBookItems;
         sale.customerId = saleCart.customerId;
         sale.operationNumber = this.generateSaleNumber(saleCart.customerId);
         sale.operationDateTime = new Date();
         sale.total = this.calculateTotal(sale);
 
-        for (let q of sale.bookAndQuantityMap) {
-            stockService.increaseStock(q[0].isbn, -q[1])
+        for (let q of sale.saleBookItems) {
+            stockService.increaseStock(q.book.isbn, - q.quantity)
         }
 
         this.addSaleMock(sale);
-        this.saleCart = new SaleCart; // sepeti boşalt
+        this.saleCart = new SaleCart(); // sepeti boşalt
         this.updateSaleCart();
     }
 
     async addSaleMock(s: Sale) {
         try {
-            console.log(s.bookAndQuantityMap);
-            
+            console.log(s.saleBookItems);
+
             const response = await fetch(this.saleApi, {
                 method: 'POST',
                 body: JSON.stringify({
-                    bookAndQuantity: Array.from(s.bookAndQuantityMap.entries()),
+                    bookAndQuantity: Array.from(s.saleBookItems),
                     customerId: s.customerId,
                     operationDateTime: s.operationDateTime,
                     operationNumber: s.operationNumber,
@@ -190,8 +191,8 @@ export class SaleService {
 
             const result = (await response.json());
             console.log(result);
-            
-            alert(result.message + " "+ result.saleNumber);
+
+            alert(result.message + " " + result.saleNumber);
 
         } catch (Exception) {
             console.log('Hata Oluştu.');

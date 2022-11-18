@@ -1,31 +1,36 @@
 import { Book } from "./book";
+import { SaleBookItems } from "./sale-book-item";
 
 export class Sale {
-
-    private _bookAndQuantityMap? = new Map<Book, number>();
+    private _saleBookItems?: Array<SaleBookItems>;
     private _customerId?: number;
     private _operationDateTime?: Date;
     private _operationNumber?: string;
     private _total?: number;
 
-
-    constructor(bookAndQuantityMap?: Map<Book, number>, operationDateTime?: Date, customerId?: number, operationNumber?: string, total?: number) {
-        this._bookAndQuantityMap = bookAndQuantityMap;
+    constructor(saleBookItems?: Array<SaleBookItems>, operationDateTime?: Date, customerId?: number, operationNumber?: string, total?: number) {
+        this._saleBookItems = saleBookItems;
         this._operationDateTime = operationDateTime;
         this._customerId = customerId;
         this._operationNumber = operationNumber;
         this._total = total;
     }
 
+    /**
+     * Getter saleBookItems
+     * @return {Array<SaleBookItems>}
+     */
+	public get saleBookItems(): Array<SaleBookItems> {
+		return this._saleBookItems!;
+	}
 
     /**
-     * Getter bookAndQuantityMap
-     * @return {Map<Book, number>()}
+     * Setter saleBookItems
+     * @param {Array<SaleBookItems>} value
      */
-    public get bookAndQuantityMap(): Map<Book, number> {
-        return this._bookAndQuantityMap!;
-    }
-
+	public set saleBookItems(value: Array<SaleBookItems>) {
+		this._saleBookItems = value;
+	}
 
     /**
      * Getter operationDateTime
@@ -59,16 +64,6 @@ export class Sale {
         return this._total!;
     }
 
-
-
-    /**
-     * Setter bookAndQuantityMap
-     * @param {Map} value
-     */
-    public set bookAndQuantityMap(value: Map<Book, number>) {
-        this._bookAndQuantityMap = value;
-    }
-
     /**
      * Setter operationDateTime
      * @param {Date} value
@@ -100,6 +95,4 @@ export class Sale {
     public set total(value: number) {
         this._total = value;
     }
-
-
 }

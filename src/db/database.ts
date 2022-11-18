@@ -28,7 +28,7 @@ export class DataBase {
           this._rents = new Array<Rent>();
           this._bookSpecifications = new Array<BookSpecification>();
           this._cancels = new Array<Cancel>();
-          this._saleCart = new SaleCart;
+          this._saleCart = new SaleCart();
           this._rentCart = new RentCart;
      }
 
