@@ -13,7 +13,6 @@ export class Rent extends Sale {
         this._refund = refund;
     }
 
-
     /**
      * Getter refundDate
      * @return {Date}

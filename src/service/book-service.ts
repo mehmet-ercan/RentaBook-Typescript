@@ -1,7 +1,7 @@
 /**
  * @author Mehmet E. Akcan - 21.10.22
  */
-import { stockService } from "..";
+import { bookService, stockService } from "..";
 import { Book } from "../domain/book";
 import { BookSpecification } from "../domain/book-specification";
 
@@ -47,56 +47,41 @@ export class BookService {
         this._bookSpecification = value;
     }
 
-    /**
-     * parametre olarak gelen isbn bilgisine göre ilgili kitabı bulur.
-     * @param isbn Bulunacak olan kitabın isbn numarası
-     * @returns isbn numarasına göre ilgili kitabı Book nesnesi olarak geri döndürür
-     */
-    public getBook(isbn: string): Book {
-        //Buradan null bir değer de dönebileceği için hata veriyor
-        //ama biz sondaki ! operatörü ile null değer dönmeyecek diye garanti veriyoruz
-        return this.bookList.find(b => b.isbn === isbn)!;
+    public getBook(id: number): Book {
+        let bookSpecification = new BookSpecification("123-45", 123, new Date(), new Date());
+        let book = new Book("123-45", "a", "a", "2022", 123, bookSpecification);
+        return book;
     }
 
-    /**
-     * Parametre olarak gelen Book nesnesini kitap nesnesine ekler
-     * @param newBook eklenecek olan kitap nesnesi
-     */
-    public addBook(newBook: Book) {
-        try {
-            this.bookList.push(newBook);
-            this.bookSpecification.push(newBook.bookSpecification);
-        } catch (Exception) {
-            console.log("Kitap eklenirken bir hata meydana geldi.");
+    async getBooks() {
+
+        const response = await fetch(this.bookApi, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
         }
-    }
+        const result = (await response.json());
+        const getResult = <Book[]>JSON.parse(JSON.stringify(result, null, 4));
 
-    public isValidBook(isbn: string): boolean {
-        const b = this.getBook(isbn);
-        return this.bookList.includes(b)
+        return getResult as Array<Book>;
+
     }
 
     async initializeDataMock() {
-        try {
-            const response = await fetch(this.bookApi, {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                }
-            });
 
-            if (!response.ok) {
-                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
-            }
-            const result = (await response.json());
-            const getResult = <Book[]>JSON.parse(JSON.stringify(result, null, 4));
-            this.bookList = getResult as Array<Book>;
-        } catch (error) {
-            console.error(error);
-        }
+        bookService.getBooks();
+
+        console.log(this.bookList);
+
     }
 
     public listBooks() {
+
         const listBooksDiv = document.getElementById("listBooks");
 
         if (listBooksDiv) {
@@ -105,6 +90,8 @@ export class BookService {
             while (listBooksDiv.lastChild && listBooksDiv.children.length > 1) {
                 listBooksDiv.removeChild(listBooksDiv.lastChild);
             }
+
+            this.initializeDataMock();
 
             this.bookList.forEach(element => {
                 row = document.createElement("div");
@@ -127,7 +114,7 @@ export class BookService {
 
                 column = document.createElement("div");
                 column.className = "column-list-book";
-                column.textContent = stockService.getStockQuantity(element.isbn).toString();
+                column.textContent = stockService.getStockQuantity(element.id).toString();
                 row.appendChild(column);
 
                 column = document.createElement("div");

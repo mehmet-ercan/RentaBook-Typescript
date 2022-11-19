@@ -158,7 +158,7 @@ export class SaleService {
         sale.total = this.calculateTotal(sale);
 
         for (let q of sale.orderBookItems) {
-            stockService.increaseStock(q.book.isbn, - q.quantity)
+            stockService.increaseStock(q.book.id, - q.quantity)
         }
 
         let success = this.addSaleMock(sale);
@@ -202,6 +202,26 @@ export class SaleService {
         }
     }
 
+    public async getSaleMock(operationNumber: String): Promise<Sale> {
 
+        const response = await fetch(this.saleApi + "/" + operationNumber, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            }
+        });
 
+        if (!response.ok) {
+            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+        }
+
+        const result = (await response.json());
+        const getResult = <Sale>JSON.parse(JSON.stringify(result, null, 4));
+
+        return new Sale(getResult.orderBookItems, getResult.customerId,
+            getResult.operationDateTime, getResult.operationNumber,
+            getResult.total);
+    }
 }
+
+

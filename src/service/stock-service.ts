@@ -38,7 +38,7 @@ export class StockService {
     public addStock(isbn: string, shelfNumber: string, quantity: number): boolean {
         try {
 
-            let newStock = new Stock(isbn, quantity, shelfNumber);
+            let newStock = new Stock(1, quantity, shelfNumber);
             this.stockList.push(newStock);
             return true;
         } catch (error) {
@@ -53,8 +53,8 @@ export class StockService {
      * @param quantity stok eklenecek olan kitabın adedi
      * @returns işlem gerçekleşmesi durumunda true, diğer durumda false döner
      */
-    public increaseStock(isbn: string, quantity: number): boolean {
-        let stock = this.getStock(isbn);
+    public increaseStock(bookId: number, quantity: number): boolean {
+        let stock = this.getStock(bookId);
         if (stock) {
             stock.quantity = (stock.quantity + quantity);
             return true;
@@ -68,15 +68,15 @@ export class StockService {
      * @param isbn stock nesnesi getirilecek olan nesnenin isbn nosu,
      * @returns db olan stock nesnensi geri döner, db de yok ise throw ile hata fırlatırlır
      */
-    public getStock(isbn: string) {
-        let stock = this.stockList.find(s => s.isbn === isbn);
+    public getStock(bookId: number) {
+        let stock = this.stockList.find(s => s.book_id === bookId);
         if (stock) {
             return stock;
         }
     }
 
-    public getStockQuantity(isbn: string): number {
-        let s: Stock = this.getStock(isbn)!;
+    public getStockQuantity(bookId: number): number {
+        let s: Stock = this.getStock(bookId)!;
 
         if (s) {
             return s.quantity;
@@ -95,7 +95,7 @@ export class StockService {
             const response = await fetch(this.stockApi, {
                 method: 'POST',
                 body: JSON.stringify({
-                    isbn: s.isbn,
+                    bookId:s.book_id,
                     quantity: s.quantity,
                     shelfNumber: s.shelfNumber
                 }),
@@ -124,10 +124,10 @@ export class StockService {
     async increaseStockMock(s: Stock) {
         try {
 
-            const response = await fetch(this.stockApi + "/" + s.isbn, {
+            const response = await fetch(this.stockApi + "/" + s.book_id, {
                 method: 'PUT',
                 body: JSON.stringify({
-                    isbn: s.isbn,
+                    bookId:s.book_id,
                     quantity: s.quantity,
                     shelfNumber: s.shelfNumber
                 }),

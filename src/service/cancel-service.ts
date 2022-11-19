@@ -53,40 +53,30 @@ export class CancelService {
     async cancelSaleMock(cancelSale: Cancel) {
 
         let refund: number = this.calculateCancelSaleRefund(cancelSale);
-
         cancelSale.refund = refund;
 
-        try {
-            const response = await fetch(this.cancelSaleApi, {
-                method: 'POST',
-                body: JSON.stringify({
-                    sale: cancelSale.cancelType,
-                    refund: cancelSale.refund,
-                    canceledDateTime: cancelSale.canceledDateTime
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                },
-            });
+        const response = await fetch(this.cancelSaleApi, {
+            method: 'POST',
+            body: JSON.stringify({
+                cancelType: cancelSale.cancelType,
+                refund: cancelSale.refund,
+                canceledDateTime: cancelSale.canceledDateTime
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        });
 
-            //Todo sale mock servisine delete isteği atıp o sale nesnesini silecek
+        //Todo sale mock servisine delete isteği atıp o sale nesnesini silecek
 
-            if (response.ok) {
-                const result = (await response.json());
-                console.log(result);
-                return true;
-            } else {
-                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
-            }
-
-
-
-        } catch (Exception) {
-            console.log('Hata Oluştu.');
+        if (response.ok) {
+            const result = (await response.json());
+            console.log(result);
+            return true;
+        } else {
+            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
         }
-
-
     }
 
     public cancelRent(cancel: Cancel) {
@@ -107,7 +97,7 @@ export class CancelService {
         return refund;
     }
 
-    async cancelRentMock(cancelRent: Cancel){
+    async cancelRentMock(cancelRent: Cancel) {
         let refund: number = this.calculateCancelRentRefund(cancelRent);
 
         cancelRent.refund = refund;

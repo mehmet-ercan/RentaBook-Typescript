@@ -124,7 +124,7 @@ if (addStockForm) {
     const quanttiy = formData.get("stockQuantity") as unknown as number;
     const shelfNumber = formData.get("shelfNumber") as string;
 
-    const stock = new Stock(isbn, quanttiy, shelfNumber);
+    const stock = new Stock(1, quanttiy, shelfNumber);
 
     const isContainsBook = bookService.bookList.some(b => b.isbn == isbn);
 
@@ -183,13 +183,13 @@ if (saleBookForm) {
     const formData = new FormData(saleBookForm);
 
     const isbn = formData.get("isbnForSale") as string;
-    const book = bookService.getBook(isbn);
+    const book = bookService.getBook(2);
     const customerId = parseInt(formData.get("customerIdForSale") as string);
     //isValidCustomer rest servisten döenen veriye göre şekillenecek
     const isValidCustomer: boolean = true; //customerService.isValidCustomer(customerId);
     const quantity = parseInt(formData.get("quantityForSale") as string);
 
-    const stock = stockService.getStock(isbn)!;
+    const stock = stockService.getStock(1)!;
 
     try {
       if (book) {
@@ -243,6 +243,7 @@ btnSale.addEventListener("click", () => {
 const btnShowBooksMenuItem = <HTMLElement>(document.getElementById("showBooksMenuItem"));
 btnShowBooksMenuItem.addEventListener("click", () => {
   bookService.listBooks();
+
 })
 
 const cancelSaleForm = <HTMLFormElement>document.getElementById("cancel-sale-form");
@@ -250,31 +251,19 @@ if (cancelSaleForm) {
   cancelSaleForm.onsubmit = async (e) => {
     e.preventDefault();
 
-    // İptal işleminin çalışabilmesi için önce satış verisi ekledim, sonra satış iptali işlemi çalışıyor
-    let sbi = new Array<OrderBookItems>;
-    sbi.push(new OrderBookItems(bookService.getBook("123-45"), 3))
-
-    let a = new Sale(sbi, 1, new Date, "S021122163045", 123);
-    saleService.saleList.push(a);
-
     const formData = new FormData(cancelSaleForm);
     const saleNumber = formData.get("saleNumberforCancel") as string;
 
-    let sale = saleService.getSale(saleNumber);
-
-    if (sale) {
-      let cancelSale: Cancel = new Cancel(sale, sale.total, new Date);
-      let state = await cancelService.cancelSaleMock(cancelSale);
-
-      if (state) {
-        alert(sale.operationNumber + " numaralı satış iptal edilmiştir.");
-      } else {
-        alert(sale.operationNumber + " numaralı satış iptal edilirken hata meydana geldi.");
-      }
+    // İptal işleminin çalışabilmesi için önce satış verisini servisten çağırdım
+    let sale = await saleService.getSaleMock(saleNumber);
+    let cancelSale: Cancel = new Cancel(sale, sale.total, new Date);
+    let state = await cancelService.cancelSaleMock(cancelSale);
+    
+    if (state) {
+      alert(sale.operationNumber + " numaralı satış iptal edilmiştir.");
     } else {
-      alert(saleNumber + " numaralı satış bulunamamıştır. Tekrar deneyiniz.");
+      alert(sale.operationNumber + " numaralı satış iptal edilirken hata meydana geldi.");
     }
-
   }
 }
 
@@ -285,7 +274,7 @@ if (cancelRentForm) {
 
     // Kiralama iptalinin çalışabilmesi için önce veri ekledim, sonra iptal işlemi çalışıyor
     let sbi = new Array<OrderBookItems>;
-    sbi.push(new OrderBookItems(bookService.getBook("123-45"), 3));
+    sbi.push(new OrderBookItems(bookService.getBook(2), 3));
 
     let rDate = new Date;
     rDate.setDate(rDate.getDate() + 14);
@@ -297,6 +286,7 @@ if (cancelRentForm) {
     const rentNumber = formData.get("rentNumberforCancel") as string;
 
     let rent = rentService.getRent(rentNumber);
+    
 
     if (rent) {
       let cancelRent: Cancel = new Cancel(rent, rent.total, new Date);

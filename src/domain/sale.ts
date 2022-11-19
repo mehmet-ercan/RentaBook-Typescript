@@ -2,12 +2,12 @@ import { Book } from "./book";
 import { OrderBookItems } from "./order-book-item";
 
 export class Sale {
+    private _id:number;
     private _orderBookItems?: Array<OrderBookItems>;
     private _customerId?: number;
     private _operationDateTime?: Date;
     private _operationNumber?: string;
     private _total?: number;
-
 
 	constructor(orderBookItems?: Array<OrderBookItems>, customerId?: number, operationDateTime?: Date, operationNumber?: string, total?: number) {
 		this._orderBookItems = orderBookItems;
@@ -15,6 +15,22 @@ export class Sale {
 		this._operationDateTime = operationDateTime;
 		this._operationNumber = operationNumber;
 		this._total = total;
+	}
+
+    /**
+     * Getter id
+     * @return {number}
+     */
+	public get id(): number {
+		return this._id;
+	}
+
+    /**
+     * Setter id
+     * @param {number} value
+     */
+	public set id(value: number) {
+		this._id = value;
 	}
 
 

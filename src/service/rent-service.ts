@@ -215,7 +215,7 @@ export class RentService {
         this.calculateRefund(rent);
 
         for (let i of rent.orderBookItems) {
-            stockService.increaseStock(i.book.isbn, -i.quantity)
+            stockService.increaseStock(i.book.id, -i.quantity)
         }
 
         this.rentCart = new RentCart; // sepeti boşalt

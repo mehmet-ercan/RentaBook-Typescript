@@ -1,6 +1,7 @@
 import { Book } from "./book";
 
 export class OrderBookItems {
+    private _id: number;
     private _book: Book;
     private _quantity: number;
 
@@ -9,6 +10,24 @@ export class OrderBookItems {
         this._book = book;
         this._quantity = quantity;
     }
+
+
+    /**
+     * Getter id
+     * @return {number}
+     */
+	public get id(): number {
+		return this._id;
+	}
+
+    /**
+     * Setter id
+     * @param {number} value
+     */
+	public set id(value: number) {
+		this._id = value;
+	}
+
 
     /**
      * Getter book
