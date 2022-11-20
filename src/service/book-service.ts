@@ -58,92 +58,24 @@ export class BookService {
         return this.bookList.find(b => b.isbn === isbn)!;
     }
 
-    /**
-     * Parametre olarak gelen Book nesnesini kitap nesnesine ekler
-     * @param newBook eklenecek olan kitap nesnesi
-     */
-    public addBook(newBook: Book) {
-        try {
-            this.bookList.push(newBook);
-            this.bookSpecification.push(newBook.bookSpecification);
-        } catch (Exception) {
-            console.log("Kitap eklenirken bir hata meydana geldi.");
-        }
-    }
+    async getAllBooksDataFromService(): Promise<Array<Book>> {
 
-    public isValidBook(isbn: string): boolean {
-        const b = this.getBook(isbn);
-        return this.bookList.includes(b)
-    }
-
-    async initializeDataMock() {
-        try {
-            const response = await fetch(this.bookApi, {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+        const response = await fetch(this.bookApi, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
             }
-            const result = (await response.json());
-            const getResult = <Book[]>JSON.parse(JSON.stringify(result, null, 4));
-            this.bookList = getResult as Array<Book>;
-        } catch (error) {
-            console.error(error);
+        });
+
+        if (!response.ok) {
+            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
         }
+        const result = (await response.json());
+        const getResult = <Array<Book>>JSON.parse(JSON.stringify(result, null, 4));
+        return getResult;
     }
 
-    public listBooks() {
-        const listBooksDiv = document.getElementById("listBooks");
-
-        if (listBooksDiv) {
-            let row, column;
-
-            while (listBooksDiv.lastChild && listBooksDiv.children.length > 1) {
-                listBooksDiv.removeChild(listBooksDiv.lastChild);
-            }
-
-            this.bookList.forEach(element => {
-                row = document.createElement("div");
-                row.className = "row-list-book";
-
-                column = document.createElement("div");
-                column.className = "column-list-book";
-                column.textContent = element.isbn.toString();
-                row.appendChild(column);
-
-                column = document.createElement("div");
-                column.className = "column-list-book";
-                column.textContent = element.name.toString();
-                row.appendChild(column);
-
-                column = document.createElement("div");
-                column.className = "column-list-book";
-                column.textContent = element.author.toString();
-                row.appendChild(column);
-
-                column = document.createElement("div");
-                column.className = "column-list-book";
-                column.textContent = stockService.getStockQuantity(element.isbn).toString();
-                row.appendChild(column);
-
-                column = document.createElement("div");
-                column.className = "column-list-book";
-                column.textContent = element.bookSpecification.price.toString() + " ₺";
-                row.appendChild(column);
-
-                listBooksDiv.appendChild(row);
-            });
-
-
-        }
-
-    }
-
-    async addBookMock(b: Book) {
+    async createBook(b: Book) {
         try {
             const response = await fetch(this.bookApi, {
                 method: 'POST',
@@ -170,6 +102,8 @@ export class BookService {
                 const result = (await response.json());
                 console.log("Rest servisinden dönen cevap =>");
                 console.log(result);
+
+                this.bookList = await this.getAllBooksDataFromService();
                 return true;
             } else {
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);

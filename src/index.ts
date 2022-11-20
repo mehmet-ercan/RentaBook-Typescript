@@ -44,7 +44,10 @@ function initiliazeServices(db: DataBase) {
 }
 
 async function initiliazeData() {
-  await bookService.initializeDataMock();
+  bookService.bookList = await bookService.getAllBooksDataFromService();
+  listBooks;
+  console.log(bookService.bookList);
+  
 }
 
 function addListenerForMenuItems() {
@@ -95,14 +98,15 @@ if (addBookForm != null) {
     const startDate = new Date();
     const endDate = new Date('Dec 31, 9999 23:59:59');
 
-    title.match("");
-
+    //title.match("");
 
     const bookSpec = new BookSpecification(isbn, price, startDate, endDate);
     const book = new Book(isbn, title, author, publishYear, pages, bookSpec);
     //bookService.addBook(book);
 
-    let success = await bookService.addBookMock(book);
+    let success = await bookService.createBook(book);
+    listBooks();
+
     if (success) {
       alert(book.isbn + " numaralı kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
       addBookForm.reset();
@@ -242,7 +246,8 @@ btnSale.addEventListener("click", () => {
  */
 const btnShowBooksMenuItem = <HTMLElement>(document.getElementById("showBooksMenuItem"));
 btnShowBooksMenuItem.addEventListener("click", () => {
-  bookService.listBooks();
+
+  listBooks();
 })
 
 const cancelSaleForm = <HTMLFormElement>document.getElementById("cancel-sale-form");
@@ -415,4 +420,50 @@ if (refundBookForm) {
     }
 
   };
+}
+
+function listBooks() {
+  const listBooksDiv = document.getElementById("listBooks");
+
+  if (listBooksDiv) {
+    let row, column;
+
+
+    while (listBooksDiv.lastChild && listBooksDiv.children.length > 1) {
+      listBooksDiv.removeChild(listBooksDiv.lastChild);
+    }
+
+    bookService.bookList.forEach(element => {
+      row = document.createElement("div");
+      row.className = "row-list-book";
+
+      column = document.createElement("div");
+      column.className = "column-list-book";
+      column.textContent = element.isbn.toString();
+      row.appendChild(column);
+
+      column = document.createElement("div");
+      column.className = "column-list-book";
+      column.textContent = element.name.toString();
+      row.appendChild(column);
+
+      column = document.createElement("div");
+      column.className = "column-list-book";
+      column.textContent = element.author.toString();
+      row.appendChild(column);
+
+      column = document.createElement("div");
+      column.className = "column-list-book";
+      column.textContent = stockService.getStockQuantity(element.isbn).toString();
+      row.appendChild(column);
+
+      column = document.createElement("div");
+      column.className = "column-list-book";
+      column.textContent = element.bookSpecification.price.toString() + " ₺";
+      row.appendChild(column);
+
+      listBooksDiv.appendChild(row);
+    });
+  }
+
 }
