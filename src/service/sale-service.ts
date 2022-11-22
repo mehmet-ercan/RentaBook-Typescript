@@ -158,7 +158,7 @@ export class SaleService {
         sale.total = this.calculateTotal(sale);
 
         for (let q of sale.orderBookItems) {
-            stockService.increaseStock(q.book.isbn, - q.quantity)
+            stockService.increaseStock(q.book.id, - q.quantity)
         }
 
         let success = this.createSale(sale);

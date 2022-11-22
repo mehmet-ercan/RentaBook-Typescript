@@ -38,7 +38,6 @@ export class StockService {
      */
     public addStock(isbn: string, shelfNumber: string, quantity: number): boolean {
         try {
-
             let newStock = new Stock(isbn, quantity, shelfNumber);
             this.stockList.push(newStock);
             return true;
@@ -54,8 +53,9 @@ export class StockService {
      * @param quantity stok eklenecek olan kitabın adedi
      * @returns işlem gerçekleşmesi durumunda true, diğer durumda false döner
      */
-    public increaseStock(isbn: string, quantity: number): boolean {
-        let stock = this.getStock(isbn);
+    public increaseStock(id: number, quantity: number): boolean {
+        let stock = this.getStock(id);
+
         if (stock) {
             stock.quantity = (stock.quantity + quantity);
             return true;
@@ -64,20 +64,8 @@ export class StockService {
         }
     }
 
-    /**
-     * stock nesnesini geri döndürür
-     * @param isbn stock nesnesi getirilecek olan nesnenin isbn nosu,
-     * @returns db olan stock nesnensi geri döner, db de yok ise throw ile hata fırlatırlır
-     */
-    public getStock(isbn: string) {
-        let stock = this.stockList.find(s => s.isbn === isbn);
-        if (stock) {
-            return stock;
-        }
-    }
-
-    public getStockQuantity(isbn: string): Number {
-        let s: Stock | undefined = this.stockList.find(st => st.isbn === isbn);
+    public getStockQuantity(bookId:number): Number {
+        let s: Stock | undefined = this.stockList.find(st => st.book.id === bookId);
         console.log(s);
 
         if (s !== undefined) {
@@ -85,6 +73,20 @@ export class StockService {
         } else {
             return 0;
         }
+    }
+
+    /**
+     * stock nesnesini geri döndürür
+     * @param isbn stock nesnesi getirilecek olan nesnenin isbn nosu,
+     * @returns db olan stock nesnensi geri döner, db de yok ise throw ile hata fırlatırlır
+     */
+     async getStock(bookId: number):Promise<Stock> {
+        let stock = this.stockList.find(s => s.book.id === bookId);
+        
+        if (stock) {
+            return stock;
+        }
+        return stock;
     }
 
     /**
@@ -97,8 +99,6 @@ export class StockService {
             const response = await fetch(this.stockApi + "/" + b.id, {
                 method: 'POST',
                 body: JSON.stringify({
-                    id: b.id,
-                    isbn: s.isbn,
                     quantity: s.quantity,
                     shelfNumber: s.shelfNumber,
                     book: b
@@ -109,7 +109,6 @@ export class StockService {
                 },
             });
 
-            debugger;
             if (response.ok) {
                 const result = (await response.json());
                 console.log(result);
@@ -145,12 +144,12 @@ export class StockService {
     async increaseStockMock(s: Stock) {
         try {
 
-            const response = await fetch(this.stockApi + "/" + s.isbn, {
+            const response = await fetch(this.stockApi + "/" + s.id, {
                 method: 'PUT',
                 body: JSON.stringify({
-                    isbn: s.isbn,
                     quantity: s.quantity,
-                    shelfNumber: s.shelfNumber
+                    shelfNumber: s.shelfNumber,
+                    book:s.book
                 }),
                 headers: {
                     'Content-Type': 'application/json',

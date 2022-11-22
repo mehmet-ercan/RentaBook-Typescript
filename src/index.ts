@@ -200,7 +200,7 @@ if (saleBookForm) {
     const isValidCustomer: boolean = true; //customerService.isValidCustomer(customerId);
     const quantity = parseInt(formData.get("quantityForSale") as string);
 
-    const stock = stockService.getStock(isbn)!;
+    const stock = stockService.getStock(book.id)!;
 
     try {
       if (book) {
@@ -317,7 +317,7 @@ if (rentBookForm) {
     //isValidCustomer rest servisten döenen veriye göre şekillenecek
     const isValidCustomer: boolean = true; //customerService.isValidCustomer(customerId);
     const quantity = parseInt(formData.get("quantityForRent") as string);
-    const stock = stockService.getStock(isbn)!;
+    const stock = stockService.getStock(book.id)!;
 
     try {
       if (book) {
@@ -439,7 +439,7 @@ function listBooks() {
 
       column = document.createElement("div");
       column.className = "column-list-book";
-      column.textContent = stockService.getStockQuantity(element.isbn).toString();
+      column.textContent = stockService.getStockQuantity(element.id).toString();
       row.appendChild(column);
 
       column = document.createElement("div");
