@@ -1,4 +1,4 @@
-import { BookSpecification } from "./book-specification";
+import { BookPrice } from "./book-price";
 
 export class Book {
      private _id: number;
@@ -7,15 +7,15 @@ export class Book {
      private _author: string;
      private _publishYear: string;
      private _pages: number;
-     private _bookSpecification: BookSpecification;
+     private _bookPrice: BookPrice;
 
-     constructor(isbn: string, name: string, author: string, publishYear: string, pages: number, bookSpecification: BookSpecification) {
+     constructor(isbn: string, name: string, author: string, publishYear: string, pages: number, bookPrice: BookPrice) {
           this._name = name;
           this._author = author;
           this._isbn = isbn;
           this._publishYear = publishYear;
           this._pages = pages;
-          this._bookSpecification = bookSpecification;
+          this._bookPrice = bookPrice;
      }
 
 
@@ -77,11 +77,11 @@ export class Book {
      }
 
      /**
-      * Getter bookSpecification
-      * @return {BookSpecification}
+      * Getter bookPrice
+      * @return {BookPrice}
       */
-     public get bookSpecification(): BookSpecification {
-          return this._bookSpecification;
+     public get bookPrice(): BookPrice {
+          return this._bookPrice;
      }
 
      /**
@@ -125,10 +125,10 @@ export class Book {
      }
 
      /**
-      * Setter bookSpecification
-      * @param {BookSpecification} value
+      * Setter bookPrice
+      * @param {BookPrice} value
       */
-     public set bookSpecification(value: BookSpecification) {
-          this._bookSpecification = value;
+     public set bookPrice(value: BookPrice) {
+          this._bookPrice = value;
      }
 }

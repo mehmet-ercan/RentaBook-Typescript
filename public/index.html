@@ -119,12 +119,12 @@
 
       <div>
         <label for="publishYear">Yayın Yılı</label>
-        <input type="number" name="bookPublishYear" id="publishYear" class="myBook" required="required" />
+        <input type="number" name="bookPublishYear" id="publishYear" class="myBook" required="required" min="0" />
       </div>
 
       <div>
         <label for="pages">Sayfa Sayısı</label>
-        <input type="number" name="bookPages" id="pages" class="myBook" required="required" />
+        <input type="number" name="bookPages" id="pages" class="myBook" required="required" min="0" />
       </div>
 
       <div>
@@ -234,7 +234,7 @@
 
       <div>
         <label for="quantityForSale">Kaç Adet Alınacak</label>
-        <input type="number" name="quantityForSale" id="quantity-for-sale" />
+        <input type="number" name="quantityForSale" id="quantity-for-sale" required="required" min="0"/>
       </div>
 
       <!-- Submit button-->
@@ -275,7 +275,7 @@
       <div>
         <label for="saleNumberforCancel">İşlem Numarası</label>
         <input type="text" name="saleNumberforCancel" id="sale-number-for-cancel" required="required"
-          pattern="[S]{1}[0-9]{12}" />
+          pattern="[S]{1}[0-9]{1,15}" />
       </div>
       <div>
         <input type="submit" value="Satış İptali" />
@@ -299,7 +299,7 @@
 
       <div>
         <label for="quantityForRent">Kaç Adet Alınacak</label>
-        <input type="number" name="quantityForRent" id="quantity-for-rent" required="required" />
+        <input type="number" name="quantityForRent" id="quantity-for-rent" required="required" min="0" />
       </div>
 
       <!-- Submit button-->
@@ -339,7 +339,7 @@
       <div>
         <label for="rentNumberforCancel">İşlem Numarası</label>
         <input type="text" name="rentNumberforCancel" id="rent-number-for-cancel" required="required"
-          pattern="[R]{1}[0-9]{12}" />
+          pattern="[R]{1}[0-9]{1,15}" />
       </div>
       <div>
         <input type="submit" value="Kiralama İptali" />
@@ -353,7 +353,7 @@
       <div>
         <label for="rentNumberforRefund">İşlem Numarası</label>
         <input type="text" name="rentNumberforRefund" id="rent-number-for-refund" required="required"
-          pattern="[R]{1}[0-9]{12}" />
+          pattern="[R]{1}[0-9]{1,15}" />
       </div>
       <div>
         <input type="submit" value="Geri Al" />

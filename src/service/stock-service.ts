@@ -1,8 +1,9 @@
+import { Book } from "../domain/book";
 import { Stock } from "../domain/stock";
 
 export class StockService {
     private _stockList: Array<Stock>;
-    private stockApi: string = "http://localhost:3002/api/stocks";
+    private stockApi: string = "http://localhost:3002/api/v1/stocks";
 
     constructor(stockList: Array<Stock>) {
         this._stockList = stockList;
@@ -75,10 +76,11 @@ export class StockService {
         }
     }
 
-    public getStockQuantity(isbn: string): number {
-        let s: Stock = this.getStock(isbn)!;
+    public getStockQuantity(isbn: string): Number {
+        let s: Stock | undefined = this.stockList.find(st => st.isbn === isbn);
+        console.log(s);
 
-        if (s) {
+        if (s !== undefined) {
             return s.quantity;
         } else {
             return 0;
@@ -90,14 +92,16 @@ export class StockService {
      * İşte bu oluşturma/create işlemi burada yapılıyor.
      * @param s index.ts dosyasından gelen stok nesnesi
      */
-    async addStockMock(s: Stock): Promise<Boolean | undefined> {
+    async createStock(s: Stock, b: Book): Promise<Boolean | undefined> {
         try {
-            const response = await fetch(this.stockApi, {
+            const response = await fetch(this.stockApi + "/" + b.id, {
                 method: 'POST',
                 body: JSON.stringify({
+                    id: b.id,
                     isbn: s.isbn,
                     quantity: s.quantity,
-                    shelfNumber: s.shelfNumber
+                    shelfNumber: s.shelfNumber,
+                    book: b
                 }),
                 headers: {
                     'Content-Type': 'application/json',
@@ -105,6 +109,7 @@ export class StockService {
                 },
             });
 
+            debugger;
             if (response.ok) {
                 const result = (await response.json());
                 console.log(result);
@@ -115,6 +120,22 @@ export class StockService {
         } catch (error) {
             console.log('Hata Oluştu.' + error);
         }
+    }
+
+    async getAllStocksData(): Promise<Array<Stock>> {
+        const response = await fetch(this.stockApi, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+        }
+        const result = (await response.json());
+        const getResult = <Array<Stock>>JSON.parse(JSON.stringify(result, null, 4));
+        return getResult;
     }
 
     /**

@@ -2,8 +2,8 @@ import { Cancel } from "../domain/cancel";
 
 export class CancelService {
     private _cancelledList: Array<Cancel>;
-    cancelSaleApi: string = 'http://localhost:3002/api/v1/cancelSale';
-    cancelRentApi: string = 'http://localhost:3002/api/v1/cancelRent';
+    cancelSaleApi: string = 'http://localhost:3002/api/v1/sales';
+    cancelRentApi: string = 'http://localhost:3002/api/v1/rents';
 
     constructor(cancelledList: Array<Cancel>) {
         this._cancelledList = cancelledList;
@@ -50,20 +50,10 @@ export class CancelService {
         return refund;
     }
 
-    async cancelSaleMock(cancelSale: Cancel) {
-
-        let refund: number = this.calculateCancelSaleRefund(cancelSale);
-
-        cancelSale.refund = refund;
-
+    async cancelSaleMock(operationNumber: string) {
         try {
-            const response = await fetch(this.cancelSaleApi, {
-                method: 'POST',
-                body: JSON.stringify({
-                    sale: cancelSale.cancelType,
-                    refund: cancelSale.refund,
-                    canceledDateTime: cancelSale.canceledDateTime
-                }),
+            const response = await fetch(this.cancelSaleApi + "/" + operationNumber, {
+                method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
@@ -73,15 +63,13 @@ export class CancelService {
             //Todo sale mock servisine delete isteği atıp o sale nesnesini silecek
 
             if (response.ok) {
-                const result = (await response.json());
-                console.log(result);
+                // Delete işlemnde .json şeklşnde serilize yapılamaz, hata verir
+                // const result = (await response.json());
+                console.log(response);
                 return true;
             } else {
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
             }
-
-
-
         } catch (Exception) {
             console.log('Hata Oluştu.');
         }
@@ -107,39 +95,21 @@ export class CancelService {
         return refund;
     }
 
-    async cancelRentMock(cancelRent: Cancel){
-        let refund: number = this.calculateCancelRentRefund(cancelRent);
+    async cancelRentMock(operationNumber: string): Promise<boolean> {
 
-        cancelRent.refund = refund;
+        const response = await fetch(this.cancelRentApi + "/" + operationNumber, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        });
 
-        try {
-            const response = await fetch(this.cancelRentApi, {
-                method: 'POST',
-                body: JSON.stringify({
-                    rent: cancelRent.cancelType,
-                    refund: cancelRent.refund,
-                    canceledDateTime: cancelRent.canceledDateTime
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                },
-            });
-
-            //Todo sale mock servisine delete isteği atıp o sale nesnesini silecek
-
-            if (response.ok) {
-                const result = (await response.json());
-                console.log(result);
-                return true;
-            } else {
-                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
-            }
-
-
-
-        } catch (Exception) {
-            console.log('Hata Oluştu.');
+        if (response.ok) {
+            console.log(response);
+            return true;
+        } else {
+            return false;
         }
     }
 

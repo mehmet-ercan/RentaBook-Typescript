@@ -1,7 +1,11 @@
+import { Book } from "./book";
+
 export class Stock {
+    private _id:number;
     private _isbn: string;
     private _quantity: number;
     private _shelfNumber: string;
+    private _book:Book;
 
     constructor(isbn?: string, quantity?: number, shelfNumber?: string) {
         this._isbn = isbn!;
@@ -9,6 +13,39 @@ export class Stock {
         this._shelfNumber = shelfNumber!;
     }
 
+
+    /**
+     * Getter id
+     * @return {number}
+     */
+	public get id(): number {
+		return this._id;
+	}
+
+    /**
+     * Setter id
+     * @param {number} value
+     */
+	public set id(value: number) {
+		this._id = value;
+	}
+
+
+    /**
+     * Getter book
+     * @return {Book}
+     */
+	public get book(): Book {
+		return this._book;
+	}
+
+    /**
+     * Setter book
+     * @param {Book} value
+     */
+	public set book(value: Book) {
+		this._book = value;
+	}
 
 
     /**

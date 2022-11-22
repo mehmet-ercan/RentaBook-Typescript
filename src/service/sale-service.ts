@@ -55,7 +55,7 @@ export class SaleService {
         let subTotal = 0.0;
 
         for (let entry of sale.orderBookItems) {
-            subTotal += entry.book.bookSpecification.price * entry.quantity;
+            subTotal += entry.book.bookPrice.price * entry.quantity;
         }
 
         return subTotal;
@@ -130,7 +130,7 @@ export class SaleService {
 
                     column = document.createElement("div");
                     column.className = "sale-cart-column";
-                    column.textContent = (item.book.bookSpecification.price * item.quantity).toString();
+                    column.textContent = (item.book.bookPrice.price * item.quantity).toString();
                     row.appendChild(column);
                 }
             }
@@ -138,7 +138,7 @@ export class SaleService {
             if (row && subTotalSpan) {
 
                 for (let t of this.saleCart.orderBookItems) {
-                    subTotal += t.book.bookSpecification.price * t.quantity;
+                    subTotal += t.book.bookPrice.price * t.quantity;
                 }
 
                 saleCart.appendChild(row);
@@ -161,13 +161,13 @@ export class SaleService {
             stockService.increaseStock(q.book.isbn, - q.quantity)
         }
 
-        let success = this.addSaleMock(sale);
+        let success = this.createSale(sale);
         this.saleCart = new SaleCart(); // sepeti boşalt
         this.updateSaleCart();
         return success;
     }
 
-    async addSaleMock(s: Sale) {
+    async createSale(s: Sale) {
         try {
             const response = await fetch(this.saleApi, {
                 method: 'POST',
@@ -202,6 +202,25 @@ export class SaleService {
         }
     }
 
+    async isExistSale(operationNumber: string): Promise<boolean> {
+        const response = await fetch(this.saleApi + "/" + operationNumber, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        });
 
+        console.log(response);
+
+        if (response.ok) {
+            const result = (await response.json());
+            console.log("Rest apidan dönen cevap:\n");
+            console.log(result);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }

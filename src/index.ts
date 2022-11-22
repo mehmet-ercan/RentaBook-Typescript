@@ -1,7 +1,7 @@
 // export NODE_OPTIONS=--openssl-legacy-provider
 import { DataBase } from "./db/database";
 import { Book } from "./domain/book";
-import { BookSpecification } from "./domain/book-specification";
+import { BookPrice } from "./domain/book-price";
 import { Cancel } from "./domain/cancel";
 import { Customer } from "./domain/customer";
 import { Rent } from "./domain/rent";
@@ -38,16 +38,17 @@ function initiliazeServices(db: DataBase) {
 
   customerService.addCustomer(new Customer("", "", ""));
   customerService.addCustomer(new Customer("", "", ""));
-
-  stockService.addStock("123-45", "A45-52", 10);
-  stockService.addStock("123-46", "A45-52", 10);
 }
 
 async function initiliazeData() {
-  bookService.bookList = await bookService.getAllBooksDataFromService();
-  listBooks;
+  bookService.bookList = await bookService.getAllBooksData();
+  stockService.stockList = await stockService.getAllStocksData();
+
   console.log(bookService.bookList);
-  
+  console.log(stockService.stockList);
+
+  listBooks;
+
 }
 
 function addListenerForMenuItems() {
@@ -95,26 +96,32 @@ if (addBookForm != null) {
     const publishYear = formData.get("bookPublishYear") as string;
     const pages = formData.get("bookPages") as unknown as number;
     const price = formData.get("bookPrice") as unknown as number;
-    const startDate = new Date();
-    const endDate = new Date('Dec 31, 9999 23:59:59');
 
-    //title.match("");
+    const bookPrice = new BookPrice();
+    bookPrice.price = price;
 
-    const bookSpec = new BookSpecification(isbn, price, startDate, endDate);
-    const book = new Book(isbn, title, author, publishYear, pages, bookSpec);
-    //bookService.addBook(book);
+    const book = new Book(isbn, title, author, publishYear, pages, bookPrice);
+    let isSameIsbn: boolean = bookService.bookList.some((obj) => {
+      return obj.isbn === book.isbn;
+    });
 
-    let success = await bookService.createBook(book);
-    listBooks();
+    if (isSameIsbn === false) {
+      let success = await bookService.createBook(book);
 
-    if (success) {
-      alert(book.isbn + " numaralı kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
-      addBookForm.reset();
+      if (success) {
+        alert(book.isbn + " numaralı kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
+        addBookForm.reset();
+        listBooks();
+      } else {
+        alert(book.isbn + " numaralı kitap Ekleme İşlemi Sırasında Bir Hata oluştu.");
+      }
+
+      return false; // prevent reload page
     } else {
-      alert(book.isbn + " numaralı kitap Ekleme İşlemi Sırasında Bir Hata oluştu.");
+      alert("Aynı ISBN numrasına sahip ikinci bir kitap eklenemz.");
     }
 
-    return false; // prevent reload
+
   };
 }
 
@@ -129,20 +136,20 @@ if (addStockForm) {
     const shelfNumber = formData.get("shelfNumber") as string;
 
     const stock = new Stock(isbn, quanttiy, shelfNumber);
+    const isContainsBook: boolean = bookService.bookList.some(b => b.isbn === isbn);
 
-    const isContainsBook = bookService.bookList.some(b => b.isbn == isbn);
-
-    if (!isContainsBook) {
+    if (isContainsBook !== true) {
       alert("Stok eklenmeye çalışılan kitap, kayıtlı değildir. Lütfen önce kitap ekleyiniz");
     }
     else {
-      let isOk = await stockService.addStockMock(stock);
+      const book = bookService.getBook(isbn);
+      let isOk = await stockService.createStock(stock, book);
 
       if (isOk) {
         alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
+        await initiliazeData();
+        listBooks();
       }
-
-
     }
 
     addStockForm.reset();
@@ -255,26 +262,20 @@ if (cancelSaleForm) {
   cancelSaleForm.onsubmit = async (e) => {
     e.preventDefault();
 
-    // İptal işleminin çalışabilmesi için önce satış verisi ekledim, sonra satış iptali işlemi çalışıyor
-    let sbi = new Array<OrderBookItems>;
-    sbi.push(new OrderBookItems(bookService.getBook("123-45"), 3))
-
-    let a = new Sale(sbi, 1, new Date, "S021122163045", 123);
-    saleService.saleList.push(a);
-
     const formData = new FormData(cancelSaleForm);
     const saleNumber = formData.get("saleNumberforCancel") as string;
 
-    let sale = saleService.getSale(saleNumber);
 
-    if (sale) {
-      let cancelSale: Cancel = new Cancel(sale, sale.total, new Date);
-      let state = await cancelService.cancelSaleMock(cancelSale);
+    let isExistSale = await saleService.isExistSale(saleNumber);
+
+    if (isExistSale === true) {
+
+      let state = await cancelService.cancelSaleMock(saleNumber);
 
       if (state) {
-        alert(sale.operationNumber + " numaralı satış iptal edilmiştir.");
+        alert(saleNumber + " numaralı satış iptal edilmiştir.");
       } else {
-        alert(sale.operationNumber + " numaralı satış iptal edilirken hata meydana geldi.");
+        alert(saleNumber + " numaralı satış iptal edilirken hata meydana geldi.");
       }
     } else {
       alert(saleNumber + " numaralı satış bulunamamıştır. Tekrar deneyiniz.");
@@ -288,36 +289,17 @@ if (cancelRentForm) {
   cancelRentForm.onsubmit = async (e) => {
     e.preventDefault();
 
-    // Kiralama iptalinin çalışabilmesi için önce veri ekledim, sonra iptal işlemi çalışıyor
-    let sbi = new Array<OrderBookItems>;
-    sbi.push(new OrderBookItems(bookService.getBook("123-45"), 3));
-
-    let rDate = new Date;
-    rDate.setDate(rDate.getDate() + 14);
-
-    let a = new Rent(sbi, new Date, 1, "R021122163045", 123, rDate, 200);
-    rentService.rentList.push(a);
-
     const formData = new FormData(cancelRentForm);
     const rentNumber = formData.get("rentNumberforCancel") as string;
 
-    let rent = rentService.getRent(rentNumber);
+    let state = await cancelService.cancelRentMock(rentNumber);
 
-    if (rent) {
-      let cancelRent: Cancel = new Cancel(rent, rent.total, new Date);
-      let state = await cancelService.cancelRentMock(cancelRent);
-
-      if (state) {
-        alert(rent.operationNumber + " numaralı kiralama iptal edilmiştir.");
-      } else {
-        alert(rent.operationNumber + " numaralı kiralama iptal edilirken hata meydana geldi.");
-      }
+    if (state) {
+      alert(rentNumber + " numaralı kiralama iptal edilmiştir.");
     } else {
       alert(rentNumber + " numaralı kiralma bulunamamıştır. Tekrar deneyiniz.");
     }
-
   }
-
 }
 
 /**Burada mock servisi yok çünkü burada kitap kiralaması yapılırken, kitapları sepete ekliyoruz.
@@ -434,6 +416,9 @@ function listBooks() {
     }
 
     bookService.bookList.forEach(element => {
+
+      //alert(stockService.getStockQuantity(element.isbn));
+
       row = document.createElement("div");
       row.className = "row-list-book";
 
@@ -459,7 +444,7 @@ function listBooks() {
 
       column = document.createElement("div");
       column.className = "column-list-book";
-      column.textContent = element.bookSpecification.price.toString() + " ₺";
+      column.textContent = element.bookPrice.price.toString() + " ₺";
       row.appendChild(column);
 
       listBooksDiv.appendChild(row);

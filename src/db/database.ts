@@ -1,5 +1,5 @@
 import { Book } from "../domain/book";
-import { BookSpecification } from "../domain/book-specification";
+import { BookPrice } from "../domain/book-price";
 import { Cancel } from "../domain/cancel";
 import { Customer } from "../domain/customer";
 import { Rent } from "../domain/rent";
@@ -15,7 +15,7 @@ export class DataBase {
      private _customers: Array<Customer>;//
      private _sales: Array<Sale>;//
      private _rents: Array<Rent>;
-     private _bookSpecifications: Array<BookSpecification>;
+     private _bookSpecifications: Array<BookPrice>;
      private _cancels: Array<Cancel>;//
      private _saleCart: SaleCart;
      private _rentCart:RentCart;
@@ -26,7 +26,7 @@ export class DataBase {
           this._customers = new Array<Customer>();
           this._sales = new Array<Sale>();
           this._rents = new Array<Rent>();
-          this._bookSpecifications = new Array<BookSpecification>();
+          this._bookSpecifications = new Array<BookPrice>();
           this._cancels = new Array<Cancel>();
           this._saleCart = new SaleCart();
           this._rentCart = new RentCart;
@@ -74,9 +74,9 @@ export class DataBase {
 
      /**
       * Getter bookSpecifications
-      * @return {Array<BookSpecification>}
+      * @return {Array<BookPrice>}
       */
-     public get getBookSpecifications(): Array<BookSpecification> {
+     public get getBookSpecifications(): Array<BookPrice> {
           return this._bookSpecifications;
      }
 

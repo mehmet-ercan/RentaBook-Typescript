@@ -3,14 +3,14 @@
  */
 import { stockService } from "..";
 import { Book } from "../domain/book";
-import { BookSpecification } from "../domain/book-specification";
+import { BookPrice } from "../domain/book-price";
 
 export class BookService {
     private _bookList: Array<Book>;
-    private _bookSpecification: Array<BookSpecification>;
+    private _bookSpecification: Array<BookPrice>;
     bookApi: string = 'http://localhost:3002/api/v1/books';
 
-    constructor(bookList: Array<Book>, bookSpecification: Array<BookSpecification>) {
+    constructor(bookList: Array<Book>, bookSpecification: Array<BookPrice>) {
         this._bookList = bookList;
         this._bookSpecification = bookSpecification;
     }
@@ -25,9 +25,9 @@ export class BookService {
 
     /**
      * Getter bookSpecification
-     * @return {Array<BookSpecification>}
+     * @return {Array<BookPrice>}
      */
-    public get bookSpecification(): Array<BookSpecification> {
+    public get bookSpecification(): Array<BookPrice> {
         return this._bookSpecification;
     }
 
@@ -41,9 +41,9 @@ export class BookService {
 
     /**
      * Setter bookSpecification
-     * @param {Array<BookSpecification>} value
+     * @param {Array<BookPrice>} value
      */
-    public set bookSpecification(value: Array<BookSpecification>) {
+    public set bookSpecification(value: Array<BookPrice>) {
         this._bookSpecification = value;
     }
 
@@ -58,7 +58,7 @@ export class BookService {
         return this.bookList.find(b => b.isbn === isbn)!;
     }
 
-    async getAllBooksDataFromService(): Promise<Array<Book>> {
+    async getAllBooksData(): Promise<Array<Book>> {
 
         const response = await fetch(this.bookApi, {
             method: 'GET',
@@ -85,11 +85,8 @@ export class BookService {
                     author: b.author,
                     pages: b.pages,
                     publishYear: b.publishYear,
-                    bookSpecification: {
-                        isbn: b.bookSpecification.isbn,
-                        price: b.bookSpecification.price,
-                        startDate: b.bookSpecification.startDate,
-                        endDate: b.bookSpecification.endDate
+                    bookPriceCreateDto:{
+                        price:b.bookPrice.price 
                     }
                 }),
                 headers: {
@@ -103,7 +100,7 @@ export class BookService {
                 console.log("Rest servisinden dönen cevap =>");
                 console.log(result);
 
-                this.bookList = await this.getAllBooksDataFromService();
+                this.bookList = await this.getAllBooksData();
                 return true;
             } else {
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
