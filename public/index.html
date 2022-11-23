@@ -17,7 +17,7 @@
 <body >
   <header class="header">
     <a href="#" class="logo">
-      <img src="../public/images/logo_transparent.svg" alt="Logo" />
+      <img src="./images/logo_transparent.svg" alt="Logo" />
     </a>
 
     <nav class="navbar" id="primary_nav_wrap">
@@ -103,8 +103,8 @@
         <label for="name">Kitabın İsmi</label>
         <input type="text" name="bookTitle" id="title" class="myBook" required="required" pattern="[A-Za-z0-9 .]{1,20}"
           oninvalid="this.setCustomValidity('Lütfen Kitap İsmini Doğru Yazınız.')" oninput="setCustomValidity('')" />
-        <!--Üstteki satırı, sadece kendi mesajımızı vermek istediğimizde yazmamız gerekiyor-->
-        <!--Aksi takdirde uyraı mesajı, dığru veri giirlse bile gitmiyor, orada kalıyor-->
+        <!--Üstteki satırı, sadece kendi mesajımızı vermek istediğimizde, yazmamız gerekiyor-->
+        <!--Yazılmadığı takdirde uyraı mesajı, doğru veri girilse bile gitmiyor, orada kalıyor-->
       </div>
 
       <div>
@@ -200,8 +200,8 @@
       </div>
 
       <div>
-        <label for="stock">Toplam Stok Adedi</label>
-        <input type="number" name="stockQuantity" id="book-stock-quantity" required="required" />
+        <label for="stock">Stok Adedi</label>
+        <input type="number" name="stockQuantity" id="book-stock-quantity" required="required" min="0"/>
       </div>
 
       <div>

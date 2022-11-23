@@ -6,7 +6,7 @@ export class Stock {
     private _shelfNumber: string;
     private _book:Book;
 
-    constructor(isbn?: string, quantity?: number, shelfNumber?: string, book?:Book) {
+    constructor(quantity?: number, shelfNumber?: string, book?:Book) {
         this._quantity = quantity!;
         this._shelfNumber = shelfNumber!;
         this._book=book!;

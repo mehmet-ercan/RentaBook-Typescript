@@ -135,21 +135,20 @@ if (addStockForm) {
     const quanttiy = formData.get("stockQuantity") as unknown as number;
     const shelfNumber = formData.get("shelfNumber") as string;
 
-    const stock = new Stock(isbn, quanttiy, shelfNumber);
-    const isContainsBook: boolean = bookService.bookList.some(b => b.isbn === isbn);
+    const book = bookService.bookList.find(b => b.isbn === isbn)!;
 
-    if (isContainsBook !== true) {
-      alert("Stok eklenmeye çalışılan kitap, kayıtlı değildir. Lütfen önce kitap ekleyiniz");
-    }
-    else {
-      const book = bookService.getBook(isbn);
-      let isOk = await stockService.createStock(stock, book);
+    if (book) {
+      const stock = new Stock(quanttiy, shelfNumber, book);
+      let isOk = await stockService.createStock(stock);
 
       if (isOk) {
         alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
         await initiliazeData();
-        listBooks();
+        await listBooks();
       }
+    }
+    else {
+      alert("Stok eklenmeye çalışılan kitaba ait isbn numarası hatalıdır.");
     }
 
     addStockForm.reset();
@@ -189,8 +188,9 @@ if (addCustomerForm) {
  */
 const saleBookForm = <HTMLFormElement>(document.getElementById("sale-book-form"));
 if (saleBookForm) {
-  saleBookForm.onsubmit = () => {
+  saleBookForm.onsubmit = async (e) => {
 
+    e.preventDefault();
     const formData = new FormData(saleBookForm);
 
     const isbn = formData.get("isbnForSale") as string;
@@ -200,7 +200,7 @@ if (saleBookForm) {
     const isValidCustomer: boolean = true; //customerService.isValidCustomer(customerId);
     const quantity = parseInt(formData.get("quantityForSale") as string);
 
-    const stock = stockService.getStock(book.id)!;
+    let stock = await stockService.getStockByBookId(book.id)!;
 
     try {
       if (book) {
@@ -307,7 +307,7 @@ if (cancelRentForm) {
  */
 const rentBookForm = <HTMLFormElement>(document.getElementById("rent-book-form"));
 if (rentBookForm) {
-  rentBookForm.onsubmit = () => {
+  rentBookForm.onsubmit = async () => {
 
     const formData = new FormData(rentBookForm);
 
@@ -317,7 +317,8 @@ if (rentBookForm) {
     //isValidCustomer rest servisten döenen veriye göre şekillenecek
     const isValidCustomer: boolean = true; //customerService.isValidCustomer(customerId);
     const quantity = parseInt(formData.get("quantityForRent") as string);
-    const stock = stockService.getStock(book.id)!;
+
+    const stock = await stockService.getStockByBookId(book.id)!;
 
     try {
       if (book) {
@@ -333,7 +334,7 @@ if (rentBookForm) {
             alert(quantity + " kadar kitap dükkanda mevcut değildir.");
           }
         } else {
-          alert(`Dükkanda ${isbn} numaralı kitabın stoğu mevcut değildir.`);
+          alert(`Dükkanda ${isbn} numaralı kitabın stoğu mevcut değildir. Önce stok ekleyiniz`);
         }
       } else {
         alert(isbn + " numaralı kitap yoktur.");
@@ -404,7 +405,11 @@ if (refundBookForm) {
   };
 }
 
-function listBooks() {
+async function listBooks() {
+
+  bookService.bookList = await bookService.getAllBooksData();
+  stockService.stockList = await stockService.getAllStocksData();
+
   const listBooksDiv = document.getElementById("listBooks");
 
   if (listBooksDiv) {
@@ -439,7 +444,15 @@ function listBooks() {
 
       column = document.createElement("div");
       column.className = "column-list-book";
-      column.textContent = stockService.getStockQuantity(element.id).toString();
+
+      let isValidSctock: boolean = stockService.stockList.some(s => s.book.id === element.id);
+      let q = 0;
+
+      if (isValidSctock === true) {
+        q = stockService.stockList.find(s => s.book.id === element.id)!.quantity;
+      }
+
+      column.textContent = q.toString();
       row.appendChild(column);
 
       column = document.createElement("div");

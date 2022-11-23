@@ -147,7 +147,7 @@ export class SaleService {
         }
     }
 
-    public cartToSale(): any {
+    public async cartToSale(): Promise<any> {
         let saleCart: SaleCart = this.saleCart;
         let sale = new Sale();
 
@@ -157,8 +157,11 @@ export class SaleService {
         sale.operationDateTime = new Date();
         sale.total = this.calculateTotal(sale);
 
-        for (let q of sale.orderBookItems) {
-            stockService.increaseStock(q.book.id, - q.quantity)
+        for (let i of sale.orderBookItems) {
+            let stock = await stockService.getStockByBookId(i.book.id);
+            if(stock){
+
+            }
         }
 
         let success = this.createSale(sale);

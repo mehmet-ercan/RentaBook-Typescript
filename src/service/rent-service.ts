@@ -3,6 +3,7 @@ import { Book } from "../domain/book";
 import { Rent } from "../domain/rent";
 import { RentCart } from "../domain/rent-cart";
 import { OrderBookItems } from "../domain/order-book-item";
+import { Stock } from "../domain/stock";
 
 export class RentService {
     private _rentList: Array<Rent>;
@@ -200,7 +201,7 @@ export class RentService {
 
     }
 
-    public cartToRent() {
+    public async cartToRent() {
         let rentCart: RentCart = this.rentCart;
         let rent = new Rent();
 
@@ -215,7 +216,10 @@ export class RentService {
         this.calculateRefund(rent);
 
         for (let i of rent.orderBookItems) {
-            stockService.increaseStock(i.book.id, -i.quantity)
+            let stock = await stockService.getStockByBookId(i.book.id);
+            if(stock){
+
+            }
         }
 
         this.rentCart = new RentCart; // sepeti boşalt
