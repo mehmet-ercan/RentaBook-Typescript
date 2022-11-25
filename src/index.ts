@@ -2,10 +2,8 @@
 import { DataBase } from "./db/database";
 import { Book } from "./domain/book";
 import { BookPrice } from "./domain/book-price";
-import { Cancel } from "./domain/cancel";
 import { Customer } from "./domain/customer";
 import { Rent } from "./domain/rent";
-import { Sale } from "./domain/sale";
 import { OrderBookItems } from "./domain/order-book-item";
 import { Stock } from "./domain/stock";
 import { BookService } from "./service/book-service";
@@ -35,17 +33,17 @@ function initiliazeServices(db: DataBase) {
   saleService = new SaleService(db.getSalesList, db.getSaleCart);
   stockService = new StockService(db.getStocksList);
   console.log("Services intiliazed.");
-
-  customerService.addCustomer(new Customer("", "", ""));
-  customerService.addCustomer(new Customer("", "", ""));
 }
 
 async function initiliazeData() {
   bookService.bookList = await bookService.getAllBooksData();
   stockService.stockList = await stockService.getAllStocksData();
+  customerService.customerList = await customerService.getAllCustomersData();
 
   console.log(bookService.bookList);
   console.log(stockService.stockList);
+  console.log(customerService.customerList);
+  console.log("Data intiliazed.");
 
   listBooks;
 
@@ -170,7 +168,7 @@ if (addCustomerForm) {
     const phoneNumber = formData.get("customerPhoneNumber") as string;
 
     const customer = new Customer(name, surname, phoneNumber);
-    let success = await customerService.addCustomerMock(customer);
+    let success = await customerService.createCustomer(customer);
 
     if (success) {
       alert("Müşteri Ekleme İşlemi Başarı İle Tamamlanmıştır. ");
@@ -192,18 +190,17 @@ if (saleBookForm) {
 
     e.preventDefault();
     const formData = new FormData(saleBookForm);
-
     const isbn = formData.get("isbnForSale") as string;
-    const book = bookService.getBook(isbn);
+    const book = await bookService.getBook(isbn);
     const customerId = parseInt(formData.get("customerIdForSale") as string);
-    //isValidCustomer rest servisten döenen veriye göre şekillenecek
-    const isValidCustomer: boolean = true; //customerService.isValidCustomer(customerId);
-    const quantity = parseInt(formData.get("quantityForSale") as string);
 
-    let stock = await stockService.getStockByBookId(book.id)!;
+    const isValidCustomer = await customerService.getCustomer(customerId);
+
+    const quantity = parseInt(formData.get("quantityForSale") as string);
 
     try {
       if (book) {
+        let stock = await stockService.getStockByBookId(book.id)!;
         if (stock) {
           if (stock.quantity >= quantity) {
             if (isValidCustomer) {
@@ -221,6 +218,7 @@ if (saleBookForm) {
       } else {
         alert(isbn + " numaralı kitap yoktur.");
       }
+
 
       saleBookForm.reset();
       return false;
@@ -307,21 +305,25 @@ if (cancelRentForm) {
  */
 const rentBookForm = <HTMLFormElement>(document.getElementById("rent-book-form"));
 if (rentBookForm) {
-  rentBookForm.onsubmit = async () => {
+  rentBookForm.onsubmit = async (e) => {
+    e.preventDefault();
 
     const formData = new FormData(rentBookForm);
 
     const isbn = formData.get("isbnForRent") as string;
-    const book = bookService.getBook(isbn);
+    const book = await bookService.getBook(isbn);
+
     const customerId = parseInt(formData.get("customerIdForRent") as string);
     //isValidCustomer rest servisten döenen veriye göre şekillenecek
-    const isValidCustomer: boolean = true; //customerService.isValidCustomer(customerId);
+    const isValidCustomer = await customerService.getCustomer(customerId);
+
     const quantity = parseInt(formData.get("quantityForRent") as string);
 
-    const stock = await stockService.getStockByBookId(book.id)!;
+    
 
     try {
       if (book) {
+        const stock = await stockService.getStockByBookId(book.id)!;
         if (stock) {
           if (stock.quantity >= quantity) {
             if (isValidCustomer) {
@@ -372,7 +374,7 @@ if (refundBookForm) {
     // Kiralama işleminden geri ödeme işlemi çalışabilmesi için önce kiralama verisi ekledim, 
     // Sonra geri ödeme işlemi çalışıyor
     let sbi = new Array<OrderBookItems>;
-    sbi.push(new OrderBookItems(bookService.getBook("123-45"), 3))
+    sbi.push(new OrderBookItems(await bookService.getBook("123-45"), 3))
 
     let rDate = new Date;
     rDate.setDate(rDate.getDate() + 23);

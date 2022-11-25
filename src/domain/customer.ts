@@ -1,61 +1,80 @@
 export class Customer {
-  private _name: string;
-  private _surName: string;
-  private _phoneNumber: string;
+     private _id: number;
+     private _name: string;
+     private _surName: string;
+     private _phoneNumber: string;
 
-  constructor(name: string, surName: string, phoneNumber: string) {
-    this._name = name;
-    this._surName = surName;
-    this._phoneNumber = phoneNumber;
-  }
+     constructor(name: string, surName: string, phoneNumber: string) {
+          this._name = name;
+          this._surName = surName;
+          this._phoneNumber = phoneNumber;
+     }
+
 
     /**
-     * Getter name
-     * @return {string}
+     * Getter id
+     * @return {number}
      */
-	public get name(): string {
-		return this._name;
+	public get id(): number {
+		return this._id;
 	}
 
     /**
-     * Getter surName
-     * @return {string}
+     * Setter id
+     * @param {number} value
      */
-	public get surName(): string {
-		return this._surName;
+	public set id(value: number) {
+		this._id = value;
 	}
+     
 
-    /**
-     * Getter phoneNumber
-     * @return {string}
-     */
-	public get phoneNumber(): string {
-		return this._phoneNumber;
-	}
+     /**
+      * Getter name
+      * @return {string}
+      */
+     public get name(): string {
+          return this._name;
+     }
 
-    /**
-     * Setter name
-     * @param {string} value
-     */
-	public set name(value: string) {
-		this._name = value;
-	}
+     /**
+      * Getter surName
+      * @return {string}
+      */
+     public get surName(): string {
+          return this._surName;
+     }
 
-    /**
-     * Setter surName
-     * @param {string} value
-     */
-	public set surName(value: string) {
-		this._surName = value;
-	}
+     /**
+      * Getter phoneNumber
+      * @return {string}
+      */
+     public get phoneNumber(): string {
+          return this._phoneNumber;
+     }
 
-    /**
-     * Setter phoneNumber
-     * @param {string} value
-     */
-	public set phoneNumber(value: string) {
-		this._phoneNumber = value;
-	}
+     /**
+      * Setter name
+      * @param {string} value
+      */
+     public set name(value: string) {
+          this._name = value;
+     }
+
+     /**
+      * Setter surName
+      * @param {string} value
+      */
+     public set surName(value: string) {
+          this._surName = value;
+     }
+
+     /**
+      * Setter phoneNumber
+      * @param {string} value
+      */
+     public set phoneNumber(value: string) {
+          this._phoneNumber = value;
+     }
 
 
 }

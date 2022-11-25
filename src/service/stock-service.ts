@@ -32,7 +32,7 @@ export class StockService {
      */
     public async getStockByBookId(bookId: number): Promise<Stock> {
         try {
-            const response = await fetch(this.stockApi + "/q/" + bookId, {
+            const response = await fetch(this.stockApi + "/q?bookId=" + bookId, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -104,36 +104,5 @@ export class StockService {
         const getResult = <Array<Stock>>JSON.parse(JSON.stringify(result, null, 4));
         return getResult;
     }
-
-    /**
-     * Stok eklenirken eğer stok nesnesi daha önceden var ise, stok artırımını put ile yapacağız
-     * @param s index.ts dosyasından gelen stok nesnesi
-     */
-    async increaseStockMock(s: Stock) {
-        try {
-
-            const response = await fetch(this.stockApi + "/" + s.id, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    quantity: s.quantity,
-                    shelfNumber: s.shelfNumber,
-                    book: s.book
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
-            }
-
-            const result = (await response.json());
-            console.log(result);
-            console.log(response.status);
-        } catch (Exception) {
-            console.log('Hata Oluştu.');
-        }
-    }
+    
 }

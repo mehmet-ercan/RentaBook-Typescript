@@ -24,35 +24,23 @@ export class CustomerService {
         this._customerList = value;
     }
 
-    public addCustomer(newCustomer: Customer) {
-        this.customerList.push(newCustomer);
+    async getAllCustomersData(): Promise<Array<Customer>> {
+        const response = await fetch(this.customerApi, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+        }
+        const result = (await response.json());
+        const getResult = <Array<Customer>>result;
+        return getResult;
     }
 
-    /*
-        public getCustomerInfo(id: number): Customer | undefined {
-    
-            let customer = this.customerList.find(customer => customer.id === id);
-    
-            if (customer) {
-                return customer;
-            } else {
-                return undefined;
-            }
-        }
-    
-        public isValidCustomer(customerId: number): boolean {
-    
-            let isValid = this.customerList.some(customer => customer.id === customerId);
-    
-            if (isValid) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    */
-
-    async addCustomerMock(newCustomer: Customer) {
+    async createCustomer(newCustomer: Customer) {
         try {
             const response = await fetch(this.customerApi, {
                 method: 'POST',
@@ -77,6 +65,34 @@ export class CustomerService {
             }
         } catch (Exception) {
             console.log('Hata Oluştu.');
+        }
+    }
+
+    async getCustomer(customerId: number): Promise<Customer> {
+        try {
+            const response = await fetch(this.customerApi + "/" + customerId, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                alert(`Error! status: ${response.body}`);
+                throw new Error(`Error! status: ${response.status}`);
+            }
+
+            const result = (await response.json());
+            const getResult = <Customer>result;
+            return getResult;
+
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log('error message: ', error.message);
+            } else {
+                console.log('unexpected error: ', error);
+            }
+            return null as any;
         }
     }
 }
