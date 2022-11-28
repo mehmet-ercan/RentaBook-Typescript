@@ -28,4 +28,4 @@ In the public folder/directory
 
 open index.html (if you are using visual studio code as your text editor use liveserver extension)
 
-[check out the github repo](https://github.com/Xavier577/vanilla-typescript-project-boilerplate)
+[check out the base github repo](https://github.com/Xavier577/vanilla-typescript-project-boilerplate)
