@@ -140,7 +140,14 @@ export class RentService {
             }
         }
 
-        this.rentCart.orderBookItems.push(new OrderBookItems(book, quantity))
+        let orderBookItems: OrderBookItems = new OrderBookItems(book, quantity);
+        let index = this.rentCart.orderBookItems.findIndex(x => x.book.isbn === book.isbn);
+
+        if (index === -1) {
+            this.rentCart.orderBookItems.push(orderBookItems)
+        } else {
+            this.rentCart.orderBookItems[index] = orderBookItems;
+        }
         this.updateRentCart();
     }
 
@@ -217,7 +224,7 @@ export class RentService {
 
         for (let i of rent.orderBookItems) {
             let stock = await stockService.getStockByBookId(i.book.id);
-            if(stock){
+            if (stock) {
 
             }
         }

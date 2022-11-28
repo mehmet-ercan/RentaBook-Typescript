@@ -88,8 +88,16 @@ export class SaleService {
                 return false;
             }
         }
+
         let orderBookItems: OrderBookItems = new OrderBookItems(book, quantity);
-        this.saleCart.orderBookItems.push(orderBookItems);
+        let index = this.saleCart.orderBookItems.findIndex(x => x.book.isbn === book.isbn);
+
+        if (index === -1) {
+            this.saleCart.orderBookItems.push(orderBookItems);
+        } else {
+            this.saleCart.orderBookItems[index] = orderBookItems;
+        }
+
         this.updateSaleCart();
     }
 
@@ -159,7 +167,7 @@ export class SaleService {
 
         for (let i of sale.orderBookItems) {
             let stock = await stockService.getStockByBookId(i.book.id);
-            if(stock){
+            if (stock) {
 
             }
         }
