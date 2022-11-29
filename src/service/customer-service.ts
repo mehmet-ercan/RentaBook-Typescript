@@ -24,7 +24,7 @@ export class CustomerService {
         this._customerList = value;
     }
 
-    async getAllCustomersData(): Promise<Array<Customer>> {
+    public async getAllCustomersData(): Promise<Array<Customer>> {
         const response = await fetch(this.customerApi, {
             method: 'GET',
             headers: {
@@ -40,7 +40,7 @@ export class CustomerService {
         return getResult;
     }
 
-    async createCustomer(newCustomer: Customer) {
+    public async createCustomer(newCustomer: Customer) {
         try {
             const response = await fetch(this.customerApi, {
                 method: 'POST',
@@ -68,7 +68,7 @@ export class CustomerService {
         }
     }
 
-    async getCustomer(customerId: number): Promise<Customer> {
+    public async getCustomer(customerId: number): Promise<Customer> {
         try {
             const response = await fetch(this.customerApi + "/" + customerId, {
                 method: 'GET',

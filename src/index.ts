@@ -40,9 +40,9 @@ async function initiliazeData() {
   stockService.stockList = await stockService.getAllStocksData();
   customerService.customerList = await customerService.getAllCustomersData();
 
-  console.log(bookService.bookList);
-  console.log(stockService.stockList);
-  console.log(customerService.customerList);
+  console.table(bookService.bookList);
+  console.table(stockService.stockList);
+  console.table(customerService.customerList);
   console.log("Data intiliazed.");
 
   listBooks;

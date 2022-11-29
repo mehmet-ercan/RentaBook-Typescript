@@ -50,7 +50,7 @@ export class CancelService {
         return refund;
     }
 
-    async cancelSaleMock(operationNumber: string) {
+    public async cancelSaleMock(operationNumber: string) {
         try {
             const response = await fetch(this.cancelSaleApi + "/" + operationNumber, {
                 method: 'DELETE',
@@ -95,7 +95,7 @@ export class CancelService {
         return refund;
     }
 
-    async cancelRentMock(operationNumber: string): Promise<boolean> {
+    public async cancelRentMock(operationNumber: string): Promise<boolean> {
 
         const response = await fetch(this.cancelRentApi + "/" + operationNumber, {
             method: 'DELETE',

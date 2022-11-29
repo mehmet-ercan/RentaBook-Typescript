@@ -234,7 +234,7 @@ export class RentService {
         this.addRentMock(rent);
     }
 
-    async addRentMock(r: Rent) {
+    public async addRentMock(r: Rent) {
         try {
             const response = await fetch(this.rentApi, {
                 method: 'POST',
@@ -268,7 +268,7 @@ export class RentService {
         }
     }
 
-    async refundRentMock(r: Rent) {
+    public async refundRentMock(r: Rent) {
         //PATCH Belirli bir kaynaktaki verilerin bir kısmının değiştirilmesi için kullanılan metodtur.
         try {
             const response = await fetch(this.rentApi + "/" + r.operationNumber, {

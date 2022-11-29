@@ -51,7 +51,7 @@ export class SaleService {
 
     }
 
-    calculateTotal(sale: Sale): number {
+    public calculateTotal(sale: Sale): number {
         let subTotal = 0.0;
 
         for (let entry of sale.orderBookItems) {
@@ -170,7 +170,7 @@ export class SaleService {
         return success;
     }
 
-    async createSale(s: Sale) {
+    public async createSale(s: Sale) {
         try {
             const response = await fetch(this.saleApi, {
                 method: 'POST',
@@ -203,7 +203,7 @@ export class SaleService {
         }
     }
 
-    async isExistSale(operationNumber: string): Promise<boolean> {
+    public async isExistSale(operationNumber: string): Promise<boolean> {
         const response = await fetch(this.saleApi + "/" + operationNumber, {
             method: 'GET',
             headers: {

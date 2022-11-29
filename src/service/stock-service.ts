@@ -62,7 +62,7 @@ export class StockService {
      * İşte bu oluşturma/create işlemi burada yapılıyor.
      * @param s index.ts dosyasından gelen stok nesnesi
      */
-    async createStock(s: Stock): Promise<Boolean | undefined> {
+     public async createStock(s: Stock): Promise<Boolean | undefined> {
         try {
             const response = await fetch(this.stockApi, {
                 method: 'POST',
@@ -89,7 +89,7 @@ export class StockService {
         }
     }
 
-    async getAllStocksData(): Promise<Array<Stock>> {
+    public async getAllStocksData(): Promise<Array<Stock>> {
         const response = await fetch(this.stockApi, {
             method: 'GET',
             headers: {

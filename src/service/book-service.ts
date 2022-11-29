@@ -52,7 +52,7 @@ export class BookService {
      * @param isbn Bulunacak olan kitabın isbn numarası
      * @returns isbn numarasına göre ilgili kitabı Book nesnesi olarak geri döndürür
      */
-    public async getBook(isbn: string): Promise<Book> {
+    async getBook(isbn: string): Promise<Book> {
         //Buradan undefineded / null bir değer de dönebileceği için hata veriyor
         //ama biz sondaki ! operatörü ile null değer dönmeyecek diye garanti veriyoruz
         const response = await fetch(this.bookApi + "/q?isbn=" + isbn, {
@@ -65,7 +65,7 @@ export class BookService {
         if (!response.ok) {
             throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
         }
-        
+
         const result = (await response.json());
         const getResult = <Book>result;
         return getResult;
@@ -84,8 +84,8 @@ export class BookService {
         if (!response.ok) {
             throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
         }
-        const result = (await response.json());
-        const getResult = <Array<Book>>JSON.parse(JSON.stringify(result, null, 4));
+        const result = await response.json();
+        const getResult = <Array<Book>>result;
         return getResult;
     }
 
