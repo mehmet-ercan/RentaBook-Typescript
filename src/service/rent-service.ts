@@ -5,11 +5,14 @@ import { RentCart } from "../domain/rent-cart";
 import { OrderBookItems } from "../domain/order-book-item";
 import { Stock } from "../domain/stock";
 
+const REFUND_API = 'http://localhost:3002/api/v1/refunds/rents';
+const RENT_API = 'http://localhost:3002/api/v1/rents';
+
 export class RentService {
     private _rentList: Array<Rent>;
 
     private _rentCart: RentCart;
-    public rentApi = 'http://localhost:3002/api/v1/rents';
+
     refundPercent: number;
 
 
@@ -205,7 +208,7 @@ export class RentService {
 
     public async createRent(r: Rent) {
         try {
-            const response = await fetch(this.rentApi, {
+            const response = await fetch(RENT_API, {
                 method: 'POST',
                 body: JSON.stringify({
                     orderBookItems: Array.from(r.orderBookItems),
@@ -219,7 +222,7 @@ export class RentService {
             });
 
             if (response.ok) {
-                const result = <Rent> (await response.json());
+                const result = <Rent>(await response.json());
                 console.log("Rest apidan dönen cevap:\n");
                 console.log(result);
                 alert("Kitap kiralama işlemi başarıyla gerçekleşmiştir.");
@@ -233,15 +236,11 @@ export class RentService {
         }
     }
 
-    public async refundRent(r: Rent) {
+    public async refundRent(operationNumber: string): Promise<Rent> {
         //PATCH Belirli bir kaynaktaki verilerin bir kısmının değiştirilmesi için kullanılan metodtur.
         try {
-            const response = await fetch(this.rentApi + "/" + r.operationNumber, {
+            const response = await fetch(REFUND_API + "/" + operationNumber, {
                 method: 'PATCH',
-                body: JSON.stringify({
-                    refundDate: r.refundDate,
-                    refund: r.refund
-                }),
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
@@ -249,14 +248,36 @@ export class RentService {
             });
 
             if (response.ok) {
-                const result = (await response.json());
+                const result = <Rent>(await response.json());
                 console.log(result);
-                return r.refund;
+                return result;
             } else {
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
             }
         } catch (Exception) {
             console.log('Hata Oluştu.');
+            return null as any;
+        }
+    }
+
+    public async isExistRent(operationNumber: string): Promise<boolean> {
+        const response = await fetch(RENT_API + "/" + operationNumber, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        });
+
+        console.log(response);
+
+        if (response.ok) {
+            const result = (await response.json());
+            console.log("Rest apidan dönen cevap:\n");
+            console.log(result);
+            return true;
+        } else {
+            return false;
         }
     }
 

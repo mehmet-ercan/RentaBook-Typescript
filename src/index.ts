@@ -319,7 +319,7 @@ if (rentBookForm) {
 
     const quantity = parseInt(formData.get("quantityForRent") as string);
 
-    
+
 
     try {
       if (book) {
@@ -371,34 +371,21 @@ const refundBookForm = <HTMLFormElement>(document.getElementById("refund-book-fo
 if (refundBookForm) {
   refundBookForm.onsubmit = async (e) => {
 
-    // Kiralama işleminden geri ödeme işlemi çalışabilmesi için önce kiralama verisi ekledim, 
-    // Sonra geri ödeme işlemi çalışıyor
-    let sbi = new Array<OrderBookItems>;
-    sbi.push(new OrderBookItems(await bookService.getBook("123-45"), 3))
-
-    let rDate = new Date;
-    rDate.setDate(rDate.getDate() + 23);
-
-    let a = new Rent(sbi, new Date, 1, "R021122163045", 123, rDate, 0);
-    a.refund = rentService.calculateRefundAmount(a);
-
-    rentService.rentList.push(a);
-    //Veri Girişi son alanı
-
     e.preventDefault();
+
     const formData = new FormData(refundBookForm);
     const rentNumber = formData.get("rentNumberforRefund") as string;
 
-    let rent = rentService.getRent(rentNumber);
-    if (rent) {
+    let isExistRent = await rentService.isExistRent(rentNumber);
+    if (isExistRent === true) {
 
-      let refund = await rentService.refundRent(rent);
+      let rent = await rentService.refundRent(rentNumber);
 
-      if (refund) {
+      if (rent) {
         alert(rent.operationNumber + " numaralı kiralama geri alınmıştır.");
-        alert("Geri ödeme miktarı:" + refund + " ₺ .")
+        alert("Geri ödeme miktarı:" + rent.refund + " ₺ .")
       } else {
-        alert(rent.operationNumber + " numaralı kiralama iptal edilirken hata meydana geldi.");
+        alert(rentNumber + " numaralı kiralama iptal edilirken hata meydana geldi.");
       }
     } else {
       alert(rentNumber + " numaralı kiralama bulunamamıştır. Tekrar deneyiniz.");
