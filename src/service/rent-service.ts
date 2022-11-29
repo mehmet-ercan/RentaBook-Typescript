@@ -51,10 +51,6 @@ export class RentService {
         this._rentCart = value;
     }
 
-    public addRent(rent: Rent): void {
-        this.rentList.push(rent);
-    }
-
     /**
      * Kitapların hepsi sepete eklendikten sonra toplma ücreti hesaplauan fonksiyon
      * @param rent Kitapların listesinin bulunduğu nesne
@@ -69,17 +65,6 @@ export class RentService {
         }
 
         return subTotal;
-    }
-
-    // R051022145509 => domain.Rent 05.10.2022 14:55.09
-    generateRentNumber(customerId: number): string {
-        let today = new Date();
-        let receiptNumber: string = "R" + today.getDay().toString() +
-            today.getMonth().toString() + today.getFullYear().toString() +
-            today.getHours().toString() + today.getMinutes().toString() +
-            today.getSeconds().toString() + customerId.toString();
-
-        return receiptNumber;
     }
 
     /**
@@ -203,9 +188,6 @@ export class RentService {
                 subTotalSpan.textContent = subTotal.toString() + " TL";
             }
         }
-
-
-
     }
 
     public async cartToRent() {
@@ -214,38 +196,21 @@ export class RentService {
 
         rent.orderBookItems = rentCart.orderBookItems;
         rent.customerId = rentCart.customerId;
-        rent.operationNumber = this.generateRentNumber(rentCart.customerId);
-        rent.operationDateTime = new Date();
         rent.total = this.calculateTotal(rent);
-        let rDate = new Date();
-        rDate.setDate(rDate.getDate() + 14);
-        rent.refundDate = rDate;
-        this.calculateRefund(rent);
-
-        for (let i of rent.orderBookItems) {
-            let stock = await stockService.getStockByBookId(i.book.id);
-            if (stock) {
-
-            }
-        }
 
         this.rentCart = new RentCart; // sepeti boşalt
         this.updateRentCart();
-        this.addRentMock(rent);
+        this.createRent(rent);
     }
 
-    public async addRentMock(r: Rent) {
+    public async createRent(r: Rent) {
         try {
             const response = await fetch(this.rentApi, {
                 method: 'POST',
                 body: JSON.stringify({
                     orderBookItems: Array.from(r.orderBookItems),
                     customerId: r.customerId,
-                    operationDateTime: r.operationDateTime,
-                    operationNumber: r.operationNumber,
                     total: r.total,
-                    refundDate: r.refundDate,
-                    refund: r.refund
                 }),
                 headers: {
                     'Content-Type': 'application/json',
@@ -254,11 +219,11 @@ export class RentService {
             });
 
             if (response.ok) {
-                const result = (await response.json());
+                const result = <Rent> (await response.json());
                 console.log("Rest apidan dönen cevap:\n");
                 console.log(result);
                 alert("Kitap kiralama işlemi başarıyla gerçekleşmiştir.");
-                alert("Fişinizi kaybetneyiniz. Fiş numaranız: " + r.operationNumber);
+                alert("Fişinizi kaybetneyiniz. Fiş numaranız: " + result.operationNumber);
             } else {
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
             }
@@ -268,7 +233,7 @@ export class RentService {
         }
     }
 
-    public async refundRentMock(r: Rent) {
+    public async refundRent(r: Rent) {
         //PATCH Belirli bir kaynaktaki verilerin bir kısmının değiştirilmesi için kullanılan metodtur.
         try {
             const response = await fetch(this.rentApi + "/" + r.operationNumber, {

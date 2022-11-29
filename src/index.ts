@@ -300,8 +300,8 @@ if (cancelRentForm) {
   }
 }
 
-/**Burada mock servisi yok çünkü burada kitap kiralaması yapılırken, kitapları sepete ekliyoruz.
- * Sepete ekledikten sonra btnRent idli butonun click eventi, mock servisi çağırıyor
+/**Burada api servisi yok çünkü burada kitap kiralaması yapılırken, kitapları sepete ekliyoruz.
+ * Sepete ekledikten sonra btnRent idli butonun click eventi, api post servisi çağırıyor
  */
 const rentBookForm = <HTMLFormElement>(document.getElementById("rent-book-form"));
 if (rentBookForm) {
@@ -352,10 +352,10 @@ if (rentBookForm) {
 }
 
 /**
- * Kitap satışı için işlem yapılırken kitaplar sepete ekleniyor.
- * Ekleme işlemi bittikten sonra satın alm iiçin bu butona tıklandığında servise gidip sepetteki kitapların satışı gerçekleşiyor
- * Burada diğer butonlarda olduğu gibi direk mock servisine bağlanmak yerine servise gitmek durumundayız. 
- * Çünkü serviste Sale nesnesini oluşturup mock servisine parametre olark geçiyoruz.
+ * Kitap satışı için işlem yapılırken kitaplar sepete eklendi.
+ * Ekleme işlemi bittikten sonra satın alm için bu butona tıklandığında servise gidip sepetteki kitapların satışı gerçekleşiyor
+ * Burada diğer butonlarda olduğu gibi direk api servisine bağlanmak yerine servise gitmek durumundayız. 
+ * Çünkü serviste Sale nesnesini oluşturup api servisine parametre olarak geçeceğiz.
  */
 const btnRent = <HTMLButtonElement>(document.getElementById("btnRent"));
 btnRent.addEventListener("click", () => {
@@ -392,7 +392,7 @@ if (refundBookForm) {
     let rent = rentService.getRent(rentNumber);
     if (rent) {
 
-      let refund = await rentService.refundRentMock(rent);
+      let refund = await rentService.refundRent(rent);
 
       if (refund) {
         alert(rent.operationNumber + " numaralı kiralama geri alınmıştır.");

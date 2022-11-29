@@ -46,11 +46,6 @@ export class SaleService {
         this._saleCart = value;
     }
 
-    public addSale(sale: Sale): void {
-        this.saleList.push(sale);
-
-    }
-
     public calculateTotal(sale: Sale): number {
         let subTotal = 0.0;
 
@@ -59,16 +54,6 @@ export class SaleService {
         }
 
         return subTotal;
-    }
-
-    public getSale(saleNumber: string): Sale {
-        let sale = this.saleList.find(s => s.operationNumber === saleNumber);
-        return sale!;
-    }
-
-    public removeSale(sale: Sale) {
-        let index = this.saleList.indexOf(sale);
-        this.saleList.splice(index, 1);
     }
 
     public addBookToCart(book: Book, quantity: number, customerId: number) {
@@ -188,11 +173,11 @@ export class SaleService {
             console.log(response);
 
             if (response.ok) {
-                const result = (await response.json());
+                const result =<Sale> (await response.json());
                 console.log("Rest apidan dönen cevap:\n");
                 console.log(result);
                 alert("Kitap satış işlemi başarıyla gerçekleşmiştir.");
-                alert("Fişinizi kaybetmeyiniz. Fiş Numarası: " + s.operationNumber);
+                alert("Fişinizi kaybetmeyiniz. Fiş Numarası: " + result.operationNumber);
                 return true;
             } else {
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
