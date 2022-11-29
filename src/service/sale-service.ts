@@ -61,13 +61,6 @@ export class SaleService {
         return subTotal;
     }
 
-    generateSaleNumber(customerId: number): string {
-        let today = new Date();
-        let receiptNumber: string = "S" + today.getDay().toString() + today.getMonth().toString() + today.getFullYear().toString() + today.getHours().toString() + today.getMinutes().toString() + today.getSeconds().toString() + customerId.toString();
-
-        return receiptNumber;
-    }
-
     public getSale(saleNumber: string): Sale {
         let sale = this.saleList.find(s => s.operationNumber === saleNumber);
         return sale!;
@@ -161,7 +154,6 @@ export class SaleService {
 
         sale.orderBookItems = saleCart.orderBookItems;
         sale.customerId = saleCart.customerId;
-        sale.operationNumber = this.generateSaleNumber(saleCart.customerId);
         sale.operationDateTime = new Date();
         sale.total = this.calculateTotal(sale);
 
@@ -185,8 +177,6 @@ export class SaleService {
                 body: JSON.stringify({
                     orderBookItems: Array.from(s.orderBookItems),
                     customerId: s.customerId,
-                    operationDateTime: s.operationDateTime,
-                    operationNumber: s.operationNumber,
                     total: s.total
                 }),
                 headers: {
