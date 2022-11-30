@@ -190,13 +190,13 @@ if (saleBookForm) {
 
     e.preventDefault();
     const formData = new FormData(saleBookForm);
+    
     const isbn = formData.get("isbnForSale") as string;
-    const book = await bookService.getBook(isbn);
     const customerId = parseInt(formData.get("customerIdForSale") as string);
-
-    const isValidCustomer = await customerService.getCustomer(customerId);
-
     const quantity = parseInt(formData.get("quantityForSale") as string);
+
+    const book = await bookService.getBook(isbn);
+    const isValidCustomer = await customerService.getCustomer(customerId);
 
     try {
       if (book) {

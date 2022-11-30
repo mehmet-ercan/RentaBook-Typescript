@@ -78,8 +78,7 @@ export class CustomerService {
             });
 
             if (!response.ok) {
-                alert(`Error! status: ${response.body}`);
-                throw new Error(`Error! status: ${response.status}`);
+                return null as any;
             }
 
             const result = (await response.json());

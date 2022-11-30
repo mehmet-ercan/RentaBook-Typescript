@@ -63,6 +63,7 @@ export class BookService {
         });
 
         if (!response.ok) {
+            return null as any;
             throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
         }
 
