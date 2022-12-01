@@ -25,29 +25,22 @@ export class CancelService {
         this._cancelledList = value;
     }
 
-    public calculateDiffHours(d1: Date, d2: Date): number {
+    public async cancelRentMock(operationNumber: string): Promise<boolean> {
 
-        let diffMilis: number = (d1.getTime() - d2.getTime());// mili seconds
-        let diffHour = Math.floor(diffMilis / 1000 / 60 / 60); // /1000 > second / 60 > min / 60 > hour
-        return diffHour;
-    }
+        const response = await fetch(this.cancelRentApi + "/" + operationNumber, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        });
 
-    public cancelSale(cancel: Cancel): void {
-        let refund: number = this.calculateCancelSaleRefund(cancel);
-        cancel.refund = refund;
-        this.cancelledList.push(cancel);
-    }
-
-    public calculateCancelSaleRefund(cancelSale: Cancel): number {
-        let diff = this.calculateDiffHours(cancelSale.canceledDateTime, cancelSale.cancelType.operationDateTime)
-        let refund: number;
-
-        if (diff > 24) {
-            refund = cancelSale.cancelType.total * 0.75;
+        if (response.ok) {
+            console.log(response);
+            return true;
         } else {
-            refund = cancelSale.cancelType.total;
+            return false;
         }
-        return refund;
     }
 
     public async cancelSaleMock(operationNumber: string) {
@@ -75,42 +68,6 @@ export class CancelService {
         }
 
 
-    }
-
-    public cancelRent(cancel: Cancel) {
-        let refund: number = this.calculateCancelRentRefund(cancel);
-        cancel.refund = refund;
-        this.cancelledList.push(cancel);
-    }
-
-    public calculateCancelRentRefund(cancelRent: Cancel): number {
-        let diff = this.calculateDiffHours(cancelRent.canceledDateTime, cancelRent.cancelType.operationDateTime)
-        let refund: number;
-
-        if (diff > 24) {
-            refund = cancelRent.cancelType.total * 0.75;
-        } else {
-            refund = cancelRent.cancelType.total;
-        }
-        return refund;
-    }
-
-    public async cancelRentMock(operationNumber: string): Promise<boolean> {
-
-        const response = await fetch(this.cancelRentApi + "/" + operationNumber, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-        });
-
-        if (response.ok) {
-            console.log(response);
-            return true;
-        } else {
-            return false;
-        }
     }
 
 }

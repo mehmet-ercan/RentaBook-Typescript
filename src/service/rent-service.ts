@@ -15,7 +15,6 @@ export class RentService {
 
     refundPercent: number;
 
-
     constructor(rentList: Array<Rent>, rentCart: RentCart) {
         this._rentList = rentList;
         this.refundPercent = 0.75;
@@ -68,49 +67,6 @@ export class RentService {
         }
 
         return subTotal;
-    }
-
-    /**
-     * 
-     * @param d1 Kitaplaın kiralık olarak alındığı tarih
-     * @param d2 Kitapların geri getirildiği tarih
-     * @returns İki tarih arasındaki fark (saat olarak)
-     */
-    public calculateDiffHours(d1: Date, d2: Date): number {
-
-        let diffMilis: number = (d1.getTime() - d2.getTime());// mili seconds
-        let diffHour = Math.floor(diffMilis / 1000 / 60 / 60); // /1000 > second / 60 > min / 60 > hour
-        return diffHour;
-    }
-
-    /**
-     * Kitap ilk kiralandığı anda, zamanında getirildiği gibi düşünülerek verilecek olan varsayılan geri ödeme miktarı
-     * @param rent Hesaplanacak olan geri ödeme miktarının içinde bulunduğu nesne
-     */
-    public calculateRefund(rent: Rent): void {
-        rent.refund = rent.total * this.refundPercent;
-    }
-
-    /**
-     * Kitap kiralandı, okundu ve geri getirildiği zaman ne kadar geri ödeme verileceğini hesaplar
-     * @param rent Hesaplanacak olan geri ödeme miktarının içinde bulunduğu nesne
-     * @returns Geri ödeme miktarı
-     */
-    public calculateRefundAmount(rent: Rent): number {
-        let diff = this.calculateDiffHours(rent.refundDate, rent.operationDateTime) / 24;
-        let refund: number;
-
-        if (diff <= 14) {
-            refund = rent.total * 0.75;
-        } else if (diff <= 24) {
-            let fine = (0.75 - ((diff - 14) * 0.05));
-            refund = rent.total * fine;
-        }
-        else {
-            refund = rent.total * 0.25;
-        }
-
-        return refund;
     }
 
     public getRent(rentNumber: string): Rent {
@@ -280,5 +236,4 @@ export class RentService {
             return false;
         }
     }
-
 }
