@@ -5,10 +5,11 @@ import { stockService } from "..";
 import { Book } from "../domain/book";
 import { BookPrice } from "../domain/book-price";
 
+const BOOK_API: string = 'http://localhost:3002/api/v1/books';
+
 export class BookService {
     private _bookList: Array<Book>;
     private _bookSpecification: Array<BookPrice>;
-    bookApi: string = 'http://localhost:3002/api/v1/books';
 
     constructor(bookList: Array<Book>, bookSpecification: Array<BookPrice>) {
         this._bookList = bookList;
@@ -55,7 +56,7 @@ export class BookService {
     async getBook(isbn: string): Promise<Book> {
         //Buradan undefineded / null bir değer de dönebileceği için hata veriyor
         //ama biz sondaki ! operatörü ile null değer dönmeyecek diye garanti veriyoruz
-        const response = await fetch(this.bookApi + "/q?isbn=" + isbn, {
+        const response = await fetch(BOOK_API + "/q?isbn=" + isbn, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -75,7 +76,7 @@ export class BookService {
 
     async getAllBooksData(): Promise<Array<Book>> {
 
-        const response = await fetch(this.bookApi, {
+        const response = await fetch(BOOK_API, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -92,7 +93,7 @@ export class BookService {
 
     async createBook(b: Book) {
         try {
-            const response = await fetch(this.bookApi, {
+            const response = await fetch(BOOK_API, {
                 method: 'POST',
                 body: JSON.stringify({
                     isbn: b.isbn,

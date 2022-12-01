@@ -45,8 +45,7 @@ async function initiliazeData() {
   console.table(customerService.customerList);
   console.log("Data intiliazed.");
 
-  listBooks;
-
+  updateBookList;
 }
 
 function addListenerForMenuItems() {
@@ -109,7 +108,7 @@ if (addBookForm != null) {
       if (success) {
         alert(book.isbn + " numaralı kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
         addBookForm.reset();
-        listBooks();
+        updateBookList();
       } else {
         alert(book.isbn + " numaralı kitap Ekleme İşlemi Sırasında Bir Hata oluştu.");
       }
@@ -142,7 +141,7 @@ if (addStockForm) {
       if (isOk) {
         alert(isbn + " isbn numaralı kitaptan, " + quanttiy + " kadar sisteme stok eklenmiştir.");
         await initiliazeData();
-        await listBooks();
+        await updateBookList();
       }
     }
     else {
@@ -219,7 +218,6 @@ if (saleBookForm) {
         alert(isbn + " numaralı kitap yoktur.");
       }
 
-
       saleBookForm.reset();
       return false;
 
@@ -238,7 +236,6 @@ if (saleBookForm) {
 const btnSale = <HTMLButtonElement>(document.getElementById("btnSale"));
 btnSale.addEventListener("click", () => {
   if (saleService.saleCart.orderBookItems.length === 0) {
-
     alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
   } else {
     saleService.cartToSale();
@@ -251,8 +248,7 @@ btnSale.addEventListener("click", () => {
  */
 const btnShowBooksMenuItem = <HTMLElement>(document.getElementById("showBooksMenuItem"));
 btnShowBooksMenuItem.addEventListener("click", () => {
-
-  listBooks();
+  updateBookList();
 })
 
 const cancelSaleForm = <HTMLFormElement>document.getElementById("cancel-sale-form");
@@ -268,9 +264,10 @@ if (cancelSaleForm) {
 
     if (isExistSale === true) {
 
-      let state = await cancelService.cancelSaleMock(saleNumber);
+      let state = await cancelService.cancelSale(saleNumber);
 
       if (state) {
+        updateBookList();
         alert(saleNumber + " numaralı satış iptal edilmiştir.");
       } else {
         alert(saleNumber + " numaralı satış iptal edilirken hata meydana geldi.");
@@ -290,9 +287,10 @@ if (cancelRentForm) {
     const formData = new FormData(cancelRentForm);
     const rentNumber = formData.get("rentNumberforCancel") as string;
 
-    let state = await cancelService.cancelRentMock(rentNumber);
+    let state = await cancelService.cancelRent(rentNumber);
 
     if (state) {
+      updateBookList();
       alert(rentNumber + " numaralı kiralama iptal edilmiştir.");
     } else {
       alert(rentNumber + " numaralı kiralma bulunamamıştır. Tekrar deneyiniz.");
@@ -311,15 +309,11 @@ if (rentBookForm) {
     const formData = new FormData(rentBookForm);
 
     const isbn = formData.get("isbnForRent") as string;
-    const book = await bookService.getBook(isbn);
-
     const customerId = parseInt(formData.get("customerIdForRent") as string);
-    //isValidCustomer rest servisten döenen veriye göre şekillenecek
-    const isValidCustomer = await customerService.getCustomer(customerId);
-
     const quantity = parseInt(formData.get("quantityForRent") as string);
 
-
+    const book = await bookService.getBook(isbn);
+    const isValidCustomer = await customerService.getCustomer(customerId);
 
     try {
       if (book) {
@@ -351,6 +345,8 @@ if (rentBookForm) {
   }
 }
 
+//TODO Kiralama işleminden sonra verilen mesajları index.ts dosyasından verilmesini sağla.
+//TODO RentService te kiralama işleminden sonra, verilecek mesaj geri dönüş değerine göre index.ts den yönetilecek.
 /**
  * Kitap satışı için işlem yapılırken kitaplar sepete eklendi.
  * Ekleme işlemi bittikten sonra satın alm için bu butona tıklandığında servise gidip sepetteki kitapların satışı gerçekleşiyor
@@ -363,6 +359,7 @@ btnRent.addEventListener("click", () => {
     alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
   } else {
     rentService.cartToRent();
+    updateBookList();
   }
 
 });
@@ -382,8 +379,9 @@ if (refundBookForm) {
       let rent = await rentService.refundRent(rentNumber);
 
       if (rent) {
+        updateBookList();
         alert(rent.operationNumber + " numaralı kiralama geri alınmıştır.");
-        alert("Geri ödeme miktarı:" + rent.refund + " ₺ .")
+        alert("Geri ödeme miktarı:" + rent.refund + " ₺ .");
       } else {
         alert(rentNumber + " numaralı kiralama iptal edilirken hata meydana geldi.");
       }
@@ -394,7 +392,7 @@ if (refundBookForm) {
   };
 }
 
-async function listBooks() {
+async function updateBookList() {
 
   bookService.bookList = await bookService.getAllBooksData();
   stockService.stockList = await stockService.getAllStocksData();

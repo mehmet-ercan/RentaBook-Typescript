@@ -1,9 +1,10 @@
 import { Book } from "../domain/book";
 import { Stock } from "../domain/stock";
 
+const STOCK_API: string = "http://localhost:3002/api/v1/stocks";
+
 export class StockService {
     private _stockList: Array<Stock>;
-    private stockApi: string = "http://localhost:3002/api/v1/stocks";
 
     constructor(stockList: Array<Stock>) {
         this._stockList = stockList;
@@ -32,7 +33,7 @@ export class StockService {
      */
     public async getStockByBookId(bookId: number): Promise<Stock> {
         try {
-            const response = await fetch(this.stockApi + "/q?bookId=" + bookId, {
+            const response = await fetch(STOCK_API+ "/q?bookId=" + bookId, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -64,7 +65,7 @@ export class StockService {
      */
      public async createStock(s: Stock): Promise<Boolean | undefined> {
         try {
-            const response = await fetch(this.stockApi, {
+            const response = await fetch(STOCK_API, {
                 method: 'POST',
                 body: JSON.stringify({
                     quantity: s.quantity,
@@ -90,7 +91,7 @@ export class StockService {
     }
 
     public async getAllStocksData(): Promise<Array<Stock>> {
-        const response = await fetch(this.stockApi, {
+        const response = await fetch(STOCK_API, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',

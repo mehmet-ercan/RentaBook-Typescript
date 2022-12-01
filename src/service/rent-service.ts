@@ -3,7 +3,6 @@ import { Book } from "../domain/book";
 import { Rent } from "../domain/rent";
 import { RentCart } from "../domain/rent-cart";
 import { OrderBookItems } from "../domain/order-book-item";
-import { Stock } from "../domain/stock";
 
 const REFUND_API = 'http://localhost:3002/api/v1/refunds/rents';
 const RENT_API = 'http://localhost:3002/api/v1/rents';
@@ -54,7 +53,7 @@ export class RentService {
     }
 
     /**
-     * Kitapların hepsi sepete eklendikten sonra toplma ücreti hesaplauan fonksiyon
+     * Kitapların hepsi sepete eklendikten sonra toplam ücreti hesaplauan fonksiyon.
      * @param rent Kitapların listesinin bulunduğu nesne
      * @returns Toplam ücret
      */
@@ -69,9 +68,32 @@ export class RentService {
         return subTotal;
     }
 
-    public getRent(rentNumber: string): Rent {
-        let rent = this.rentList.find(s => s.operationNumber === rentNumber);
-        return rent!;
+    public async getRent(rentNumber: string): Promise<Rent> {
+
+        try {
+            const response = await fetch(RENT_API + "/" + rentNumber, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                return null as any;
+            }
+
+            const result = (await response.json());
+            const getResult = <Rent>result;
+            return getResult;
+
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log('error message: ', error.message);
+            } else {
+                console.log('unexpected error: ', error);
+            }
+            return null as any;
+        }
     }
 
     public addBookToCart(book: Book, quantity: number, customerId: number) {
@@ -150,11 +172,9 @@ export class RentService {
     }
 
     public async cartToRent() {
-        let rentCart: RentCart = this.rentCart;
         let rent = new Rent();
-
-        rent.orderBookItems = rentCart.orderBookItems;
-        rent.customerId = rentCart.customerId;
+        rent.orderBookItems = this.rentCart.orderBookItems;
+        rent.customerId = this.rentCart.customerId;
         rent.total = this.calculateTotal(rent);
 
         this.rentCart = new RentCart; // sepeti boşalt

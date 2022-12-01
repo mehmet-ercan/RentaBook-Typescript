@@ -1,8 +1,9 @@
 import { Customer } from "../domain/customer";
 
+const CUSTOMER_API: string = "http://localhost:3002/api/v1/customers";
+
 export class CustomerService {
     private _customerList: Array<Customer>;
-    private customerApi: string = "http://localhost:3002/api/v1/customers";
 
     constructor(customerList: Array<Customer>) {
         this._customerList = customerList;
@@ -25,7 +26,7 @@ export class CustomerService {
     }
 
     public async getAllCustomersData(): Promise<Array<Customer>> {
-        const response = await fetch(this.customerApi, {
+        const response = await fetch(CUSTOMER_API, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -42,7 +43,7 @@ export class CustomerService {
 
     public async createCustomer(newCustomer: Customer) {
         try {
-            const response = await fetch(this.customerApi, {
+            const response = await fetch(CUSTOMER_API, {
                 method: 'POST',
                 body: JSON.stringify({
                     name: newCustomer.name,
@@ -70,7 +71,7 @@ export class CustomerService {
 
     public async getCustomer(customerId: number): Promise<Customer> {
         try {
-            const response = await fetch(this.customerApi + "/" + customerId, {
+            const response = await fetch(CUSTOMER_API + "/" + customerId, {
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',

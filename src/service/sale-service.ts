@@ -4,10 +4,11 @@ import { Sale } from "../domain/sale";
 import { OrderBookItems } from "../domain/order-book-item";
 import { SaleCart } from "../domain/sale-cart";
 
+const SALE_API = 'http://localhost:3002/api/v1/sales';
+
 export class SaleService {
     private _saleList: Array<Sale>;
     private _saleCart: SaleCart;
-    public saleApi = 'http://localhost:3002/api/v1/sales';
 
     constructor(saleList: Array<Sale>, saleCart: SaleCart) {
         this._saleList = saleList;
@@ -157,7 +158,7 @@ export class SaleService {
 
     public async createSale(s: Sale) {
         try {
-            const response = await fetch(this.saleApi, {
+            const response = await fetch(SALE_API, {
                 method: 'POST',
                 body: JSON.stringify({
                     orderBookItems: Array.from(s.orderBookItems),
@@ -189,7 +190,7 @@ export class SaleService {
     }
 
     public async isExistSale(operationNumber: string): Promise<boolean> {
-        const response = await fetch(this.saleApi + "/" + operationNumber, {
+        const response = await fetch(SALE_API+ "/" + operationNumber, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
