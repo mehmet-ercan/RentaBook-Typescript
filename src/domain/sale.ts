@@ -1,105 +1,102 @@
 import { Book } from "./book";
+import { OrderBookItems } from "./order-book-item";
 
 export class Sale {
-
-    private _bookAndQuantityMap? = new Map<Book, number>();
+    private _orderBookItems?: Array<OrderBookItems>;
     private _customerId?: number;
     private _operationDateTime?: Date;
     private _operationNumber?: string;
     private _total?: number;
 
 
-    constructor(bookAndQuantityMap?: Map<Book, number>, operationDateTime?: Date, customerId?: number, operationNumber?: string, total?: number) {
-        this._bookAndQuantityMap = bookAndQuantityMap;
-        this._operationDateTime = operationDateTime;
-        this._customerId = customerId;
-        this._operationNumber = operationNumber;
-        this._total = total;
-    }
+	constructor(orderBookItems?: Array<OrderBookItems>, customerId?: number, operationDateTime?: Date, operationNumber?: string, total?: number) {
+		this._orderBookItems = orderBookItems;
+		this._customerId = customerId;
+		this._operationDateTime = operationDateTime;
+		this._operationNumber = operationNumber;
+		this._total = total;
+	}
 
 
     /**
-     * Getter bookAndQuantityMap
-     * @return {Map<Book, number>()}
+     * Getter orderBookItems
+     * @return {Array<OrderBookItems>}
      */
-    public get bookAndQuantityMap(): Map<Book, number> {
-        return this._bookAndQuantityMap!;
-    }
-
-
-    /**
-     * Getter operationDateTime
-     * @return {Date}
-     */
-    public get operationDateTime(): Date {
-        return this._operationDateTime!;
-    }
+	public get orderBookItems(): Array<OrderBookItems> {
+		return this._orderBookItems!;
+	}
 
     /**
      * Getter customerId
      * @return {number}
      */
-    public get customerId(): number {
-        return this._customerId!;
-    }
+	public get customerId(): number {
+		return this._customerId!;
+	}
+
+    /**
+     * Getter operationDateTime
+     * @return {Date}
+     */
+	public get operationDateTime(): Date {
+		return this._operationDateTime!;
+	}
 
     /**
      * Getter operationNumber
      * @return {string}
      */
-    public get operationNumber(): string {
-        return this._operationNumber!;
-    }
+	public get operationNumber(): string {
+		return this._operationNumber!;
+	}
 
     /**
      * Getter total
      * @return {number}
      */
-    public get total(): number {
-        return this._total!;
-    }
-
-
+	public get total(): number {
+		return this._total!;
+	}
 
     /**
-     * Setter bookAndQuantityMap
-     * @param {Map} value
+     * Setter orderBookItems
+     * @param {Array<OrderBookItems>} value
      */
-    public set bookAndQuantityMap(value: Map<Book, number>) {
-        this._bookAndQuantityMap = value;
-    }
-
-    /**
-     * Setter operationDateTime
-     * @param {Date} value
-     */
-    public set operationDateTime(value: Date) {
-        this._operationDateTime = value;
-    }
+	public set orderBookItems(value: Array<OrderBookItems>) {
+		this._orderBookItems = value;
+	}
 
     /**
      * Setter customerId
      * @param {number} value
      */
-    public set customerId(value: number) {
-        this._customerId = value;
-    }
+	public set customerId(value: number) {
+		this._customerId = value;
+	}
+
+    /**
+     * Setter operationDateTime
+     * @param {Date} value
+     */
+	public set operationDateTime(value: Date) {
+		this._operationDateTime = value;
+	}
 
     /**
      * Setter operationNumber
      * @param {string} value
      */
-    public set operationNumber(value: string) {
-        this._operationNumber = value;
-    }
+	public set operationNumber(value: string) {
+		this._operationNumber = value;
+	}
 
     /**
      * Setter total
      * @param {number} value
      */
-    public set total(value: number) {
-        this._total = value;
-    }
-
-
+	public set total(value: number) {
+		this._total = value;
+	}
+	
+    
 }
