@@ -47,10 +47,10 @@ export class SaleService {
         this._saleCart = value;
     }
 
-    public calculateTotal(sale: Sale): number {
+    public calculateTotal(items: Array<OrderBookItems>): number {
         let subTotal = 0.0;
 
-        for (let entry of sale.orderBookItems) {
+        for (let entry of items) {
             subTotal += entry.book.bookPrice.price * entry.quantity;
         }
 
@@ -134,63 +134,36 @@ export class SaleService {
         }
     }
 
-    public async cartToSale(): Promise<any> {
-        let saleCart: SaleCart = this.saleCart;
-        let sale = new Sale();
+    public async createSale(): Promise<Sale> {
+        const response = await fetch(SALE_API, {
+            method: 'POST',
+            body: JSON.stringify({
+                orderBookItems: Array.from(this.saleCart.orderBookItems),
+                customerId: this.saleCart.customerId,
+                total: this.calculateTotal(this.saleCart.orderBookItems)
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        });
 
-        sale.orderBookItems = saleCart.orderBookItems;
-        sale.customerId = saleCart.customerId;
-        sale.operationDateTime = new Date();
-        sale.total = this.calculateTotal(sale);
-
-        for (let i of sale.orderBookItems) {
-            let stock = await stockService.getStockByBookId(i.book.id);
-            if (stock) {
-
-            }
+        if (!response.ok) {
+            throw new Error(`Kitap satış işleminde hata meydana geldi, hata kodu: ${response.status} `);
         }
 
-        let success = this.createSale(sale);
+        const result = <Sale>(await response.json());
         this.saleCart = new SaleCart(); // sepeti boşalt
         this.updateSaleCart();
-        return success;
-    }
 
-    public async createSale(s: Sale) {
-        try {
-            const response = await fetch(SALE_API, {
-                method: 'POST',
-                body: JSON.stringify({
-                    orderBookItems: Array.from(s.orderBookItems),
-                    customerId: s.customerId,
-                    total: s.total
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                },
-            });
+        console.log("Rest apidan dönen cevap:\n");
+        console.log(result);
+        return result;
 
-            console.log(response);
-
-            if (response.ok) {
-                const result =<Sale> (await response.json());
-                console.log("Rest apidan dönen cevap:\n");
-                console.log(result);
-                alert("Kitap satış işlemi başarıyla gerçekleşmiştir.");
-                alert("Fişinizi kaybetmeyiniz. Fiş Numarası: " + result.operationNumber);
-                return true;
-            } else {
-                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
-            }
-
-        } catch (Exception) {
-            console.log('Hata Oluştu.');
-        }
     }
 
     public async isExistSale(operationNumber: string): Promise<boolean> {
-        const response = await fetch(SALE_API+ "/" + operationNumber, {
+        const response = await fetch(SALE_API + "/" + operationNumber, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -200,14 +173,14 @@ export class SaleService {
 
         console.log(response);
 
-        if (response.ok) {
-            const result = (await response.json());
-            console.log("Rest apidan dönen cevap:\n");
-            console.log(result);
-            return true;
-        } else {
+        if (!response.ok) {
             return false;
         }
+
+        const result = (await response.json());
+        console.log("Rest apidan dönen cevap:\n");
+        console.log(result);
+        return true;
     }
 
 }

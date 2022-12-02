@@ -32,30 +32,20 @@ export class StockService {
      * @returns db olan stock nesnensi geri döner, db de yok ise throw ile hata fırlatırlır
      */
     public async getStockByBookId(bookId: number): Promise<Stock> {
-        try {
-            const response = await fetch(STOCK_API+ "/q?bookId=" + bookId, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json'
-                },
-            });
+        const response = await fetch(STOCK_API + "/q?bookId=" + bookId, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+        });
 
-            if (response.ok) {
-                const result = (await response.json());
-                return <Stock>result;
-            } else {
-                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log('error message: ', error.message);
-            } else {
-                console.log('unexpected error: ', error);
-            }
-
-            return null as any;
+        if (!response.ok) {
+            throw new Error(`Stok bilgisine ulaşılamadı, Hata kodu: ${response.status} `);
         }
+
+        const result = (await response.json());
+        return <Stock>result;
     }
 
     /**
@@ -63,7 +53,7 @@ export class StockService {
      * İşte bu oluşturma/create işlemi burada yapılıyor.
      * @param s index.ts dosyasından gelen stok nesnesi
      */
-     public async createStock(s: Stock): Promise<Boolean | undefined> {
+    public async createStock(s: Stock): Promise<Boolean | undefined> {
         try {
             const response = await fetch(STOCK_API, {
                 method: 'POST',
@@ -105,5 +95,5 @@ export class StockService {
         const getResult = <Array<Stock>>JSON.parse(JSON.stringify(result, null, 4));
         return getResult;
     }
-    
+
 }

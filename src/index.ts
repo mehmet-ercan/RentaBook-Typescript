@@ -4,7 +4,7 @@ import { Book } from "./domain/book";
 import { BookPrice } from "./domain/book-price";
 import { Customer } from "./domain/customer";
 import { Rent } from "./domain/rent";
-import { OrderBookItems } from "./domain/order-book-item";
+import { Sale } from "./domain/sale";
 import { Stock } from "./domain/stock";
 import { BookService } from "./service/book-service";
 import { CancelService } from "./service/cancel-service";
@@ -94,22 +94,22 @@ if (addBookForm != null) {
     const pages = formData.get("bookPages") as unknown as number;
     const price = formData.get("bookPrice") as unknown as number;
 
-    const bookPrice = new BookPrice();
+    let bookPrice = new BookPrice();
     bookPrice.price = price;
 
-    const book = new Book(isbn, title, author, publishYear, pages, bookPrice);
+    let book = new Book(isbn, title, author, publishYear, pages, bookPrice);
     let isSameIsbn: boolean = bookService.bookList.some((obj) => {
       return obj.isbn === book.isbn;
     });
 
     if (isSameIsbn === false) {
-      let success = await bookService.createBook(book);
 
-      if (success) {
+      try {
+        await bookService.createBook(book);
         alert(book.isbn + " numaralı kitap Ekleme İşlemi Başarı İle Tamamlanmıştır.");
         addBookForm.reset();
         updateBookList();
-      } else {
+      } catch {
         alert(book.isbn + " numaralı kitap Ekleme İşlemi Sırasında Bir Hata oluştu.");
       }
 
@@ -117,8 +117,6 @@ if (addBookForm != null) {
     } else {
       alert("Aynı ISBN numrasına sahip ikinci bir kitap eklenemz.");
     }
-
-
   };
 }
 
@@ -189,20 +187,21 @@ if (saleBookForm) {
 
     e.preventDefault();
     const formData = new FormData(saleBookForm);
-    
+
     const isbn = formData.get("isbnForSale") as string;
     const customerId = parseInt(formData.get("customerIdForSale") as string);
     const quantity = parseInt(formData.get("quantityForSale") as string);
 
-    const book = await bookService.getBook(isbn);
-    const isValidCustomer = await customerService.getCustomer(customerId);
-
     try {
+      let book = await bookService.getBook(isbn);
       if (book) {
+
         let stock = await stockService.getStockByBookId(book.id)!;
         if (stock) {
           if (stock.quantity >= quantity) {
-            if (isValidCustomer) {
+
+            let customer = await customerService.getCustomer(customerId);
+            if (customer) {
               saleService.addBookToCart(book, quantity, customerId);
             } else {
               alert(customerId + " numaralı müşteri kayıtlı değildir.");
@@ -215,14 +214,14 @@ if (saleBookForm) {
           alert(`Dükkanda ${isbn} numaralı kitabın stoğu mevcut değildir.`);
         }
       } else {
-        alert(isbn + " numaralı kitap yoktur.");
+        alert(isbn + " numaralı kitap dükkanda kayıtlı değildir.");
       }
 
       saleBookForm.reset();
       return false;
 
-    } catch (error) {
-      alert(error);
+    } catch (error: any) {
+      alert(error.message);
     }
   }
 }
@@ -234,11 +233,26 @@ if (saleBookForm) {
  * Çünkü serviste Sale nesnesini oluşturup mock servisine parametre olarak geçiyoruz.
  */
 const btnSale = <HTMLButtonElement>(document.getElementById("btnSale"));
-btnSale.addEventListener("click", () => {
+btnSale.addEventListener("click", async (e) => {
+  e.preventDefault();
+
   if (saleService.saleCart.orderBookItems.length === 0) {
     alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
   } else {
-    saleService.cartToSale();
+
+    try {
+      let sale: Sale = await saleService.createSale();
+
+      if (sale) {
+        updateBookList();
+        alert("Kitap satış işlemi başarıyla gerçekleşmiştir.");
+        alert("Fişinizi kaybetmeyiniz. Fiş Numarası: " + sale.operationNumber);
+      } else {
+        alert("Kitap satış işleminde hata meydana geldi")
+      }
+    } catch (error: any) {
+      alert(error.message)
+    }
   }
 
 });
@@ -312,15 +326,16 @@ if (rentBookForm) {
     const customerId = parseInt(formData.get("customerIdForRent") as string);
     const quantity = parseInt(formData.get("quantityForRent") as string);
 
-    const book = await bookService.getBook(isbn);
-    const isValidCustomer = await customerService.getCustomer(customerId);
-
     try {
+      let book = await bookService.getBook(isbn);
       if (book) {
+
         const stock = await stockService.getStockByBookId(book.id)!;
         if (stock) {
           if (stock.quantity >= quantity) {
-            if (isValidCustomer) {
+
+            let customer = await customerService.getCustomer(customerId);
+            if (customer) {
               rentService.addBookToCart(book, quantity, customerId);
             } else {
               alert(customerId + " numaralı müşteri kayıtlı değildir.");
@@ -339,14 +354,12 @@ if (rentBookForm) {
       rentBookForm.reset();
       return false;
 
-    } catch (error) {
-      alert(error);
+    } catch (error: any) {
+      alert(error.message);
     }
   }
 }
 
-//TODO Kiralama işleminden sonra verilen mesajları index.ts dosyasından verilmesini sağla.
-//TODO RentService te kiralama işleminden sonra, verilecek mesaj geri dönüş değerine göre index.ts den yönetilecek.
 /**
  * Kitap satışı için işlem yapılırken kitaplar sepete eklendi.
  * Ekleme işlemi bittikten sonra satın alm için bu butona tıklandığında servise gidip sepetteki kitapların satışı gerçekleşiyor
@@ -354,14 +367,23 @@ if (rentBookForm) {
  * Çünkü serviste Sale nesnesini oluşturup api servisine parametre olarak geçeceğiz.
  */
 const btnRent = <HTMLButtonElement>(document.getElementById("btnRent"));
-btnRent.addEventListener("click", () => {
+btnRent.addEventListener("click", async (e) => {
+  e.preventDefault();
   if (rentService.rentCart.orderBookItems.length === 0) {
     alert("Sepette ürün yok. Lütfen önce ürün ekleyiniz");
   } else {
-    rentService.cartToRent();
-    updateBookList();
-  }
 
+    try {
+      let rent: Rent = await rentService.createRent();
+      if (rent) {
+        alert("Kitap kiralama işlemi başarıyla gerçekleşmiştir.");
+        alert("Fişinizi kaybetneyiniz. Fiş numaranız: " + rent.operationNumber);
+        updateBookList();
+      }
+    } catch (error: any) {
+      alert(error.message);
+    }
+  }
 });
 
 const refundBookForm = <HTMLFormElement>(document.getElementById("refund-book-form"));

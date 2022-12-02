@@ -70,29 +70,19 @@ export class CustomerService {
     }
 
     public async getCustomer(customerId: number): Promise<Customer> {
-        try {
-            const response = await fetch(CUSTOMER_API + "/" + customerId, {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                }
-            });
-
-            if (!response.ok) {
-                return null as any;
+        const response = await fetch(CUSTOMER_API + "/" + customerId, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
             }
+        });
 
-            const result = (await response.json());
-            const getResult = <Customer>result;
-            return getResult;
-
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log('error message: ', error.message);
-            } else {
-                console.log('unexpected error: ', error);
-            }
-            return null as any;
+        if (!response.ok) {
+            throw new Error(`Aranan müşteri bulunamadı, hata kodu:, ${response.status}`);
         }
+
+        const result = (await response.json());
+        const getResult = <Customer>result;
+        return getResult;
     }
 }

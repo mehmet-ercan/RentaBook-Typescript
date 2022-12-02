@@ -53,9 +53,7 @@ export class BookService {
      * @param isbn Bulunacak olan kitabın isbn numarası
      * @returns isbn numarasına göre ilgili kitabı Book nesnesi olarak geri döndürür
      */
-    async getBook(isbn: string): Promise<Book> {
-        //Buradan undefineded / null bir değer de dönebileceği için hata veriyor
-        //ama biz sondaki ! operatörü ile null değer dönmeyecek diye garanti veriyoruz
+    public async getBook(isbn: string): Promise<Book> {
         const response = await fetch(BOOK_API + "/q?isbn=" + isbn, {
             method: 'GET',
             headers: {
@@ -65,17 +63,15 @@ export class BookService {
 
         if (!response.ok) {
             return null as any;
-            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+            //throw new Error(`Aranan kitap bulunamadı, hata kodu:, ${response.status}`);
         }
 
         const result = (await response.json());
         const getResult = <Book>result;
         return getResult;
-
     }
 
-    async getAllBooksData(): Promise<Array<Book>> {
-
+    public async getAllBooksData(): Promise<Array<Book>> {
         const response = await fetch(BOOK_API, {
             method: 'GET',
             headers: {
@@ -91,38 +87,32 @@ export class BookService {
         return getResult;
     }
 
-    async createBook(b: Book) {
-        try {
-            const response = await fetch(BOOK_API, {
-                method: 'POST',
-                body: JSON.stringify({
-                    isbn: b.isbn,
-                    name: b.name,
-                    author: b.author,
-                    pages: b.pages,
-                    publishYear: b.publishYear,
-                    bookPriceCreateDto: {
-                        price: b.bookPrice.price
-                    }
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                },
-            });
+    public async createBook(b: Book) {
+        const response = await fetch(BOOK_API, {
+            method: 'POST',
+            body: JSON.stringify({
+                isbn: b.isbn,
+                name: b.name,
+                author: b.author,
+                pages: b.pages,
+                publishYear: b.publishYear,
+                bookPriceCreateDto: {
+                    price: b.bookPrice.price
+                }
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        });
 
-            if (response.ok) {
-                const result = (await response.json());
-                console.log("Rest servisinden dönen cevap =>");
-                console.log(result);
-
-                this.bookList = await this.getAllBooksData();
-                return true;
-            } else {
-                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
-            }
-        } catch (Exception) {
-            console.log('Hata Oluştu.');
+        if (!response.ok) {
+            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
         }
+
+        const result = await response.json();
+        console.log("Rest servisinden dönen cevap =>");
+        console.log(result);
+        this.bookList = await this.getAllBooksData();
     }
 }

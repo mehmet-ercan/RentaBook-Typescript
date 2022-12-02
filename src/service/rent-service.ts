@@ -57,12 +57,12 @@ export class RentService {
      * @param rent Kitapların listesinin bulunduğu nesne
      * @returns Toplam ücret
      */
-    public calculateTotal(rent: Rent): number {
+    public calculateTotal(): number {
         let subTotal: number = 0;
 
-        //it can be => let entry of rent.bookAndQuantityMap.entries()
-        for (let item of rent.orderBookItems) {
-            subTotal += item.book.bookPrice.price * item.quantity
+        //it could be => let entry of rent.bookAndQuantityMap.entries()
+        for (let items of this.rentCart.orderBookItems) {
+            subTotal += items.book.bookPrice.price * items.quantity
         }
 
         return subTotal;
@@ -171,46 +171,33 @@ export class RentService {
         }
     }
 
-    public async cartToRent() {
-        let rent = new Rent();
-        rent.orderBookItems = this.rentCart.orderBookItems;
-        rent.customerId = this.rentCart.customerId;
-        rent.total = this.calculateTotal(rent);
+    public async createRent(): Promise<Rent> {
+        const response = await fetch(RENT_API, {
+            method: 'POST',
+            body: JSON.stringify({
+                orderBookItems: Array.from(this.rentCart.orderBookItems),
+                customerId: this.rentCart.customerId,
+                total: this.calculateTotal(),
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        });
 
+        if (!response.ok) {
+            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+        }
+
+        const result = <Rent>(await response.json());
+        console.log("Rest apidan dönen cevap:\n");
+        console.log(result);
+        
         this.rentCart = new RentCart; // sepeti boşalt
         this.updateRentCart();
-        this.createRent(rent);
+        return result;
     }
 
-    public async createRent(r: Rent) {
-        try {
-            const response = await fetch(RENT_API, {
-                method: 'POST',
-                body: JSON.stringify({
-                    orderBookItems: Array.from(r.orderBookItems),
-                    customerId: r.customerId,
-                    total: r.total,
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                },
-            });
-
-            if (response.ok) {
-                const result = <Rent>(await response.json());
-                console.log("Rest apidan dönen cevap:\n");
-                console.log(result);
-                alert("Kitap kiralama işlemi başarıyla gerçekleşmiştir.");
-                alert("Fişinizi kaybetneyiniz. Fiş numaranız: " + result.operationNumber);
-            } else {
-                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
-            }
-        } catch (Exception) {
-            console.log('Hata Oluştu.');
-            alert("Kitap kiralama işlemi sırasında bir hata oluştu. Lütfen tekrar deneyiniz.");
-        }
-    }
 
     public async refundRent(operationNumber: string): Promise<Rent> {
         //PATCH Belirli bir kaynaktaki verilerin bir kısmının değiştirilmesi için kullanılan metodtur.
