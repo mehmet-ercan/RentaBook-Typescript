@@ -4,7 +4,8 @@
   --main-color: #f5f5f5;
   --black-color: #353535;
   --border: 01rem solid rgba(255, 255, 255, 0.3);
-  --cards: rgba(249, 167, 74, 0.6);
+  --cards: rgba(246, 135, 10, 0.6);
+  --btnHover: #ff9800;
 }
 
 /*! base html codes*/
@@ -28,16 +29,6 @@ html {
   scroll-padding-top: 9rem;
 }
 
-html::-webkit-scrollbar {
-  width: 1rem;
-  background-color: white;
-}
-
-html::-webkit-scrollbar-thumb {
-  width: 1rem;
-  background-color: black;
-}
-
 section {
   padding: 3.5rem 7%;
 }
@@ -47,19 +38,12 @@ section {
 #addBookSection,
 #addCustomerSection,
 #saleBookSection,
-#addStockSection {
+#addStockSection,
+#cancelSaleSection,
+#rentBookSection,
+#cancelRentSection,
+#refundBookSection {
   display: none;
-}
-
-.book-cards .headLine {
-  color: black;
-  font-size: 3.5rem;
-  margin-bottom: 3.5rem;
-  border-bottom: 0.1rem solid #fff;
-}
-
-.book-cards .headLine span {
-  color: var(--cards);
 }
 
 body {
@@ -70,7 +54,7 @@ body {
   margin-top: 1rem;
   display: inline-block;
   padding: 2rem 3.75rem;
-  border-radius: 30rem;
+  border-radius: 2rem;
   font-size: 2rem;
   color: white;
   background-color: var(--black-color);
@@ -78,14 +62,15 @@ body {
 }
 
 .btn:hover {
-  opacity: 0.4;
+  background-color: var(--btnHover);
+  color: #ffff;
 }
 
 .btnBuy {
   margin-left: auto;
   margin-right: 0;
   padding: 2rem 3.75rem;
-  border-radius: 5rem;
+  border-radius: 2rem;
   font-size: 2rem;
   color: white;
   background-color: var(--black-color);
@@ -98,17 +83,18 @@ body {
 
 /* Header Sectiom Start*/
 .logo img {
-  height: 10rem;
+  height: 9rem;
+  padding-right: 3rem;
 }
 
 .header {
   background-color: white;
   display: flex; /* Öğeleri yan yana hizalar */
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 3%;
   margin: 2rem 7%;
-  border-radius: 30rem;
+  border-radius: 2rem;
   box-shadow: 0px 0px 17px -3px rgba(0, 0, 0, 0.75);
   position: sticky; /*aşağı doğru kaydırma yaptığımızda ekranın en üstüne yapışır*/
   top: 0.5em;
@@ -116,23 +102,10 @@ body {
 }
 
 .header .navbar a {
-  font-size: 1.6rem;
-  margin: 0 1.5rem; /* ilk değer üst alt, sonraki de sağ ve soldan %7 kadar boşluk verir */
+  font-size: 2rem !important; /* html etiketi içerisindeki font size iptal ederk kendi bıyutumuzu vermiş oluyoruz */
+  margin: 0.5rem 1rem; /* ilk değer üst alt, sonraki de sağ ve soldan 1.5rem kadar boşluk verir */
   color: var(--black-color);
   border-bottom: 0.1rem solid transparent;
-}
-
-.header .navbar .active,
-.header .navbar a:hover {
-  border-color: var(--black-color);
-  padding-bottom: 0.5rem;
-}
-
-.header .buttons button {
-  cursor: pointer;
-  font-size: 2.5em;
-  margin-left: 2rem;
-  background-color: transparent;
 }
 
 /*New Navbar Start*/
@@ -165,7 +138,9 @@ body {
 }
 
 #primary_nav_wrap ul li:hover {
-  background: #f6f6f6;
+  background: #ff9800;
+  border-radius: 1rem;
+  z-index: 1;
 }
 
 #primary_nav_wrap ul ul {
@@ -175,6 +150,7 @@ body {
   left: 0;
   background: #fff;
   padding: 0;
+  border-radius: 1rem;
 }
 
 #primary_nav_wrap ul ul li {
@@ -194,6 +170,7 @@ body {
 
 #primary_nav_wrap ul li:hover > ul {
   display: block;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 0.8rem 2.4rem;
 }
 /*New Navbar End*/
 
@@ -208,7 +185,7 @@ body {
   background: url(../../images/home2.jpg) no-repeat;
   background-size: cover;
   background-position: center;
-  margin-top: -14.5rem;
+  margin-top: -13.5rem; /*header 94.8px + (20+20 = alt ve üstten padding var) = 134.8 ~ 135px = 13.5 rem */
   display: flex;
   align-items: center;
 }
@@ -233,63 +210,30 @@ body {
   color: white;
 }
 
-/* Book Section Start*/
+/**
+ * ----------------------------------------
+ * animation tracking-in-expand
+ * ----------------------------------------
+ */
 
-.book-cards {
-  display: none;
+ .text-focus-in {
+	animation: text-focus-in 1.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
 }
 
-.book-cards .box-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
-  gap: 1rem;
+@keyframes text-focus-in {
+  0% {
+    filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    filter: blur(0px);
+    opacity: 1;
+  }
 }
+/* Home Sectiom End*/
 
-.book-cards .box-container .box {
-  padding: 3rem;
-  background-color: var(--cards);
-  border-radius: 3rem;
-  min-height: 60rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-}
 
-.book-cards .box-container .box img {
-  width: 100%;
-  object-fit: cover;
-}
-
-.book-cards .box-container .box .book-publisher {
-  font-size: 1.8rem;
-}
-
-.book-cards .box-container .box h3 {
-  font-size: 2.5rem;
-  padding: 1rem 0;
-}
-
-.book-cards .box-container .box .price {
-  font-size: 2.5rem;
-  padding: 0.5rem 0;
-}
-
-.book-cards .box-container .box .price span {
-  font-size: 2rem;
-  padding: 0.5rem 0;
-  text-decoration: line-through;
-  font-style: italic;
-  font-weight: 300;
-}
-
-.book-cards .box-container .box .box-bottom {
-  align-self: flex-end;
-}
-
-/* Book Section End*/
-
-/* All Form Using - Start */
+/* All Form Element Using - Start */
 
 form {
   margin: 2% auto;
@@ -299,6 +243,7 @@ form {
   border: 0.1em solid #ddd;
   border-radius: 0.5rem;
   font-size: 1.75rem;
+  box-shadow: 1rem 1rem 2rem 0rem rgb(0 0 0 / 75%);
 }
 
 form input {
@@ -306,9 +251,28 @@ form input {
   height: 4rem;
   text-indent: 1.5em;
   border: 0.1em solid #ddd;
-  border-radius: 2rem;
+  border-radius: 1rem;
   outline-color: #1abc9c;
   font-size: 1.75rem;
+}
+
+form input[type="submit"] {
+  margin-top: 1.5rem;
+  height: 5rem;
+  text-indent: 0em;
+  text-align: center;
+  background-color: var(--black-color);
+  border-radius: 1rem;
+  color: var(--main-color);
+  font-weight: bold;
+  font-family: "Lato", sans-serif;
+  cursor: pointer;
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+
+form input[type="submit"]:hover {
+  background-color: var(--btnHover);
 }
 
 form div {
@@ -318,10 +282,11 @@ form div {
 form label {
   color: black;
 }
-/* All Form Using - End */
+/* All Form Element Using - End */
 
-/* Create four equal columns that floats next to each other */
-.column-cart {
+/* Sale Cart Start*/
+
+.sale-cart-column {
   text-align: center;
   float: left;
   width: 24%;
@@ -332,32 +297,80 @@ form label {
   height: 3rem; /* Should be removed. Only for demonstration */
 }
 
-/* Clear floats after the columns */
-.row-cart:after {
+.sale-cart-row:after {
   content: "";
   display: table;
   clear: both;
 }
 
-.sale-cart .row-cart:nth-child(1) > div {
+.sale-cart .sale-cart-row:nth-child(1) > div {
   font-weight: bold;
   font-size: 2.3rem;
-  background-color: black;
-  color: white;
+  background-color: #ff9800;
+  color: black;
 }
 
-#totalAmount{
+#totalSaleAmount {
   font-size: 2rem;
   display: flex;
-  justify-content:flex-end;
+  justify-content: flex-end;
 }
 
-#totalAmount>span{
-  padding-left: .5rem;
+#totalSaleAmount > span {
+  padding-left: 0.5rem;
   font-weight: bold;
   font-size: 2rem;
   color: green;
 }
+
+/* Sale Cart End*/
+
+/* Rent Cart Start*/
+
+.rent-cart-column {
+  text-align: center;
+  float: left;
+  width: 24%;
+  padding: 0.5 0.5rem;
+  margin: 0.1rem;
+  background-color: var(--cards);
+  font-size: 1.7rem;
+  height: 3rem; /* Should be removed. Only for demonstration */
+}
+
+.rent-cart-row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.rent-cart .rent-cart-row:nth-child(1) > div {
+  font-weight: bold;
+  font-size: 2.3rem;
+  background-color: #ff9800;
+  color: black;
+}
+
+.headLine{
+  font-size: 2.5rem;
+  margin-top: 5rem;
+  padding-right: 15rem;
+}
+
+#totalRentAmount {
+  font-size: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#totalRentAmount > span {
+  padding-left: 0.5rem;
+  font-weight: bold;
+  font-size: 2rem;
+  color: green;
+}
+
+/* Rent Cart End*/
 
 /* Create four equal columns that floats next to each other */
 .column-list-book {
