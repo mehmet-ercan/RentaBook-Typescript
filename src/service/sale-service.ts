@@ -1,12 +1,13 @@
 import { stockService } from "..";
 import { Book } from "../domain/book";
 import { Sale } from "../domain/sale";
+import { OrderBookItems } from "../domain/order-book-item";
 import { SaleCart } from "../domain/sale-cart";
 
 export class SaleService {
     private _saleList: Array<Sale>;
     private _saleCart: SaleCart;
-    public addSaleApi = 'http://localhost:3002/api/sales/';
+    public saleApi = 'http://localhost:3002/api/v1/sales';
 
     constructor(saleList: Array<Sale>, saleCart: SaleCart) {
         this._saleList = saleList;
@@ -28,7 +29,6 @@ export class SaleService {
     public set saleList(value: Array<Sale>) {
         this._saleList = value;
     }
-
 
     /**
      * Getter saleCart
@@ -54,8 +54,8 @@ export class SaleService {
     calculateTotal(sale: Sale): number {
         let subTotal = 0.0;
 
-        for (let entry of sale.bookAndQuantityMap.entries()) {
-            subTotal += entry[0].bookSpec.price * entry[1];
+        for (let entry of sale.orderBookItems) {
+            subTotal += entry.book.bookPrice.price * entry.quantity;
         }
 
         return subTotal;
@@ -69,14 +69,8 @@ export class SaleService {
     }
 
     public getSale(saleNumber: string): Sale {
-
         let sale = this.saleList.find(s => s.operationNumber === saleNumber);
-
-        if (sale) {
-            return sale;
-        }
-
-        throw new Error();
+        return sale!;
     }
 
     public removeSale(sale: Sale) {
@@ -86,22 +80,22 @@ export class SaleService {
 
     public addBookToCart(book: Book, quantity: number, customerId: number) {
 
-        if (this.saleCart.bookAndQuantityMap.size === 0) {
+        if (this.saleCart.orderBookItems.length === 0) {
             this.saleCart.customerId = customerId;
-        } else if (this.saleCart.bookAndQuantityMap.size > 0) {
+        } else if (this.saleCart.orderBookItems.length > 0) {
             if (this.saleCart.customerId !== customerId) {
                 alert("Farklı müşteriye kitap satılmaya çalışılıyor. Lütfen tek müşteri için işlem yapınız");
                 return false;
             }
         }
-
-        this.saleCart.bookAndQuantityMap.set(book, quantity);
+        let orderBookItems: OrderBookItems = new OrderBookItems(book, quantity);
+        this.saleCart.orderBookItems.push(orderBookItems);
         this.updateSaleCart();
     }
 
     public updateSaleCart() {
         const saleCart = document.getElementById("saleCart");
-        const subTotalSpan = document.getElementById("totalAmountTl");
+        const subTotalSpan = document.getElementById("totalSaleAmountTl");
 
         if (saleCart) {
 
@@ -112,75 +106,73 @@ export class SaleService {
             }
             subTotalSpan!.textContent = "";
 
-            for (let index = 0; index < this.saleCart.bookAndQuantityMap.size; index++) {
+            for (let index = 0; index < this.saleCart.orderBookItems.length; index++) {
 
                 row = document.createElement("div");
-                row.className = "row-cart";
+                row.className = "sale-cart-row";
 
-                for (let entry of this.saleCart.bookAndQuantityMap.entries()) {
+                for (let item of this.saleCart.orderBookItems) {
 
                     column = document.createElement("div");
-                    column.className = "column-cart";
+                    column.className = "sale-cart-column";
                     column.textContent = this.saleCart.customerId.toString();
                     row.appendChild(column);
 
                     column = document.createElement("div");
-                    column.className = "column-cart";
-                    column.textContent = entry[0].name;
+                    column.className = "sale-cart-column";
+                    column.textContent = item.book.name;
                     row.appendChild(column);
 
                     column = document.createElement("div");
-                    column.className = "column-cart";
-                    column.textContent = entry[1].toString();
+                    column.className = "sale-cart-column";
+                    column.textContent = item.quantity.toString();
                     row.appendChild(column);
 
                     column = document.createElement("div");
-                    column.className = "column-cart";
-                    column.textContent = (entry[0].bookSpec.price * entry[1]).toString();
+                    column.className = "sale-cart-column";
+                    column.textContent = (item.book.bookPrice.price * item.quantity).toString();
                     row.appendChild(column);
                 }
             }
 
             if (row && subTotalSpan) {
 
-                for (let t of this.saleCart.bookAndQuantityMap) {
-                    subTotal += t[0].bookSpec.price * t[1];
+                for (let t of this.saleCart.orderBookItems) {
+                    subTotal += t.book.bookPrice.price * t.quantity;
                 }
 
                 saleCart.appendChild(row);
                 subTotalSpan.textContent = subTotal.toString() + " TL";
             }
         }
-
-
-
     }
 
-    public cartToSale() {
+    public cartToSale(): any {
         let saleCart: SaleCart = this.saleCart;
         let sale = new Sale();
 
-        sale.bookAndQuantityMap = saleCart.bookAndQuantityMap;
+        sale.orderBookItems = saleCart.orderBookItems;
         sale.customerId = saleCart.customerId;
         sale.operationNumber = this.generateSaleNumber(saleCart.customerId);
         sale.operationDateTime = new Date();
         sale.total = this.calculateTotal(sale);
 
-        for (let q of sale.bookAndQuantityMap) {
-            stockService.increaseStock(q[0].isbn, -q[1])
+        for (let q of sale.orderBookItems) {
+            stockService.increaseStock(q.book.id, - q.quantity)
         }
 
-        this.addSaleMock(sale);
-        this.saleCart = new SaleCart; // sepeti boşalt
+        let success = this.createSale(sale);
+        this.saleCart = new SaleCart(); // sepeti boşalt
         this.updateSaleCart();
+        return success;
     }
 
-    async addSaleMock(s: Sale) {
+    async createSale(s: Sale) {
         try {
-            const response = await fetch(this.addSaleApi, {
+            const response = await fetch(this.saleApi, {
                 method: 'POST',
                 body: JSON.stringify({
-                    bookAndQuantity: s.bookAndQuantityMap,
+                    orderBookItems: Array.from(s.orderBookItems),
                     customerId: s.customerId,
                     operationDateTime: s.operationDateTime,
                     operationNumber: s.operationNumber,
@@ -192,20 +184,43 @@ export class SaleService {
                 },
             });
 
-            if (!response.ok) {
+            console.log(response);
+
+            if (response.ok) {
+                const result = (await response.json());
+                console.log("Rest apidan dönen cevap:\n");
+                console.log(result);
+                alert("Kitap satış işlemi başarıyla gerçekleşmiştir.");
+                alert("Fişinizi kaybetmeyiniz. Fiş Numarası: " + s.operationNumber);
+                return true;
+            } else {
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
             }
-
-            const result = (await response.json());
-            console.log(result);
-            
-            alert(result.message + " "+ result.saleNumber);
 
         } catch (Exception) {
             console.log('Hata Oluştu.');
         }
     }
 
+    async isExistSale(operationNumber: string): Promise<boolean> {
+        const response = await fetch(this.saleApi + "/" + operationNumber, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        });
 
+        console.log(response);
+
+        if (response.ok) {
+            const result = (await response.json());
+            console.log("Rest apidan dönen cevap:\n");
+            console.log(result);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
