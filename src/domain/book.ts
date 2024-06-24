@@ -6,17 +6,16 @@ export class Book {
   private _author: string;
   private _publishYear: string;
   private _pages: number;
-  private _bookSpec: BookSpecification;
+  private _bookSpecification: BookSpecification;
 
-  constructor(isbn: string, name: string, author: string, publishYear: string, pages: number, bookSpec: BookSpecification) {
+  constructor(isbn: string, name: string, author: string, publishYear: string, pages: number, bookSpecification: BookSpecification) {
     this._name = name;
     this._author = author;
     this._isbn = isbn;
     this._publishYear = publishYear;
     this._pages = pages;
-    this._bookSpec = bookSpec;
+    this._bookSpecification = bookSpecification;
   }
-
 
     /**
      * Getter isbn
@@ -59,11 +58,11 @@ export class Book {
 	}
 
     /**
-     * Getter bookSpec
+     * Getter bookSpecification
      * @return {BookSpecification}
      */
-	public get bookSpec(): BookSpecification {
-		return this._bookSpec;
+	public get bookSpecification(): BookSpecification {
+		return this._bookSpecification;
 	}
 
     /**
@@ -107,12 +106,10 @@ export class Book {
 	}
 
     /**
-     * Setter bookSpec
+     * Setter bookSpecification
      * @param {BookSpecification} value
      */
-	public set bookSpec(value: BookSpecification) {
-		this._bookSpec = value;
+	public set bookSpecification(value: BookSpecification) {
+		this._bookSpecification = value;
 	}
-  
-
 }
