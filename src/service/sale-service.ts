@@ -6,7 +6,7 @@ import { SaleCart } from "../domain/sale-cart";
 export class SaleService {
     private _saleList: Array<Sale>;
     private _saleCart: SaleCart;
-    public addSaleApi = 'http://localhost:3002/api/sales/';
+    public saleApi = 'http://localhost:3002/api/sales';
 
     constructor(saleList: Array<Sale>, saleCart: SaleCart) {
         this._saleList = saleList;
@@ -28,7 +28,6 @@ export class SaleService {
     public set saleList(value: Array<Sale>) {
         this._saleList = value;
     }
-
 
     /**
      * Getter saleCart
@@ -55,7 +54,7 @@ export class SaleService {
         let subTotal = 0.0;
 
         for (let entry of sale.bookAndQuantityMap.entries()) {
-            subTotal += entry[0].bookSpec.price * entry[1];
+            subTotal += entry[0].bookSpecification.price * entry[1];
         }
 
         return subTotal;
@@ -69,14 +68,8 @@ export class SaleService {
     }
 
     public getSale(saleNumber: string): Sale {
-
         let sale = this.saleList.find(s => s.operationNumber === saleNumber);
-
-        if (sale) {
-            return sale;
-        }
-
-        throw new Error();
+        return sale!;
     }
 
     public removeSale(sale: Sale) {
@@ -101,7 +94,7 @@ export class SaleService {
 
     public updateSaleCart() {
         const saleCart = document.getElementById("saleCart");
-        const subTotalSpan = document.getElementById("totalAmountTl");
+        const subTotalSpan = document.getElementById("totalSaleAmountTl");
 
         if (saleCart) {
 
@@ -115,28 +108,28 @@ export class SaleService {
             for (let index = 0; index < this.saleCart.bookAndQuantityMap.size; index++) {
 
                 row = document.createElement("div");
-                row.className = "row-cart";
+                row.className = "sale-cart-row";
 
                 for (let entry of this.saleCart.bookAndQuantityMap.entries()) {
 
                     column = document.createElement("div");
-                    column.className = "column-cart";
+                    column.className = "sale-cart-column";
                     column.textContent = this.saleCart.customerId.toString();
                     row.appendChild(column);
 
                     column = document.createElement("div");
-                    column.className = "column-cart";
+                    column.className = "sale-cart-column";
                     column.textContent = entry[0].name;
                     row.appendChild(column);
 
                     column = document.createElement("div");
-                    column.className = "column-cart";
+                    column.className = "sale-cart-column";
                     column.textContent = entry[1].toString();
                     row.appendChild(column);
 
                     column = document.createElement("div");
-                    column.className = "column-cart";
-                    column.textContent = (entry[0].bookSpec.price * entry[1]).toString();
+                    column.className = "sale-cart-column";
+                    column.textContent = (entry[0].bookSpecification.price * entry[1]).toString();
                     row.appendChild(column);
                 }
             }
@@ -144,16 +137,13 @@ export class SaleService {
             if (row && subTotalSpan) {
 
                 for (let t of this.saleCart.bookAndQuantityMap) {
-                    subTotal += t[0].bookSpec.price * t[1];
+                    subTotal += t[0].bookSpecification.price * t[1];
                 }
 
                 saleCart.appendChild(row);
                 subTotalSpan.textContent = subTotal.toString() + " TL";
             }
         }
-
-
-
     }
 
     public cartToSale() {
@@ -177,10 +167,12 @@ export class SaleService {
 
     async addSaleMock(s: Sale) {
         try {
-            const response = await fetch(this.addSaleApi, {
+            console.log(s.bookAndQuantityMap);
+            
+            const response = await fetch(this.saleApi, {
                 method: 'POST',
                 body: JSON.stringify({
-                    bookAndQuantity: s.bookAndQuantityMap,
+                    bookAndQuantity: Array.from(s.bookAndQuantityMap.entries()),
                     customerId: s.customerId,
                     operationDateTime: s.operationDateTime,
                     operationNumber: s.operationNumber,

@@ -1,25 +1,23 @@
 import { Sale } from "./sale";
 
-export class CancelSale {
-    private _sale: Sale;
+export class Cancel {
+    private _cancelType: Sale;
     private _refund: number;
     private _canceledDateTime: Date;
 
-    constructor(sale: Sale, refund: number, canceledDateTime: Date) {
-        this._sale = sale;
+    constructor(cancelType: Sale, refund: number, canceledDateTime: Date) {
+        this._cancelType = cancelType;
         this._refund = refund;
         this._canceledDateTime = canceledDateTime;
     };
 
-    
-
 
     /**
-     * Getter sale
+     * Getter cancelType
      * @return {Sale}
      */
-	public get sale(): Sale {
-		return this._sale;
+	public get cancelType(): Sale {
+		return this._cancelType;
 	}
 
     /**
@@ -39,11 +37,11 @@ export class CancelSale {
 	}
 
     /**
-     * Setter sale
+     * Setter cancelType
      * @param {Sale} value
      */
-	public set sale(value: Sale) {
-		this._sale = value;
+	public set cancelType(value: Sale) {
+		this._cancelType = value;
 	}
 
     /**
@@ -61,6 +59,7 @@ export class CancelSale {
 	public set canceledDateTime(value: Date) {
 		this._canceledDateTime = value;
 	}
+    
     
 
 }
