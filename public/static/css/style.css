@@ -47,7 +47,10 @@ section {
 #addBookSection,
 #addCustomerSection,
 #saleBookSection,
-#addStockSection {
+#addStockSection,
+#cancelSaleSection,
+#rentBookSection,
+#cancelRentSection {
   display: none;
 }
 
@@ -78,7 +81,8 @@ body {
 }
 
 .btn:hover {
-  opacity: 0.4;
+  background-color: #ff9800;
+  color: #ffff;
 }
 
 .btnBuy {
@@ -105,7 +109,7 @@ body {
   background-color: white;
   display: flex; /* Öğeleri yan yana hizalar */
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 3%;
   margin: 2rem 7%;
   border-radius: 30rem;
@@ -124,8 +128,8 @@ body {
 
 .header .navbar .active,
 .header .navbar a:hover {
-  border-color: var(--black-color);
-  padding-bottom: 0.5rem;
+ border-color: #ffffff;
+ padding-bottom: 0.5rem; 
 }
 
 .header .buttons button {
@@ -165,7 +169,9 @@ body {
 }
 
 #primary_nav_wrap ul li:hover {
-  background: #f6f6f6;
+  background: #ff9800;
+  border-radius: 8px;
+  z-index: 1;
 }
 
 #primary_nav_wrap ul ul {
@@ -175,6 +181,7 @@ body {
   left: 0;
   background: #fff;
   padding: 0;
+  border-radius: 8px;
 }
 
 #primary_nav_wrap ul ul li {
@@ -194,6 +201,7 @@ body {
 
 #primary_nav_wrap ul li:hover > ul {
   display: block;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 /*New Navbar End*/
 
@@ -233,63 +241,7 @@ body {
   color: white;
 }
 
-/* Book Section Start*/
-
-.book-cards {
-  display: none;
-}
-
-.book-cards .box-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
-  gap: 1rem;
-}
-
-.book-cards .box-container .box {
-  padding: 3rem;
-  background-color: var(--cards);
-  border-radius: 3rem;
-  min-height: 60rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
-.book-cards .box-container .box img {
-  width: 100%;
-  object-fit: cover;
-}
-
-.book-cards .box-container .box .book-publisher {
-  font-size: 1.8rem;
-}
-
-.book-cards .box-container .box h3 {
-  font-size: 2.5rem;
-  padding: 1rem 0;
-}
-
-.book-cards .box-container .box .price {
-  font-size: 2.5rem;
-  padding: 0.5rem 0;
-}
-
-.book-cards .box-container .box .price span {
-  font-size: 2rem;
-  padding: 0.5rem 0;
-  text-decoration: line-through;
-  font-style: italic;
-  font-weight: 300;
-}
-
-.book-cards .box-container .box .box-bottom {
-  align-self: flex-end;
-}
-
-/* Book Section End*/
-
-/* All Form Using - Start */
+/* All Form Element Using - Start */
 
 form {
   margin: 2% auto;
@@ -299,6 +251,7 @@ form {
   border: 0.1em solid #ddd;
   border-radius: 0.5rem;
   font-size: 1.75rem;
+  box-shadow: 1rem 1rem 2rem 0rem rgb(0 0 0 / 75%);
 }
 
 form input {
@@ -318,10 +271,11 @@ form div {
 form label {
   color: black;
 }
-/* All Form Using - End */
+/* All Form Element Using - End */
 
-/* Create four equal columns that floats next to each other */
-.column-cart {
+/* Sale Cart Start*/
+
+.sale-cart-column{
   text-align: center;
   float: left;
   width: 24%;
@@ -332,32 +286,74 @@ form label {
   height: 3rem; /* Should be removed. Only for demonstration */
 }
 
-/* Clear floats after the columns */
-.row-cart:after {
+.sale-cart-row:after {
   content: "";
   display: table;
   clear: both;
 }
 
-.sale-cart .row-cart:nth-child(1) > div {
+.sale-cart .sale-cart-row:nth-child(1) > div {
   font-weight: bold;
   font-size: 2.3rem;
-  background-color: black;
-  color: white;
+  background-color: #ff9800;
+  color: black;
 }
 
-#totalAmount{
+#totalSaleAmount{
   font-size: 2rem;
   display: flex;
   justify-content:flex-end;
 }
 
-#totalAmount>span{
+#totalSaleAmount>span{
   padding-left: .5rem;
   font-weight: bold;
   font-size: 2rem;
   color: green;
 }
+
+/* Sale Cart End*/
+
+/* Rent Cart Start*/
+
+.rent-cart-column{
+  text-align: center;
+  float: left;
+  width: 24%;
+  padding: 0.5 0.5rem;
+  margin: 0.1rem;
+  background-color: var(--cards);
+  font-size: 1.7rem;
+  height: 3rem; /* Should be removed. Only for demonstration */
+}
+
+.rent-cart-row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.rent-cart .rent-cart-row:nth-child(1) > div {
+  font-weight: bold;
+  font-size: 2.3rem;
+  background-color: #ff9800;
+  color: black;
+}
+
+#totalRentAmount{
+  font-size: 2rem;
+  display: flex;
+  justify-content:flex-end;
+}
+
+#totalRentAmount>span{
+  padding-left: .5rem;
+  font-weight: bold;
+  font-size: 2rem;
+  color: green;
+}
+
+/* Rent Cart End*/
 
 /* Create four equal columns that floats next to each other */
 .column-list-book {

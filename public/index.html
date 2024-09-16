@@ -18,7 +18,7 @@
 
   <header class="header">
     <a href="#" class="logo">
-      <img src="../public/images/icon1.png" alt="Logo" />
+      <img src="../public/images/logo-svg.svg" alt="Logo" />
     </a>
 
     <nav class="navbar" id="primary_nav_wrap">
@@ -34,8 +34,13 @@
               <a href="#addBookSection" id="addBookMenuItem">Kitap Ekle</a>
             </li>
 
-            <li><a href="#saleBookSection" id="saleBookMenuItem">Kitap Satışı</a></li>
-            <li><a href="#">Kitap Kiralama</a></li>
+            <li>
+              <a href="#saleBookSection" id="saleBookMenuItem">Kitap Satışı</a>
+            </li>
+            
+            <li>
+              <a href="#rentBookSection" id="rentBookMenuItem">Kitap Kiralama</a>
+            </li>
 
             <li>
               <a href="#listBooksSection" id="showBooksMenuItem">Kitap Listesi</a>
@@ -57,8 +62,13 @@
         <li>
           <a href="#">İptal İşlemleri</a>
           <ul>
-            <li><a href="#" id="addCustomerMenuItem">Satış İptali</a></li>
-            <li><a href="#" id="addCustomerMenuItem">Kiralama İptali</a></li>
+            <li>
+              <a href="#cancelSaleSection" id="cancelSaleMenuItem">Satış İptali</a>
+            </li>
+
+            <li>
+              <a href="#cancelRentSection" id="cancelRentMenuItem">Kiralama İptali</a>
+            </li>
           </ul>
         </li>
 
@@ -66,19 +76,6 @@
         <li><a href="#">Hakkımızda</a></li>
       </ul>
     </nav>
-    <!--
-    <div class="buttons">
-      <button>
-        <i class="fa-solid fa-magnifying-glass"></i>
-      </button>
-      <button>
-        <i class="fas fa-shopping-cart"></i>
-      </button>
-      <button>
-        <i class="fas fa-bars"></i>
-      </button>
-    </div>
-    -->
 
   </header>
 
@@ -95,95 +92,52 @@
     </div>
   </section>
 
-  <section id="bookCardsSection" class="book-cards">
-    <h1 class="headLine">KİTAPLARDAN <span>SEÇMELER</span></h1>
-    <div class="box-container">
-
-      <div class="box">
-        <div class="box-head">
-          <img src="images/books/yalniziz.jpg" alt="book" />
-          <span class="book-publisher">Ötüken Neşriyat</span>
-          <h3>Yalnızız</h3>
-          <div class="price">49 ₺ <span>59 ₺</span></div>
-        </div>
-        <div class="box-bottom">
-          <a class="btn" href="#"> Ekle </a>
-        </div>
-      </div>
-
-      <div class="box">
-        <div class="box-head">
-          <img src="images/books/yalniziz.jpg" alt="book" />
-          <span class="book-publisher">Ötüken Neşriyat</span>
-          <h3>Yalnızız</h3>
-          <div class="price">49 ₺ <span>59 ₺</span></div>
-        </div>
-        <div class="box-bottom">
-          <a class="btn" href="#"> Ekle </a>
-        </div>
-      </div>
-
-      <div class="box">
-        <div class="box-head">
-          <img src="images/books/yalniziz.jpg" alt="book" />
-          <span class="book-publisher">Ötüken Neşriyat</span>
-          <h3>Yalnızız</h3>
-          <div class="price">49 ₺ <span>59 ₺</span></div>
-        </div>
-        <div class="box-bottom">
-          <a class="btn" href="#"> Ekle </a>
-        </div>
-      </div>
-
-      <div class="box">
-        <div class="box-head">
-          <img src="images/books/yalniziz.jpg" alt="book" />
-          <span class="book-publisher">Ötüken Neşriyat</span>
-          <h3>Yalnızız</h3>
-          <div class="price">49 ₺ <span>59 ₺</span></div>
-        </div>
-        <div class="box-bottom">
-          <a class="btn" href="#"> Ekle </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section id="addBookSection" class="add-book">
     <form id="add-book-form">
       <div>
         <label for="name">Kitabın İsmi</label>
-        <input type="text" name="bookTitle" id="title" class="myBook" />
+        <input type="text" name="bookTitle" id="title" class="myBook" 
+        required="required" pattern="[A-Za-z0-9 .]{1,20}" 
+        oninvalid="this.setCustomValidity('Lütfen Kitap İsmini Doğru Yazınız.')"
+        oninput="setCustomValidity('')"/> 
+        <!--Üstteki satırı, sadece kendi mesajımızı vermek istediğimizde yazmamız gerekiyor-->
+        <!--Aksi takdirde uyraı mesajı, dığru veri giirlse bile gitmiyor, orada kalıyor-->
       </div>
 
       <div>
         <label for="author">Kitabın Yazarı</label>
-        <input type="text" name="bookAuthor" id="author" class="myBook" />
+        <input type="text" name="bookAuthor" id="author" class="myBook" 
+        required="required" pattern="[A-Za-z]{1,20}"/>
       </div>
 
       <div>
         <label for="isbn">ISBN Numarası</label>
-        <input type="text" name="bookIsbn" id="isbn" class="myBook" />
+        <input type="number" name="bookIsbn" id="isbn" class="myBook" 
+        required="required" pattern="[0-9-]{1,20}"/>
       </div>
 
       <div>
         <label for="publishYear">Yayın Yılı</label>
-        <input type="text" name="bookPublishYear" id="publishYear" class="myBook" />
+        <input type="number" name="bookPublishYear" id="publishYear" class="myBook" 
+        required="required" />
       </div>
 
       <div>
         <label for="pages">Sayfa Sayısı</label>
-        <input type="text" name="bookPages" id="pages" class="myBook" />
+        <input type="number" name="bookPages" id="pages" class="myBook" 
+        required="required" />
       </div>
 
       <div>
         <label for="price">Ücreti</label>
-        <input type="text" name="bookPrice" id="price" class="myBook" />
+        <input type="text" name="bookPrice" id="price" class="myBook" 
+        required="required"  pattern="[0-9]*[.]?[0-9]+"/>
       </div>
 
       <!-- Submit button-->
       <div>
-        <input type="submit" value="Ekle" class="myBook" id="addBookSubmitButton" />
+        <input type="submit" value="Ekle" class="myBook" id="addBookSubmitButton" 
+        required="required" />
       </div>
 
     </form>
@@ -217,17 +171,22 @@
     <form id="add-customer-form">
       <div>
         <label for="name">Müşterinin İsmi</label>
-        <input type="text" name="customerName" id="customerName" />
+        <input type="text" name="customerName" id="customerName" 
+        required="required" pattern="[A-Za-z]{1,20}" />
       </div>
 
       <div>
         <label for="author">Müşterinin Soyismi</label>
-        <input type="text" name="customerSurname" id="customerSurname" />
+        <input type="text" name="customerSurname" id="customerSurname" 
+        required="required" pattern="[A-Za-z]{1,20}"/>
       </div>
 
       <div>
         <label for="isbn">Müşterinin Telefon Numarası</label>
-        <input type="text" name="customerPhoneNumber" id="customerPhoneNumber" />
+        <input type="number" name="customerPhoneNumber" id="customerPhoneNumber" 
+        required="required" pattern="[5]{1}[0-9]{9}"
+        oninvalid="this.setCustomValidity('Tel. noyu > 5554443322 şeklinde giriniz.')"
+        oninput="setCustomValidity('')"/>
       </div>
 
       <!-- Submit button-->
@@ -242,17 +201,20 @@
     <form id="add-stock-form">
       <div>
         <label for="isbn">Stok Eklenecek Kitabın ISBN Numarası</label>
-        <input type="text" name="bookIsbnForAddStock" id="book-isbn-for-stock" />
+        <input type="text" name="bookIsbnForAddStock" id="book-isbn-for-stock"
+        required="required" pattern="[0-9-]{1,20}"/>
       </div>
 
       <div>
-        <label for="stock">Eklenecek Stok Adedi</label>
-        <input type="text" name="stockQuantity" id="book-stock-quantity" />
+        <label for="stock">Toplam Stok Adedi</label>
+        <input type="number" name="stockQuantity" id="book-stock-quantity"
+        required="required"/>
       </div>
 
       <div>
         <label for="shelfNumber">Raf Numarası</label>
-        <input type="text" name="shelfNumber" id="book-stock-shelfNumber" />
+        <input type="text" name="shelfNumber" id="book-stock-shelfNumber"
+        required="required" pattern="[A-Za-z0-9 .-]{1,20}"/>
       </div>
 
       <!-- Submit button-->
@@ -269,17 +231,18 @@
     <form id="sale-book-form">
       <div>
         <label for="customerId">Müşteri Numarası</label>
-        <input type="text" name="customerIdForSale" id="customer-id-for-sale" />
+        <input type="number" name="customerIdForSale" id="customer-id-for-sale" />
       </div>
 
       <div>
         <label for="isbn">ISBN Numarası</label>
-        <input type="text" name="isbnForSale" id="isbn-for-sale" />
+        <input type="text" name="isbnForSale" id="isbn-for-sale" 
+        required="required" pattern="[0-9-]{1,20}"/>
       </div>
 
       <div>
         <label for="quantityForSale">Kaç Adet Alınacak</label>
-        <input type="text" name="quantityForSale" id="quantity-for-sale" />
+        <input type="number" name="quantityForSale" id="quantity-for-sale" />
       </div>
 
       <!-- Submit button-->
@@ -292,28 +255,107 @@
     <h1 class="headLine">ALIŞ VERİŞ SEPETİ</h1>
 
     <div id="saleCart" class="sale-cart">
-      <div class="row-cart">
-        <div class="column-cart">
+      <div class="sale-cart-row">
+        <div class="sale-cart-column">
           Müşteri No
         </div>
-        <div class="column-cart">
+        <div class="sale-cart-column">
           Kitap İsmi
         </div>
-        <div class="column-cart">
+        <div class="sale-cart-column">
           Adet
         </div>
-        <div class="column-cart">
+        <div class="sale-cart-column">
           Ücreti
         </div>
       </div>
     </div>
 
 
-    <input type="button" id="btnBuy" class="btn" value="Satın Al" />
-    <span id="totalAmount">Toplam Ücreti: <span id="totalAmountTl">  </span></span>
-    
+    <input type="button" id="btnSale" class="btn" value="Satın Al" />
+    <span id="totalSaleAmount">Toplam Ücreti: <span id="totalSaleAmountTl"> </span></span>
+
   </section>
 
+  <section id="cancelSaleSection" class="cancel-sale">
+    <form id="cancel-sale-form">
+      <div>
+        <label for="saleNumberforCancel">İşlem Numarası</label>
+        <input type="text" name="saleNumberforCancel" id="sale-number-for-cancel" 
+        required="required" pattern="[S]{1}[0-9]{12}"/>
+      </div>
+      <div>
+        <input type="submit" value="İptal Et" />
+      </div>
+
+    </form>
+  </section>
+
+  <section id="rentBookSection" class="rent-book">
+
+    <form id="rent-book-form">
+      <div>
+        <label for="customerId">Müşteri Numarası</label>
+        <input type="number" name="customerIdForRent" id="customer-id-for-rent" />
+      </div>
+
+      <div>
+        <label for="isbn">ISBN Numarası</label>
+        <input type="text" name="isbnForRent" id="isbn-for-rent" 
+        required="required" pattern="[0-9-]{1,20}"/>
+      </div>
+
+      <div>
+        <label for="quantityForRent">Kaç Adet Alınacak</label>
+        <input type="number" name="quantityForRent" id="quantity-for-rent" 
+        required="required" />
+      </div>
+
+      <!-- Submit button-->
+      <div>
+        <input type="submit" value="Ekle" />
+      </div>
+
+    </form>
+
+    <h1 class="headLine">ALIŞ VERİŞ SEPETİ</h1>
+
+    <div id="rentCart" class="rent-cart">
+      <div class="rent-cart-row">
+        <div class="rent-cart-column">
+          Müşteri No
+        </div>
+        <div class="rent-cart-column">
+          Kitap İsmi
+        </div>
+        <div class="rent-cart-column">
+          Adet
+        </div>
+        <div class="rent-cart-column">
+          Ücreti
+        </div>
+      </div>
+    </div>
+
+
+    <input type="button" id="btnRent" class="btn" value="Kirala" />
+    <span id="totalRentAmount">Toplam Ücreti: <span id="totalRentAmountTl"> </span></span>
+
+  </section>
+
+  <section id="cancelRentSection" class="cancel-rent">
+    <form id="cancel-rent-form">
+      <div>
+        <label for="rentNumberforCancel">İşlem Numarası</label>
+        <input type="text" name="rentNumberforCancel" id="rent-number-for-cancel" 
+        required="required" pattern="[R]{1}[0-9]{12}"/>
+      </div>
+      <div>
+        <input type="submit" value="İptal Et" />
+      </div>
+
+    </form>
+  </section>
 
   <!-- TODO DİĞER SAYFA TASARIMLARI-->
 </body>

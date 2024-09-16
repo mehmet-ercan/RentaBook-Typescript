@@ -1,4 +1,6 @@
-
+/**
+ * @author Mehmet E. Akcan - 21.10.22
+ */
 import { stockService } from "..";
 import { Book } from "../domain/book";
 import { BookSpecification } from "../domain/book-specification";
@@ -6,7 +8,7 @@ import { BookSpecification } from "../domain/book-specification";
 export class BookService {
     private _bookList: Array<Book>;
     private _bookSpecList: Array<BookSpecification>;
-
+    bookApi: string = 'http://localhost:3002/api/books/';
     constructor(bookList: Array<Book>, bookSpecList: Array<BookSpecification>) {
         this._bookList = bookList;
         this._bookSpecList = bookSpecList;
@@ -45,13 +47,21 @@ export class BookService {
         this._bookSpecList = value;
     }
 
-
+    /**
+     * parametre olarak gelen isbn bilgisine göre ilgili kitabı bulur.
+     * @param isbn Bulunacak olan kitabın isbn numarası
+     * @returns isbn numarasına göre ilgili kitabı Book nesnesi olarak geri döndürür
+     */
     public getBook(isbn: string): Book {
         //Buradan null bir değer de dönebileceği için hata veriyor
         //ama biz sondaki ! operatörü ile null değer dönmeyecek diye garanti veriyoruz
         return this.bookList.find(b => b.isbn === isbn)!;
     }
 
+    /**
+     * Parametre olarak gelen Book nesnesini kitap nesnesine ekler
+     * @param newBook eklenecek olan kitap nesnesi
+     */
     public addBook(newBook: Book) {
         try {
             this.bookList.push(newBook);
@@ -66,7 +76,7 @@ export class BookService {
         return this.bookList.includes(b)
     }
 
-    async initializeBooksDataMock() {
+    async initializeDataMock() {
         try {
             const response = await fetch('http://localhost:3002/api/books', {
                 method: 'GET',
@@ -81,8 +91,7 @@ export class BookService {
             const result = (await response.json());
             const getResult = <Book[]>JSON.parse(JSON.stringify(result, null, 4));
             this.bookList = getResult as Array<Book>;
-            
-            this.listBooks();
+            //console.log(this.bookList);
 
         } catch (error) {
             console.error(error);
@@ -138,7 +147,7 @@ export class BookService {
 
     async addBookMock(b: Book) {
         try {
-            const response = await fetch('http://localhost:3002/api/books/', {
+            const response = await fetch(this.bookApi, {
                 method: 'POST',
                 body: JSON.stringify({
                     isbn: b.isbn,
@@ -153,13 +162,13 @@ export class BookService {
                 },
             });
 
-            if (!response.ok) {
+            if (response.ok) {
+                const result = (await response.json());
+                console.log("Mock servisinden dönen cevap =>" + JSON.stringify(result));
+                return true;
+            } else {
                 throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
             }
-
-            const result = (await response.json());
-            console.log(result);
-
         } catch (Exception) {
             console.log('Hata Oluştu.');
         }

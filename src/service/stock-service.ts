@@ -1,8 +1,8 @@
-import { DataBase } from "../db/database";
 import { Stock } from "../domain/stock";
 
 export class StockService {
     private _stockList: Array<Stock>;
+    private stockApi: string = "http://localhost:3002/api/stocks";
 
     constructor(stockList: Array<Stock>) {
         this._stockList = stockList;
@@ -29,6 +29,8 @@ export class StockService {
      * Elimizde hiç stock kaydı/nesnesi yok, yeni kayıt/nesne oluşturuyoruz
      * Yeni eklenen kitaba stok ekleme işlemi
      * @param isbn  stok eklenecek olan kitabın isbn numarası
+     * @param shelfNumber stok eklenecek olan kitabın raf numarası
+     * @param quantity kitapdan kaç adet stoğa eklenecek
      */
     public addStock(isbn: string, shelfNumber: string, quantity: number): boolean {
         try {
@@ -80,33 +82,67 @@ export class StockService {
         }
     }
 
-    public addStockMock(s: Stock) {
-        postAddStockMock(s);
-    }
-}
+    /**
+     * Eğer stok nesnesi yok ise stok nesnesi, belirtilen adet kadar stok bilgisi ile beraber ekleniyor.
+     * İşte bu oluşturma/create işlemi burada yapılıyor.
+     * @param s index.ts dosyasından gelen stok nesnesi
+     */
+    async addStockMock(s: Stock): Promise<Boolean | undefined> {
+        try {
+            const response = await fetch(this.stockApi, {
+                method: 'POST',
+                body: JSON.stringify({
+                    isbn: s.isbn,
+                    quantity: s.quantity,
+                    shelfNumber: s.shelfNumber
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            });
 
-async function postAddStockMock(s: Stock) {
-    try {
-        const response = await fetch('http://localhost:3002/api/stocks/' + s.isbn, {
-            method: 'POST',
-            body: JSON.stringify({
-                isbn: s.isbn,
-                quantity: s.quantity
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+            if (response.ok) {
+                const result = (await response.json());
+                console.log(result);
+                return true;
+            } else {
+                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+            }
+        } catch (error) {
+            console.log('Hata Oluştu.' + error);
         }
+    }
 
-        const result = (await response.json());
-        console.log(result);
+    /**
+     * Stok eklenirken eğer stok nesnesi daha önceden var ise, stok artırımını put ile yapacağız
+     * @param s index.ts dosyasından gelen stok nesnesi
+     */
+    async increaseStockMock(s: Stock) {
+        try {
 
-    } catch (Exception) {
-        console.log('Hata Oluştu.');
+            const response = await fetch(this.stockApi + "/" + s.isbn, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    isbn: s.isbn,
+                    quantity: s.quantity,
+                    shelfNumber: s.shelfNumber
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Hata oluştu, hata kodu: ${response.status} `);
+            }
+
+            const result = (await response.json());
+            console.log(result);
+            console.log(response.status);
+        } catch (Exception) {
+            console.log('Hata Oluştu.');
+        }
     }
 }
