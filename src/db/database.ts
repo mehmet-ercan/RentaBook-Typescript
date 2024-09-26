@@ -3,6 +3,7 @@ import { BookSpecification } from "../domain/book-specification";
 import { CancelSale } from "../domain/cancal-sale";
 import { Customer } from "../domain/customer";
 import { Rent } from "../domain/rent";
+import { RentCart } from "../domain/rent-cart";
 import { Sale } from "../domain/sale";
 import { SaleCart } from "../domain/sale-cart";
 import { Stock } from "../domain/stock";
@@ -17,6 +18,7 @@ export class DataBase {
      private _bookSpecifications: Array<BookSpecification>;
      private _cancelSales: Array<CancelSale>;//
      private _saleCart: SaleCart;
+     private _rentCart:RentCart;
 
      constructor() {
           this._books = new Array<Book>();
@@ -27,7 +29,7 @@ export class DataBase {
           this._bookSpecifications = new Array<BookSpecification>();
           this._cancelSales = new Array<CancelSale>();
           this._saleCart = new SaleCart;
-
+          this._rentCart = new RentCart;
      }
 
      /**
@@ -94,6 +96,14 @@ export class DataBase {
           return this._saleCart;
      }
 
+         /**
+     * Getter rentCart
+     * @return {RentCart}
+     */
+	public get getRentCart(): RentCart {
+		return this._rentCart;
+	}
+
     /**
      * Setter saleCart
      * @param {SaleCart} value
@@ -101,6 +111,18 @@ export class DataBase {
 	public set setSaleCart(value: SaleCart) {
 		this._saleCart = value;
 	}
+
+
+
+
+    /**
+     * Setter rentCart
+     * @param {RentCart} value
+     */
+	public set setRentCart(value: RentCart) {
+		this._rentCart = value;
+	}
+     
 
 
 }
